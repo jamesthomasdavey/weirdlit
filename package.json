@@ -1,0 +1,19 @@
+{
+  "name": "weirdlit",
+  "version": "1.0.0",
+  "description": "The central hub for weird literature",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamesthomasdavey/weirdlit.git"
+  },
+  "author": "James Thomas Davey",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jamesthomasdavey/weirdlit/issues"
+  },
+  "homepage": "https://github.com/jamesthomasdavey/weirdlit#readme"
+}
