@@ -6,7 +6,18 @@ const BookSchema = new Schema({
     type: String,
     required: true
   },
-  isbn: {
+  subtitle: {
+    type: String
+  },
+  googleID: {
+    type: String,
+    required: true
+  },
+  isbn10: {
+    type: String,
+    required: true
+  },
+  isbn13: {
     type: String,
     required: true
   },
@@ -35,6 +46,10 @@ const BookSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  isApproved: {
+    type: Boolean,
+    default: false
   }
 });
 

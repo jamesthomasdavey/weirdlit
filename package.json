@@ -18,9 +18,11 @@
   },
   "homepage": "https://github.com/jamesthomasdavey/weirdlit#readme",
   "dependencies": {
+    "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
+    "flatted": "^1.0.2",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.3.2",
     "passport": "^0.4.0",
