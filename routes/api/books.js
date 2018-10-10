@@ -35,7 +35,6 @@ router.post("/register", (req, res) => {
       }
     })
     .then(() => {
-      // return the book information from google books
       return axios.get(
         `https://www.googleapis.com/books/v1/volumes/${
           req.body.googleID
@@ -62,22 +61,10 @@ router.post("/register", (req, res) => {
         }
       });
       // check if authors exist. if not, create them.
-      // await asyncForEach(volumeInfo.authors, async authorName => {
-      //   await Author.findOne({ name: authorName }).then(async foundAuthor => {
-      //     if (!foundAuthor) {
-      //       await Author.create({ name: authorName }).then(createdAuthor => {
-      //         newBook.authors.push(createdAuthor._id);
-      //       });
-      //     } else {
-      //       newBook.authors.push(foundAuthor._id);
-      //     }
-      //   });
-      // });
-
-      await volumeInfo.authors.forEach(authorName => {
-        Author.findOne({ name: authorName }).then(foundAuthor => {
+      await asyncForEach(volumeInfo.authors, async authorName => {
+        await Author.findOne({ name: authorName }).then(async foundAuthor => {
           if (!foundAuthor) {
-            Author.create({ name: authorName }).then(createdAuthor => {
+            await Author.create({ name: authorName }).then(createdAuthor => {
               newBook.authors.push(createdAuthor._id);
             });
           } else {
@@ -85,15 +72,14 @@ router.post("/register", (req, res) => {
           }
         });
       });
-
       return newBook.save();
     })
-    .then(async newBook => {
+    .then(newBook => {
       res.json(newBook);
-      await newBook.authors.forEach(authorID => {
-        Author.findById(authorID).then(foundAuthor => {
+      asyncForEach(newBook.authors, async authorID => {
+        await Author.findById(authorID).then(async foundAuthor => {
           foundAuthor.books.push(newBook._id);
-          foundAuthor.save();
+          await foundAuthor.save();
         });
       });
     })
