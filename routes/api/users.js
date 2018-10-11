@@ -14,50 +14,61 @@ router.get("/test", (req, res) => res.json({ msg: "users test working..." }));
 // @desc      register new user
 // @access    public
 router.post("/register", (req, res) => {
-  // check if username is taken
-  User.findOne({ username: req.body.username })
-    .then(user => {
-      // if taken, send message and throw error
-      if (user) {
-        res.status(400).json({
-          username: "Username has already been registered."
-        });
-        throw "Username has already been registered.";
+  User.findOne({ email: req.body.email }).then(foundUser => {
+    if (foundUser) {
+      return res.status(400).json({ email: "Email already registered" });
+    }
+    const newUser = new User({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password
+    });
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) {
+        return res.status(400).json({ msg: "Error generating salt" });
       }
-    })
-    // if not, check if email is taken
-    .then(() => User.findOne({ email: req.body.email }))
-    .then(user => {
-      // if taken, send message and throw error
-      if (user) {
-        res.status(400).json({
-          email: "Email has already been registered."
-        });
-        throw "Email has already been registered.";
+      bcrypt.hash(newUser.password, salt, (err, hash) => {
+        if (err) {
+          return res.status(400).json({ msg: "Error generating hash" });
+        }
+        newUser.password = hash;
+        return newUser
+          .save()
+          .then(newUser => res.json(newUser))
+          .catch(err => console.log(err));
+      });
+    });
+  });
+});
+
+// @route     /api/users/login
+// @desc      log in user
+// @access    public
+router.post("/login", (req, res) => {
+  User.findOne({ email: req.body.email })
+    .then(foundUser => {
+      if (!foundUser) {
+        return res.status(404).json({ email: "User not found" });
       }
+      return foundUser;
     })
-    // if not, create a new user
-    .then(() => {
-      const newUser = new User({
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password
-      });
-      // generate salt
-      bcrypt.genSalt(10, (err, salt) => {
-        if (err) throw err;
-        bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if (err) throw err;
-          // replace password value with hash and save
-          newUser.password = hash;
-          newUser
-            .save()
-            .then(user => res.json(user))
-            .catch(err => console.log(err));
+    .then(foundUser => {
+      return bcrypt
+        .compare(req.body.password, foundUser.password)
+        .then(isMatch => {
+          if (!isMatch) {
+            return res.status(400).json({ password: "Password is incorrect" });
+          }
+          return foundUser;
         });
-      });
     })
-    .catch(err => console.log(err));
+    .then(foundUser => {
+      const payload = {
+        name: foundUser.name,
+        email: foundUser.email
+      };
+      res.json(payload);
+    });
 });
 
 module.exports = router;
