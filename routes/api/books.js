@@ -72,16 +72,17 @@ router.post("/register", (req, res) => {
           }
         });
       });
-      return newBook.save();
-    })
-    .then(newBook => {
-      res.json(newBook);
-      asyncForEach(newBook.authors, async authorID => {
+      // save new book
+      await newBook.save();
+      // add reference for book to each author
+      await asyncForEach(newBook.authors, async authorID => {
         await Author.findById(authorID).then(async foundAuthor => {
           foundAuthor.books.push(newBook._id);
           await foundAuthor.save();
         });
       });
+      // send data
+      res.json(newBook);
     })
     .catch(err => console.log(err));
 });
