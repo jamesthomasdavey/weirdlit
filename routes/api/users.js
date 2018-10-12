@@ -81,4 +81,11 @@ router.post('/login', (req, res) => {
     .catch(err => console.log(err));
 });
 
+// @route     /api/users/:userId
+// @desc      view user page
+// @access    public
+router.get('/:userId', (req, res) => {
+  User.findById(req.params.userId).then(user => res.json(user));
+});
+
 module.exports = router;

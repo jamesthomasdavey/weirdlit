@@ -105,7 +105,11 @@ router.post('/register', (req, res) => {
 // @desc      book show route
 // @access    public
 router.get('/:bookId', (req, res) => {
-  Book.findById(req.params.bookId).then(book => res.json(book));
+  Book.findById(req.params.bookId)
+    .populate('authors')
+    .exec()
+    .then(book => res.json(book))
+    .catch(err => console.log(err));
 });
 
 module.exports = router;

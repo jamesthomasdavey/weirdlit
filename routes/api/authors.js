@@ -9,7 +9,7 @@ const Book = require('./../../models/Book');
 // @desc      show author page
 // @access    public
 router.get('/:authorId', (req, res) => {
-  Author.findOne({ _id: req.params.authorId })
+  Author.findById(req.params.authorId)
     .populate('books')
     .exec()
     .then(author => res.json(author))
