@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const AuthorSchema = new Schema({
@@ -10,7 +10,7 @@ const AuthorSchema = new Schema({
     {
       id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Book"
+        ref: 'Book'
       }
     }
   ],
@@ -20,4 +20,4 @@ const AuthorSchema = new Schema({
   }
 });
 
-module.exports = Author = mongoose.model("authors", AuthorSchema);
+module.exports = Author = mongoose.model('authors', AuthorSchema);

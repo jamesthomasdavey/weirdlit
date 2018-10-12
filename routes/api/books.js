@@ -1,49 +1,51 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const axios = require("axios");
-const flatted = require("flatted");
-const googleBooksApiKey = require("./../../config/keys").googleBooksApiKey;
+const axios = require('axios');
+const flatted = require('flatted');
+const googleBooksApiKey = require('./../../config/keys').googleBooksApiKey;
 
 // require book model
-const Book = require("./../../models/Book");
-const Author = require("./../../models/Author");
+const Book = require('./../../models/Book');
+const Author = require('./../../models/Author');
 
 // 2cl7AgAAQBAJ
 
 const asyncForEach = async (arr, callback) => {
   for (let i = 0; i < arr.length; i++) {
-    await callback(arr[i], i, arr);
+    await callback(arr[i]);
   }
 };
 
-// @route     /api/books/test
-// @desc      test books route
+// @route     /api/books
+// @desc      view approved books
 // @access    public
-router.get("/test", (req, res) => res.json({ msg: "books test working..." }));
+router.get('/', (req, res) => {
+  Book.find({ isApproved: true }).then(books => res.json(books));
+});
+
+// @route     /api/books/pending
+// @desc      view pending books
+// @access    private
+router.get('/pending', (req, res) => {
+  Book.find({ isApproved: false }).then(books => res.json(books));
+});
 
 // @route     /api/books/register
 // @desc      register book route
 // @access    private
-router.post("/register", (req, res) => {
+router.post('/register', (req, res) => {
   Book.findOne({ googleID: req.body.googleID })
     .then(book => {
       if (book) {
-        res.status(400).json({
-          googleID: "This book has already been registered."
-        });
-        throw "This book has already been registered.";
+        res.status(400).json({ googleID: 'This book has already been registered.' });
+        throw 'This book has already been registered.';
       }
-    })
-    .then(() => {
       return axios.get(
-        `https://www.googleapis.com/books/v1/volumes/${
-          req.body.googleID
-        }?key=${googleBooksApiKey}`
+        `https://www.googleapis.com/books/v1/volumes/${req.body.googleID}?key=${googleBooksApiKey}`
       );
     })
     .then(async googleBookData => {
-      const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data
-        .volumeInfo;
+      const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
       // create new book
       const newBook = new Book({
         googleID: req.body.googleID,
@@ -54,9 +56,9 @@ router.post("/register", (req, res) => {
       if (volumeInfo.subtitle) newBook.subtitle = volumeInfo.subtitle;
       // add isbn numbers to book
       volumeInfo.industryIdentifiers.forEach(industryIdentifier => {
-        if (industryIdentifier.type === "ISBN_10") {
+        if (industryIdentifier.type === 'ISBN_10') {
           newBook.isbn10 = industryIdentifier.identifier;
-        } else if (industryIdentifier.type === "ISBN_13") {
+        } else if (industryIdentifier.type === 'ISBN_13') {
           newBook.isbn13 = industryIdentifier.identifier;
         }
       });
@@ -85,6 +87,13 @@ router.post("/register", (req, res) => {
       res.json(newBook);
     })
     .catch(err => console.log(err));
+});
+
+// @route     /api/books/id
+// @desc      book show route
+// @access    public
+router.get('/:id', (req, res) => {
+  Book.findById(req.params.id).then(book => res.json(book));
 });
 
 module.exports = router;
