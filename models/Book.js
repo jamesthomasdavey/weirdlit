@@ -9,17 +9,28 @@ const BookSchema = new Schema({
   subtitle: {
     type: String
   },
-  googleID: {
-    type: String,
-    required: true
+  identifiers: {
+    googleId: {
+      type: String,
+      required: true
+    },
+    isbn10: {
+      type: String
+    },
+    isbn13: {
+      type: String
+    }
   },
-  isbn10: {
-    type: String,
-    required: true
-  },
-  isbn13: {
-    type: String,
-    required: true
+  images: {
+    thumbnail: {
+      type: String
+    },
+    small: {
+      type: String
+    },
+    medium: {
+      type: String
+    }
   },
   authors: [
     {

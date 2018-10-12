@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 
 // require routes
+const authors = require('./routes/api/authors');
 const books = require('./routes/api/books');
 const profile = require('./routes/api/profile');
 const users = require('./routes/api/users');
@@ -31,6 +32,7 @@ app.use(passport.initialize());
 app.use('/api/books', books);
 app.use('/api/profile', profile);
 app.use('/api/users', users);
+app.use('/api/authors', authors);
 
 const port = process.env.PORT || 5000;
 
