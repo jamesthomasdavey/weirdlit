@@ -8,10 +8,8 @@ const AuthorSchema = new Schema({
   },
   books: [
     {
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Book'
-      }
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'books'
     }
   ],
   date: {

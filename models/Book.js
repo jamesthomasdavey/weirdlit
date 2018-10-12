@@ -34,24 +34,18 @@ const BookSchema = new Schema({
   },
   authors: [
     {
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Author'
-      }
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'authors'
     }
   ],
   creator: {
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    }
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users'
   },
   reviews: [
     {
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Review'
-      }
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'reviews'
     }
   ],
   date: {

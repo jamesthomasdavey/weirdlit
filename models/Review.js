@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ReviewSchema = new Schema({
@@ -13,13 +13,13 @@ const ReviewSchema = new Schema({
   creator: {
     id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+      ref: 'users'
     }
   },
   book: {
     id: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Book"
+      ref: 'books'
     }
   },
   date: {
@@ -28,4 +28,4 @@ const ReviewSchema = new Schema({
   }
 });
 
-module.exports = Review = mongoose.model("reviews", ReviewSchema);
+module.exports = Review = mongoose.model('reviews', ReviewSchema);

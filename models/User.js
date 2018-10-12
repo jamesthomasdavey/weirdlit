@@ -17,7 +17,13 @@ const UserSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
-  }
+  },
+  reviews: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'reviews'
+    }
+  ]
 });
 
 module.exports = User = mongoose.model('users', UserSchema);
