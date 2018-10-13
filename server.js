@@ -21,12 +21,18 @@ const db = require('./config/keys').mongoURI;
 
 // connect mongoose using database key
 mongoose
-  .connect(db)
+  .connect(
+    db,
+    { useNewUrlParser: true }
+  )
   .then(() => console.log('Successfully connected to database.'))
   .catch(err => console.log(err));
 
 // passport middleware
 app.use(passport.initialize());
+
+// passport config
+require('./config/passport')(passport);
 
 // use routes
 app.use('/api/books', books);

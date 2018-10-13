@@ -65,13 +65,6 @@ router.post('/register', (req, res) => {
               newBook.identifiers.isbn13 = industryIdentifier.identifier;
             }
           });
-          // add image links if they exist
-          newBook.images.thumbnail = volumeInfo.imageLinks.thumbnail
-            ? volumeInfo.imageLinks.thumbnail
-            : '';
-          newBook.images.small = volumeInfo.imageLinks.small ? volumeInfo.imageLinks.small : '';
-          newBook.images.medium = volumeInfo.imageLinks.medium ? volumeInfo.imageLinks.medium : '';
-
           // check if authors exist. if not, create them.
           await asyncForEach(volumeInfo.authors, async authorName => {
             await Author.findOne({ name: authorName }).then(async foundAuthor => {
@@ -107,8 +100,27 @@ router.post('/register', (req, res) => {
 router.get('/:bookId', (req, res) => {
   Book.findById(req.params.bookId)
     .populate('authors')
+    .populate('reviews')
     .exec()
-    .then(book => res.json(book))
+    .then(book => {
+      axios
+        .get(
+          `https://www.googleapis.com/books/v1/volumes/${
+            book.identifiers.googleId
+          }?key=${googleBooksApiKey}`
+        )
+        .then(googleBookData => {
+          const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
+          res.json({
+            book,
+            googleInfo: {
+              description: volumeInfo.description,
+              pageCount: volumeInfo.pageCount
+            }
+          });
+        })
+        .catch(err => console.log(err));
+    })
     .catch(err => console.log(err));
 });
 

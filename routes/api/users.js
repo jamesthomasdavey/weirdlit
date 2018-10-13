@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
 
 // load keys
 const keys = require('./../../config/keys');
@@ -65,11 +66,9 @@ router.post('/login', (req, res) => {
     })
     .then(foundUser => {
       const payload = {
-        name: foundUser.name,
-        email: foundUser.email,
         _id: foundUser._id
       };
-      return jwt.sign(payload, keys.secretOrKey, { expiresIn: 86400 });
+      return jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 });
     })
     .then(token => {
       if (!token) throw 'Unable to sign token';
@@ -79,6 +78,17 @@ router.post('/login', (req, res) => {
       });
     })
     .catch(err => console.log(err));
+});
+
+// @route     /api/users/current
+// @desc      return current user info
+// @access    private
+router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
+  res.json({
+    _id: req.user._id,
+    name: req.user.name,
+    email: req.user.email
+  });
 });
 
 // @route     /api/users/:userId

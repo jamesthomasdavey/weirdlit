@@ -21,17 +21,6 @@ const BookSchema = new Schema({
       type: String
     }
   },
-  images: {
-    thumbnail: {
-      type: String
-    },
-    small: {
-      type: String
-    },
-    medium: {
-      type: String
-    }
-  },
   authors: [
     {
       type: mongoose.Schema.Types.ObjectId,
