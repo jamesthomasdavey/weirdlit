@@ -31,13 +31,13 @@ router.get('/pending', (req, res) => {
   Book.find({ isApproved: false }).then(books => res.json(books));
 });
 
-// @route     /api/books/register
-// @desc      register book route
+// @route     /api/books/new
+// @desc      new book route
 // @access    private
-router.post('/register', (req, res) => {
+router.post('/new', (req, res) => {
   Book.findOne({ googleId: req.body.googleId }).then(book => {
     if (book) {
-      res.status(400).json({ googleId: 'This book has already been registered.' });
+      res.status(400).json({ googleId: 'This book has already been added.' });
     } else {
       axios
         .get(
@@ -103,23 +103,26 @@ router.get('/:bookId', (req, res) => {
     .populate('reviews')
     .exec()
     .then(book => {
-      axios
-        .get(
-          `https://www.googleapis.com/books/v1/volumes/${
-            book.identifiers.googleId
-          }?key=${googleBooksApiKey}`
-        )
-        .then(googleBookData => {
-          const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
-          res.json({
-            book,
-            googleInfo: {
-              description: volumeInfo.description,
-              pageCount: volumeInfo.pageCount
-            }
-          });
-        })
-        .catch(err => console.log(err));
+      // if (!book.isApproved) res.status(400).json({ msg: 'This book has not yet been approved' });
+      // else {
+        axios
+          .get(
+            `https://www.googleapis.com/books/v1/volumes/${
+              book.identifiers.googleId
+            }?key=${googleBooksApiKey}`
+          )
+          .then(googleBookData => {
+            const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
+            res.json({
+              book,
+              googleInfo: {
+                description: volumeInfo.description,
+                pageCount: volumeInfo.pageCount
+              }
+            });
+          })
+          .catch(err => console.log(err));
+      // }
     })
     .catch(err => console.log(err));
 });

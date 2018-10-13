@@ -36,15 +36,16 @@ router.post('/register', (req, res) => {
           email: req.body.email,
           password: req.body.password
         });
-        return bcrypt
+        bcrypt
           .genSalt(10)
           .then(salt => {
             if (!salt) throw 'Error generating salt.';
-            return bcrypt.hash(newUser.password, salt).then(hash => {
-              if (!hash) throw 'Error generating hash.';
-              newUser.password = hash;
-              return newUser.save();
-            });
+            return bcrypt.hash(newUser.password, salt);
+          })
+          .then(hash => {
+            if (!hash) throw 'Error generating hash.';
+            newUser.password = hash;
+            return newUser.save();
           })
           .then(newUser => res.json(newUser))
           .catch(err => console.log(err));
