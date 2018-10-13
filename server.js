@@ -25,7 +25,7 @@ mongoose
     db,
     { useNewUrlParser: true }
   )
-  .then(() => console.log('Successfully connected to database.'))
+  .then(() => console.log(`I have connected to the database.`))
   .catch(err => console.log(err));
 
 // passport middleware
@@ -42,4 +42,7 @@ app.use('/api/authors', authors);
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => console.log(`The magic happens on port ${port}.`));
+app.listen(port, () =>
+  console.log(`I'm so glad you're still here, James.
+Find me on port ${port}.`)
+);
