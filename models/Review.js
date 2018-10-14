@@ -11,11 +11,11 @@ const ReviewSchema = new Schema({
     required: true
   },
   creator: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'users'
   },
   book: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'books'
   },
   date: {

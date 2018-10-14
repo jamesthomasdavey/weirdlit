@@ -51,6 +51,19 @@ router.get('/pending', (req, res) => {
   Book.find({ isApproved: false }).then(books => res.json(books));
 });
 
+// @route     /api/books/random
+// @desc      view random books
+// @access    public
+router.get('/random', (req, res) => {
+  Book.find({ isApproved: true })
+    .then(books => {
+      if (!books || books.length === 0) throw 'Could not find any books';
+      const randomBook = books[Math.floor(Math.random() * books.length)];
+      res.redirect(`/api/books/${randomBook._id}`);
+    })
+    .catch(err => console.log(err));
+});
+
 // @route     /api/books/new
 // @desc      new book route
 // @access    private
@@ -109,7 +122,8 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
           });
           // add reference for book to user
           await User.findById(req.user._id).then(async user => {
-            await user.books.push(newBook._id);
+            user.books.push(newBook._id);
+            await user.save();
           });
           // send data
           res.json(newBook);
@@ -149,7 +163,8 @@ router.get('/:bookId', verifyBookId, (req, res) => {
             book,
             googleInfo: {
               description: volumeInfo.description,
-              pageCount: volumeInfo.pageCount
+              pageCount: volumeInfo.pageCount,
+              publishedDate: volumeInfo.publishedDate
             },
             rating
           });

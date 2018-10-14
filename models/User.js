@@ -20,13 +20,13 @@ const UserSchema = new Schema({
   },
   books: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'books'
     }
   ],
   reviews: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'reviews'
     }
   ]
