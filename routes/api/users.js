@@ -14,6 +14,7 @@ const keys = require('./../../config/keys');
 
 // load mongoose models
 const User = require('./../../models/User');
+const Profile = require('./../../models/Profile');
 
 // @route     /api/users/test
 // @desc      test users route
@@ -45,6 +46,16 @@ router.post('/register', (req, res) => {
             if (!hash) throw 'Error generating hash.';
             newUser.password = hash;
             return newUser.save();
+          })
+          .then(newUser => {
+            const newProfile = new Profile({
+              user: newUser._id,
+              date: newUser.date
+            });
+            newProfile.favoriteBook = req.body.favoriteBook ? req.body.favoriteBook : '';
+            return newProfile.save().then(() => {
+              return newUser.save();
+            });
           })
           .then(newUser => res.json(newUser))
           .catch(err => console.log(err));
