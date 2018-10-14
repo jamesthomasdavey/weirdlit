@@ -18,6 +18,12 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  books: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'books'
+    }
+  ],
   reviews: [
     {
       type: mongoose.Schema.Types.ObjectId,

@@ -3,10 +3,17 @@ const router = express.Router();
 const axios = require('axios');
 const flatted = require('flatted');
 const googleBooksApiKey = require('./../../config/keys').googleBooksApiKey;
+const passport = require('passport');
 
-// require mongoose models
-const Book = require('./../../models/Book');
+// load input validation
+const validateReviewInput = require('./../../validation/review');
+const isEmpty = require('./../../validation/is-empty');
+
+// load mongoose models
 const Author = require('./../../models/Author');
+const Book = require('./../../models/Book');
+const Review = require('./../../models/Review');
+const User = require('./../../models/User');
 
 // 2cl7AgAAQBAJ
 
@@ -15,6 +22,19 @@ const asyncForEach = async (arr, callback) => {
   for (let i = 0; i < arr.length; i++) {
     await callback(arr[i]);
   }
+};
+
+// middleware
+
+const verifyBookId = (req, res, next) => {
+  Book.findById(req.params.bookId)
+    .then(book => {
+      if (!book) res.status(404).json({ msg: 'Book not found' });
+      else if (!book.isApproved)
+        res.status(400).json({ msg: 'This book has not yet been approved' });
+      else next();
+    })
+    .catch(err => console.log(err));
 };
 
 // @route     /api/books
@@ -34,8 +54,8 @@ router.get('/pending', (req, res) => {
 // @route     /api/books/new
 // @desc      new book route
 // @access    private
-router.post('/new', (req, res) => {
-  Book.findOne({ googleId: req.body.googleId }).then(book => {
+router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Book.findOne({ 'identifiers.googleId': req.body.googleId }).then(book => {
     if (book) {
       res.status(400).json({ googleId: 'This book has already been added.' });
     } else {
@@ -53,7 +73,8 @@ router.post('/new', (req, res) => {
               googleId: req.body.googleId
             },
             title: volumeInfo.title,
-            authors: []
+            authors: [],
+            creator: req.user._id
           });
           // add subtitle if it exists
           newBook.subtitle = volumeInfo.subtitle ? volumeInfo.subtitle : null;
@@ -86,6 +107,10 @@ router.post('/new', (req, res) => {
               await foundAuthor.save();
             });
           });
+          // add reference for book to user
+          await User.findById(req.user._id).then(async user => {
+            await user.books.push(newBook._id);
+          });
           // send data
           res.json(newBook);
         })
@@ -97,34 +122,88 @@ router.post('/new', (req, res) => {
 // @route     /api/books/:bookId
 // @desc      book show route
 // @access    public
-router.get('/:bookId', (req, res) => {
+router.get('/:bookId', verifyBookId, (req, res) => {
   Book.findById(req.params.bookId)
     .populate('authors')
     .populate('reviews')
+    .populate('creator')
     .exec()
     .then(book => {
-      // if (!book.isApproved) res.status(400).json({ msg: 'This book has not yet been approved' });
-      // else {
-        axios
-          .get(
-            `https://www.googleapis.com/books/v1/volumes/${
-              book.identifiers.googleId
-            }?key=${googleBooksApiKey}`
-          )
-          .then(googleBookData => {
-            const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
-            res.json({
-              book,
-              googleInfo: {
-                description: volumeInfo.description,
-                pageCount: volumeInfo.pageCount
-              }
-            });
-          })
-          .catch(err => console.log(err));
-      // }
+      // average out rating
+      const rating =
+        book.reviews.length > 0
+          ? (
+              book.reviews.reduce((prev, current) => prev + current.rating, 0) / book.reviews.length
+            ).toFixed(2)
+          : 'This book has not yet been reviewed';
+      // get additional info from google
+      axios
+        .get(
+          `https://www.googleapis.com/books/v1/volumes/${
+            book.identifiers.googleId
+          }?key=${googleBooksApiKey}`
+        )
+        .then(googleBookData => {
+          const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
+          res.json({
+            book,
+            googleInfo: {
+              description: volumeInfo.description,
+              pageCount: volumeInfo.pageCount
+            },
+            rating
+          });
+        })
+        .catch(err => console.log(err));
     })
     .catch(err => console.log(err));
 });
+
+// @route     /api/books/:bookId/reviews/new
+// @desc      add review to book
+// @access    private
+router.post(
+  '/:bookId/reviews/new',
+  verifyBookId,
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const errors = validateReviewInput(req.body);
+    if (!isEmpty(errors)) res.status(400).json(errors);
+    User.findById(req.user._id)
+      .populate('reviews')
+      .exec()
+      .then(user => {
+        user.reviews.forEach(review => {
+          if (review.book == req.params.bookId) errors.user = 'You have already reviewed this book';
+        });
+        if (!isEmpty(errors)) res.status(400).json(errors);
+        else {
+          Review.create({
+            text: req.body.text,
+            rating: req.body.rating,
+            book: req.params.bookId,
+            creator: req.user._id
+          })
+            .then(review => {
+              Book.findById(req.params.bookId)
+                .then(book => {
+                  book.reviews.push(review._id);
+                  return book.save();
+                })
+                .then(() => {
+                  user.reviews.push(review._id);
+                  return user.save();
+                })
+                .then(() => {
+                  res.json(review);
+                })
+                .catch(err => console.log(err));
+            })
+            .catch(err => console.log(err));
+        }
+      })
+      .catch(err => console.log(err));
+  }
+);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// require mongoose models
+// load mongoose models
 const Author = require('./../../models/Author');
 const Book = require('./../../models/Book');
 

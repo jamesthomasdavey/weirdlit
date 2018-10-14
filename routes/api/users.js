@@ -7,13 +7,12 @@ const passport = require('passport');
 // load input validation
 const validateRegisterInput = require('./../../validation/register');
 const validateLoginInput = require('./../../validation/login');
-
 const isEmpty = require('./../../validation/is-empty');
 
 // load keys
 const keys = require('./../../config/keys');
 
-// load user model
+// load mongoose models
 const User = require('./../../models/User');
 
 // @route     /api/users/test
@@ -75,16 +74,13 @@ router.post('/login', (req, res) => {
                 res.status(404).json(errors);
               } else {
                 const payload = { _id: foundUser._id };
-                jwt
-                  .sign(payload, keys.secretOrKey, { expiresIn: 3600 })
-                  .then(token => {
-                    if (!token) throw 'Unable to sign token';
-                    res.json({
-                      success: true,
-                      token: `Bearer ${token}`
-                    });
-                  })
-                  .catch(err => console.log(err));
+                jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
+                  if (!token) throw 'Unable to sign token';
+                  res.json({
+                    success: true,
+                    token: `Bearer ${token}`
+                  });
+                });
               }
             })
             .catch(err => console.log(err));

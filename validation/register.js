@@ -9,7 +9,6 @@ module.exports = reqBody => {
   reqBody.password = !isEmpty(reqBody.password) ? reqBody.password : '';
   reqBody.password2 = !isEmpty(reqBody.password2) ? reqBody.password2 : '';
 
-
   // name
   if (Validator.isEmpty(reqBody.name)) {
     errors.name = 'Name field is required';
@@ -30,7 +29,7 @@ module.exports = reqBody => {
   } else if (!Validator.isLength(reqBody.password, { min: 6 })) {
     errors.password = 'Password must be at least 6 characters';
   } else if (!Validator.isLength(reqBody.password, { max: 30 })) {
-    errors.password = 'Password must be 30 characters or less';
+    errors.password = 'Password must be no longer than 30 characters';
   }
 
   // password2

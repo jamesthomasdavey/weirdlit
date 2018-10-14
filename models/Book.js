@@ -27,16 +27,16 @@ const BookSchema = new Schema({
       ref: 'authors'
     }
   ],
-  creator: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'users'
-  },
   reviews: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'reviews'
     }
   ],
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'users'
+  },
   date: {
     type: Date,
     default: Date.now
