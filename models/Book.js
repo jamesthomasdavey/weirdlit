@@ -27,12 +27,6 @@ const BookSchema = new Schema({
       ref: 'authors'
     }
   ],
-  reviews: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'reviews'
-    }
-  ],
   creator: {
     type: Schema.Types.ObjectId,
     ref: 'users'

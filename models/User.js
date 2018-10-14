@@ -17,19 +17,7 @@ const UserSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
-  },
-  books: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'books'
-    }
-  ],
-  reviews: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'reviews'
-    }
-  ]
+  }
 });
 
 module.exports = User = mongoose.model('users', UserSchema);

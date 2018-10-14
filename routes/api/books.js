@@ -34,21 +34,31 @@ const verifyBookId = (req, res, next) => {
         res.status(400).json({ msg: 'This book has not yet been approved' });
       else next();
     })
-    .catch(err => console.log(err));
+    .catch(err => res.status(400).json(err));
 };
 
 // @route     /api/books
 // @desc      view approved books
 // @access    public
 router.get('/', (req, res) => {
-  Book.find({ isApproved: true }).then(books => res.json(books));
+  Book.find({ isApproved: true })
+    .then(books => {
+      if (!books || books.length === 0) res.json([]);
+      else res.json(books);
+    })
+    .catch(err => res.status(400).json(err));
 });
 
 // @route     /api/books/pending
 // @desc      view pending books
 // @access    private
 router.get('/pending', (req, res) => {
-  Book.find({ isApproved: false }).then(books => res.json(books));
+  Book.find({ isApproved: false })
+    .then(books => {
+      if (!books || books.length === 0) res.json([]);
+      else res.json(books);
+    })
+    .catch(err => res.status(400).json(err));
 });
 
 // @route     /api/books/random
@@ -57,11 +67,13 @@ router.get('/pending', (req, res) => {
 router.get('/random', (req, res) => {
   Book.find({ isApproved: true })
     .then(books => {
-      if (!books || books.length === 0) throw 'Could not find any books';
-      const randomBook = books[Math.floor(Math.random() * books.length)];
-      res.redirect(`/api/books/${randomBook._id}`);
+      if (!books || books.length === 0) res.json({});
+      else {
+        const randomBook = books[Math.floor(Math.random() * books.length)];
+        res.redirect(`/api/books/${randomBook._id}`);
+      }
     })
-    .catch(err => console.log(err));
+    .catch(err => res.status(400).json(err));
 });
 
 // @route     /api/books/new
@@ -99,7 +111,7 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
               newBook.identifiers.isbn13 = industryIdentifier.identifier;
             }
           });
-          // check if authors exist. if not, create them.
+          // check if authors exist in our. if not, create them.
           await asyncForEach(volumeInfo.authors, async authorName => {
             await Author.findOne({ name: authorName }).then(async foundAuthor => {
               if (!foundAuthor) {
@@ -113,22 +125,10 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
           });
           // save new book
           await newBook.save();
-          // add reference for book to each author
-          await asyncForEach(newBook.authors, async authorID => {
-            await Author.findById(authorID).then(async foundAuthor => {
-              foundAuthor.books.push(newBook._id);
-              await foundAuthor.save();
-            });
-          });
-          // add reference for book to user
-          await User.findById(req.user._id).then(async user => {
-            user.books.push(newBook._id);
-            await user.save();
-          });
           // send data
           res.json(newBook);
         })
-        .catch(err => console.log(err));
+        .catch(err => res.status(400).json(err));
     }
   });
 });
@@ -139,39 +139,47 @@ router.post('/new', passport.authenticate('jwt', { session: false }), (req, res)
 router.get('/:bookId', verifyBookId, (req, res) => {
   Book.findById(req.params.bookId)
     .populate('authors')
-    .populate('reviews')
     .populate('creator')
     .exec()
-    .then(book => {
+    .then(async book => {
+      // get reviews for book
+      const bookReviews = [];
+      await Review.find({ book: book._id }).then(reviews => {
+        if (!reviews || reviews.length === 0) return;
+        else reviews.forEach(review => bookReviews.push(review));
+      });
       // average out rating
       const rating =
-        book.reviews.length > 0
+        bookReviews.length > 0
           ? (
-              book.reviews.reduce((prev, current) => prev + current.rating, 0) / book.reviews.length
+              bookReviews.reduce((prev, current) => prev + current.rating, 0) / bookReviews.length
             ).toFixed(2)
           : 'This book has not yet been reviewed';
       // get additional info from google
-      axios
+      const googleInfo = {};
+      await axios
         .get(
           `https://www.googleapis.com/books/v1/volumes/${
             book.identifiers.googleId
           }?key=${googleBooksApiKey}`
         )
         .then(googleBookData => {
+          // store info from google books into an object
           const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
-          res.json({
-            book,
-            googleInfo: {
-              description: volumeInfo.description,
-              pageCount: volumeInfo.pageCount,
-              publishedDate: volumeInfo.publishedDate
-            },
-            rating
-          });
+          googleInfo.description = volumeInfo.description ? volumeInfo.description : null;
+          googleInfo.pageCount = volumeInfo.pageCount ? volumeInfo.pageCount : null;
+          googleInfo.publishedDate = volumeInfo.publishedDate ? volumeInfo.publishedDate : null;
         })
-        .catch(err => console.log(err));
+        .catch(err => res.status(400).json(err));
+      // output data after fetching data from google
+      res.json({
+        book,
+        reviews: bookReviews,
+        rating,
+        googleInfo
+      });
     })
-    .catch(err => console.log(err));
+    .catch(err => res.status(400).json(err));
 });
 
 // @route     /api/books/:bookId/reviews/new
@@ -182,17 +190,20 @@ router.post(
   verifyBookId,
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    const errors = validateReviewInput(req.body);
-    if (!isEmpty(errors)) res.status(400).json(errors);
-    User.findById(req.user._id)
-      .populate('reviews')
-      .exec()
-      .then(user => {
-        user.reviews.forEach(review => {
-          if (review.book == req.params.bookId) errors.user = 'You have already reviewed this book';
-        });
+    let errors = {};
+    // check if user has reviewed this already
+    Book.findById(req.params.bookId).then(book => {
+      book.reviews.forEach(review => {
+        if (review.creator === req.user._id)
+          errors.alreadyReviewed = 'You have already reviewed this book';
+      });
+      if (!isEmpty(errors)) res.status(400).json(errors);
+      else {
+        // validate input
+        errors = validateReviewInput(req.body);
         if (!isEmpty(errors)) res.status(400).json(errors);
         else {
+          // create review
           Review.create({
             text: req.body.text,
             rating: req.body.rating,
@@ -200,24 +211,12 @@ router.post(
             creator: req.user._id
           })
             .then(review => {
-              Book.findById(req.params.bookId)
-                .then(book => {
-                  book.reviews.push(review._id);
-                  return book.save();
-                })
-                .then(() => {
-                  user.reviews.push(review._id);
-                  return user.save();
-                })
-                .then(() => {
-                  res.json(review);
-                })
-                .catch(err => console.log(err));
+              res.json(review);
             })
-            .catch(err => console.log(err));
+            .catch(err => res.status(400).json(err));
         }
-      })
-      .catch(err => console.log(err));
+      }
+    });
   }
 );
 

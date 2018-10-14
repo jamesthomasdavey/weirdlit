@@ -6,12 +6,6 @@ const AuthorSchema = new Schema({
     type: String,
     required: true
   },
-  books: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'books'
-    }
-  ],
   date: {
     type: Date,
     default: Date.now
