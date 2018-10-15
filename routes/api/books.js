@@ -58,36 +58,26 @@ router.get('/', (req, res) => {
 
 // @route     /api/books/pending
 // @desc      view pending books
-// @access    private
-router.get('/pending', (req, res) => {
-  Book.find({ isApproved: false })
-    .then(books => {
-      if (!books || books.length === 0) res.json([]);
-      else res.json(books);
-    })
-    .catch(err => res.status(400).json(err));
-});
+// @access    admin
+router.get(
+  '/pending',
+  passport.authenticate('jwt', { session: false }),
+  checkAuthLevel,
+  (req, res) => {
+    Book.find({ isApproved: false })
+      .then(books => {
+        if (!books || books.length === 0) res.json([]);
+        else res.json(books);
+      })
+      .catch(err => res.status(400).json(err));
+  }
+);
 
-// @route     /api/books/random
-// @desc      view random books
-// @access    public
-router.get('/random', (req, res) => {
-  Book.find({ isApproved: true })
-    .then(books => {
-      if (!books || books.length === 0) res.json({});
-      else {
-        const randomBook = books[Math.floor(Math.random() * books.length)];
-        res.redirect(`/api/books/${randomBook._id}`);
-      }
-    })
-    .catch(err => res.status(400).json(err));
-});
-
-// @route     /api/books/approve/:bookId
+// @route     put /api/books/:bookId/approve
 // @desc      approve book
 // @access    admin
-router.post(
-  '/approve/:bookId',
+router.put(
+  '/:bookId/approve',
   passport.authenticate('jwt', { session: false }),
   checkAuthLevel,
   (req, res) => {
@@ -103,6 +93,21 @@ router.post(
     });
   }
 );
+
+// @route     /api/books/random
+// @desc      view random books
+// @access    public
+router.get('/random', (req, res) => {
+  Book.find({ isApproved: true })
+    .then(books => {
+      if (!books || books.length === 0) res.json({});
+      else {
+        const randomBook = books[Math.floor(Math.random() * books.length)];
+        res.redirect(`/api/books/${randomBook._id}`);
+      }
+    })
+    .catch(err => res.status(400).json(err));
+});
 
 // @route     /api/books/new
 // @desc      new book route
