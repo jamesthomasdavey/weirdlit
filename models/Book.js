@@ -38,6 +38,15 @@ const BookSchema = new Schema({
   isApproved: {
     type: Boolean,
     default: false
+  },
+  publishedDate: {
+    type: Date
+  },
+  pageCount: {
+    type: Number
+  },
+  rating: {
+    type: Number
   }
 });
 

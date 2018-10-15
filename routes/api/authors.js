@@ -19,12 +19,22 @@ router.get('/:authorId', (req, res) => {
             const approvedBooks = [];
             books.forEach(book => {
               if (book.isApproved) {
-                approvedBooks.push(book);
+                approvedBooks.push({
+                  _id: book._id,
+                  title: book.title,
+                  subtitle: book.subtitle,
+                  publishedDate: book.publishedDate
+                });
               }
             });
             if (approvedBooks.length === 0) res.json({ books: 'No approved books found' });
             else {
-              res.json({ author, books: approvedBooks });
+              res.json({
+                _id: author._id,
+                name: author.name,
+                date: author.date,
+                books: approvedBooks
+              });
             }
           }
         });

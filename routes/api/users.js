@@ -53,7 +53,8 @@ router.post('/register', (req, res) => {
         await newUser.save();
         // create a new profile
         const newProfile = new Profile({
-          user: newUser._id
+          user: newUser._id,
+          date: newUser.date
         });
         newProfile.favoriteBook = req.body.favoriteBook ? req.body.favoriteBook : '';
         // save the new profile
