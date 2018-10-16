@@ -7,6 +7,7 @@ const passport = require('passport');
 const authors = require('./routes/api/authors');
 const books = require('./routes/api/books');
 const profile = require('./routes/api/profile');
+const reviews = require('./routes/api/reviews');
 const users = require('./routes/api/users');
 
 // run express as app
@@ -35,10 +36,11 @@ app.use(passport.initialize());
 require('./config/passport')(passport);
 
 // use routes
+app.use('/api/authors', authors);
 app.use('/api/books', books);
 app.use('/api/profile', profile);
+app.use('/api/books/:bookId/reviews', reviews);
 app.use('/api/users', users);
-app.use('/api/authors', authors);
 
 const port = process.env.PORT || 5000;
 

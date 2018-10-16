@@ -21,6 +21,9 @@ const ReviewSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  lastUpdated: {
+    type: Date
   }
 });
 

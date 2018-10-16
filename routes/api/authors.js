@@ -13,31 +13,24 @@ router.get('/:authorId', (req, res) => {
     .then(author => {
       if (!author) res.status(404).json({ author: 'Author not found' });
       else {
-        Book.find({ authors: req.params.authorId }).then(books => {
-          if (!books || books.length === 0) res.json({ books: 'No books found' });
-          else {
-            const approvedBooks = [];
-            books.forEach(book => {
-              if (book.isApproved) {
-                approvedBooks.push({
+        Book.find({ authors: req.params.authorId, isApproved: true })
+          .then(books => {
+            res.json({
+              _id: author._id,
+              name: author.name,
+              date: author.date,
+              books: books.map(book => {
+                return {
                   _id: book._id,
                   title: book.title,
                   subtitle: book.subtitle,
-                  publishedDate: book.publishedDate
-                });
-              }
+                  publishedDate: book.publishedDate,
+                  pageCount: book.pageCount
+                };
+              })
             });
-            if (approvedBooks.length === 0) res.json({ books: 'No approved books found' });
-            else {
-              res.json({
-                _id: author._id,
-                name: author.name,
-                date: author.date,
-                books: approvedBooks
-              });
-            }
-          }
-        });
+          })
+          .catch(err => res.status(400).json(err));
       }
     })
     .catch(err => res.status(400).json(err));
