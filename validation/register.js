@@ -11,14 +11,16 @@ module.exports = reqBody => {
 
   // name
   if (Validator.isEmpty(reqBody.name)) {
-    errors.name = 'Name field is required';
-  } else if (!Validator.isLength(reqBody.name, { min: 2, max: 40 })) {
-    errors.name = 'Name must be between 2 and 40 characters';
+    errors.name = 'Name is required';
+  } else if (!Validator.isLength(reqBody.name, { min: 2 })) {
+    errors.name = 'Name must be at least 2 characters';
+  } else if (!Validator.isLength(reqBody.name, { max: 40 })) {
+    errors.name = 'Name may not exceed 40 characters';
   }
 
   // email
   if (Validator.isEmpty(reqBody.email)) {
-    errors.email = 'Email field is required';
+    errors.email = 'Email is required';
   } else if (!Validator.isEmail(reqBody.email)) {
     errors.email = 'Invalid email address';
   }
@@ -29,7 +31,7 @@ module.exports = reqBody => {
   } else if (!Validator.isLength(reqBody.password, { min: 6 })) {
     errors.password = 'Password must be at least 6 characters';
   } else if (!Validator.isLength(reqBody.password, { max: 30 })) {
-    errors.password = 'Password must be no longer than 30 characters';
+    errors.password = 'Password may not exceed 30 characters';
   }
 
   // password2

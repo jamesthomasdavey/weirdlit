@@ -11,27 +11,25 @@ const Book = require('./../../models/Book');
 router.get('/:authorId', (req, res) => {
   Author.findById(req.params.authorId)
     .then(author => {
-      if (!author) res.status(404).json({ author: 'Author not found' });
-      else {
-        Book.find({ authors: req.params.authorId, isApproved: true })
-          .then(books => {
-            res.json({
-              _id: author._id,
-              name: author.name,
-              date: author.date,
-              books: books.map(book => {
-                return {
-                  _id: book._id,
-                  title: book.title,
-                  subtitle: book.subtitle,
-                  publishedDate: book.publishedDate,
-                  pageCount: book.pageCount
-                };
-              })
-            });
-          })
-          .catch(err => res.status(400).json(err));
-      }
+      if (!author) return res.status(404).json({ author: 'Author not found' });
+      Book.find({ authors: req.params.authorId, isApproved: true })
+        .then(books => {
+          res.json({
+            _id: author._id,
+            name: author.name,
+            date: author.date,
+            books: books.map(book => {
+              return {
+                _id: book._id,
+                title: book.title,
+                subtitle: book.subtitle,
+                publishedDate: book.publishedDate,
+                pageCount: book.pageCount
+              };
+            })
+          });
+        })
+        .catch(err => res.status(400).json(err));
     })
     .catch(err => res.status(400).json(err));
 });

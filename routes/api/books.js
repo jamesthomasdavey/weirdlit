@@ -22,24 +22,22 @@ const asyncForEach = async (arr, callback) => {
 };
 
 // middleware
-
 const verifyBookId = (req, res, next) => {
   Book.findOne({ _id: req.params.bookId, isApproved: true })
     .then(book => {
-      if (!book) res.status(404).json({ msg: 'Book not found' });
-      else next();
+      if (!book) return res.status(404).json({ msg: 'Book not found' });
+      next();
     })
     .catch(err => res.status(400).json(err));
 };
 
 const checkAuthLevel = (req, res, next) => {
-  if (!req.user.isAdmin) res.status(400).json({ msg: 'You are not authorized to do that' });
-  else {
-    next();
-  }
+  if (!req.user.isAdmin)
+    return res.status(400).json({ unauthorized: 'You are not authorized to do that' });
+  next();
 };
 
-// @route     /api/books
+// @route     get /api/books
 // @desc      view approved books
 // @access    public
 router.get('/', (req, res) => {
@@ -50,7 +48,7 @@ router.get('/', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
-// @route     /api/books/pending
+// @route     get /api/books/pending
 // @desc      view pending books
 // @access    admin
 router.get(
@@ -75,13 +73,13 @@ router.put(
   checkAuthLevel,
   (req, res) => {
     Book.findById(req.params.bookId).then(book => {
-      if (book.isApproved) res.status(400).json({ msg: 'Book has already been approved' });
-      else {
-        book.isApproved = true;
-        book.save().then(book => {
-          res.redirect(`/api/books/${book._id}`);
-        });
-      }
+      // make sure book isn't already approved
+      if (book.isApproved) return res.status(400).json({ msg: 'Book has already been approved' });
+      // approve and save book
+      book.isApproved = true;
+      book.save().then(book => {
+        res.redirect(`/api/books/${book._id}`);
+      });
     });
   }
 );
@@ -101,10 +99,10 @@ router.get('/random', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
-// @route     /api/books/new
+// @route     post /api/books
 // @desc      new book route
 // @access    private
-router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   Book.findOne({ 'identifiers.googleId': req.body.googleId }).then(book => {
     if (book.isApproved) {
       res.status(400).json({ googleId: 'This book has already been added' });
@@ -174,55 +172,56 @@ router.get('/:bookId', verifyBookId, (req, res) => {
     .then(async book => {
       if (!book) {
         errors._id = 'Book not found';
-        res.status(404).json(errors);
-      } else {
-        // get reviews for book
-        let bookReviews = [];
-        await Review.find({ book: book._id })
-          .populate('creator', 'name')
-          .then(reviews => {
-            if (!reviews || reviews.length === 0) return;
-            // push each review
-            else
-              bookReviews = reviews.map(review => {
-                return {
-                  _id: review._id,
-                  creator: review.creator,
-                  rating: review.rating,
-                  text: review.text,
-                  date: review.date,
-                  lastUpdated: review.lastUpdated
-                };
-              });
-          });
-        // get additional info from google
-        const googleInfo = {};
-        await axios
-          .get(
-            `https://www.googleapis.com/books/v1/volumes/${
-              book.identifiers.googleId
-            }?key=${googleBooksApiKey}`
-          )
-          .then(googleBookData => {
-            // store description from google books into an object
-            const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
-            googleInfo.description = volumeInfo.description ? volumeInfo.description : null;
-          })
-          .catch(err => res.status(400).json(err));
-        // output data after fetching data from google
-        res.json({
-          _id: book._id,
-          title: book.title,
-          subtitle: book.subtitle,
-          authors: book.authors,
-          publishedDate: book.publishedDate,
-          description: googleInfo.description,
-          pageCount: book.pageCount,
-          rating: book.rating,
-          reviews: bookReviews,
-          identifiers: book.identifiers
-        });
+        return res.status(404).json(errors);
       }
+      // get reviews for book
+      let bookReviews = [];
+      await Review.find({ book: book._id })
+        .populate('creator', 'name')
+        .then(reviews => {
+          if (!reviews || reviews.length === 0) return;
+          // push each review
+          else
+            bookReviews = reviews.map(review => {
+              return {
+                _id: review._id,
+                creator: review.creator,
+                rating: review.rating,
+                headline: review.headline,
+                text: review.text,
+                date: review.date,
+                lastUpdated: review.lastUpdated
+              };
+            });
+        })
+        .catch(err => res.status(400).json(err));
+      // get additional info from google
+      const googleInfo = {};
+      await axios
+        .get(
+          `https://www.googleapis.com/books/v1/volumes/${
+            book.identifiers.googleId
+          }?key=${googleBooksApiKey}`
+        )
+        .then(googleBookData => {
+          // store description from google books into an object
+          const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
+          googleInfo.description = volumeInfo.description ? volumeInfo.description : null;
+        })
+        .catch(err => res.status(400).json(err));
+      // output data after fetching data from google
+      res.json({
+        _id: book._id,
+        title: book.title,
+        subtitle: book.subtitle,
+        authors: book.authors,
+        publishedDate: book.publishedDate,
+        description: googleInfo.description,
+        pageCount: book.pageCount,
+        rating: book.rating,
+        reviews: bookReviews,
+        identifiers: book.identifiers
+      });
     })
     .catch(err => res.status(400).json(err));
 });

@@ -27,39 +27,38 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
     .then(async profile => {
       if (!profile) {
         errors.noprofile = 'No profile found';
-        res.status(404).json(errors);
-      } else {
-        let favoriteBook = null;
-        if (profile.favoriteBook) {
-          await Book.findOne({ title: profile.favoriteBook })
-            .populate('authors', 'name')
-            .then(book => {
-              if (!book || !book.isApproved) return;
-              else if (book.isApproved) {
-                favoriteBook = {
-                  _id: book._id,
-                  title: book.title,
-                  subtitle: book.subtitle,
-                  authors: book.authors
-                };
-              }
-            });
-        }
-        res.json({
-          _id: profile._id,
-          user: profile.user,
-          handle: profile.handle,
-          favoriteBook: favoriteBook || profile.favoriteBook,
-          location: profile.location,
-          bio: profile.bio,
-          social: {
-            goodreads: profile.social.goodreads,
-            facebook: profile.social.facebook,
-            instagram: profile.social.instagram
-          },
-          date: profile.date
-        });
+        return res.status(404).json(errors);
       }
+      let favoriteBook = null;
+      if (profile.favoriteBook) {
+        await Book.findOne({ title: profile.favoriteBook })
+          .populate('authors', 'name')
+          .then(book => {
+            if (!book || !book.isApproved) return;
+            else if (book.isApproved) {
+              favoriteBook = {
+                _id: book._id,
+                title: book.title,
+                subtitle: book.subtitle,
+                authors: book.authors
+              };
+            }
+          });
+      }
+      res.json({
+        _id: profile._id,
+        user: profile.user,
+        handle: profile.handle,
+        favoriteBook: favoriteBook || profile.favoriteBook,
+        location: profile.location,
+        bio: profile.bio,
+        social: {
+          goodreads: profile.social.goodreads,
+          facebook: profile.social.facebook,
+          instagram: profile.social.instagram
+        },
+        date: profile.date
+      });
     })
     .catch(err => res.status(404).json(err));
 });
@@ -69,36 +68,30 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
 // @access    private
 router.put('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const errors = validateProfileInput(req.body);
-  if (!isEmpty(errors)) res.status(400).json(errors);
-  else {
-    Profile.findOne({ handle: req.body.handle.toLowerCase() })
-      .then(profile => {
-        if (profile && !profile.user.equals(req.user._id)) {
-          // check if the id is taken, or if it is, make sure it is owned by the current user
-          errors.handle = 'This handle has already been taken';
-          res.status(400).json(errors);
-        } else if (!profile) {
-          // check if the profile exists at all
-          errors.noprofile = 'No profile found';
-          res.status(404).json(errors);
-        }
-        if (isEmpty(errors)) {
-          const profileFields = {};
-          if (req.body.handle) profileFields.handle = req.body.handle.toLowerCase();
-          if (req.body.favoriteBook) profileFields.favoriteBook = req.body.favoriteBook;
-          if (req.body.location) profileFields.location = req.body.location;
-          if (req.body.bio) profileFields.bio = req.body.bio;
-          profileFields.social = {};
-          if (req.body.goodreads) profileFields.social.goodreads = req.body.goodreads;
-          if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
-          if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
-          Profile.findOneAndUpdate({ user: req.user._id }, { $set: profileFields }, { new: true })
-            .then(profile => res.redirect('/api/profile'))
-            .catch(err => res.status(400).json(err));
-        }
-      })
-      .catch(err => res.status(400).json(err));
-  }
+  if (!isEmpty(errors)) return res.status(400).json(errors);
+  Profile.findOne({ handle: req.body.handle.toLowerCase() })
+    .then(profile => {
+      if (profile && !profile.user.equals(req.user._id)) {
+        // check if the id is taken, or if it is, make sure it is owned by the current user
+        errors.handle = 'This handle has already been taken';
+        return res.status(400).json(errors);
+      }
+      if (isEmpty(errors)) {
+        const profileFields = {};
+        if (req.body.handle) profileFields.handle = req.body.handle.toLowerCase();
+        if (req.body.favoriteBook) profileFields.favoriteBook = req.body.favoriteBook;
+        if (req.body.location) profileFields.location = req.body.location;
+        if (req.body.bio) profileFields.bio = req.body.bio;
+        profileFields.social = {};
+        if (req.body.goodreads) profileFields.social.goodreads = req.body.goodreads;
+        if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
+        if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
+        Profile.findOneAndUpdate({ user: req.user._id }, { $set: profileFields }, { new: true })
+          .then(profile => res.redirect('/api/profile'))
+          .catch(err => res.status(400).json(err));
+      }
+    })
+    .catch(err => res.status(400).json(err));
 });
 
 // @route     get /api/profile/:handle
@@ -111,39 +104,38 @@ router.get('/:handle', passport.authenticate('jwt', { session: false }), (req, r
     .then(async profile => {
       if (!profile) {
         errors.noprofile = 'No profile found';
-        res.status(404).json(errors);
-      } else {
-        let favoriteBook = null;
-        if (profile.favoriteBook) {
-          await Book.findOne({ title: profile.favoriteBook })
-            .populate('authors', 'name')
-            .then(book => {
-              if (!book || !book.isApproved) return;
-              else if (book.isApproved) {
-                favoriteBook = {
-                  _id: book._id,
-                  title: book.title,
-                  subtitle: book.subtitle,
-                  authors: book.authors
-                };
-              }
-            });
-        }
-        res.json({
-          _id: profile._id,
-          user: profile.user,
-          handle: profile.handle,
-          favoriteBook: favoriteBook || profile.favoriteBook,
-          location: profile.location,
-          bio: profile.bio,
-          social: {
-            goodreads: profile.social.goodreads,
-            facebook: profile.social.facebook,
-            instagram: profile.social.instagram
-          },
-          date: profile.date
-        });
+        return res.status(404).json(errors);
       }
+      let favoriteBook = null;
+      if (profile.favoriteBook) {
+        await Book.findOne({ title: profile.favoriteBook })
+          .populate('authors', 'name')
+          .then(book => {
+            if (!book || !book.isApproved) return;
+            else if (book.isApproved) {
+              favoriteBook = {
+                _id: book._id,
+                title: book.title,
+                subtitle: book.subtitle,
+                authors: book.authors
+              };
+            }
+          });
+      }
+      res.json({
+        _id: profile._id,
+        user: profile.user,
+        handle: profile.handle,
+        favoriteBook: favoriteBook || profile.favoriteBook,
+        location: profile.location,
+        bio: profile.bio,
+        social: {
+          goodreads: profile.social.goodreads,
+          facebook: profile.social.facebook,
+          instagram: profile.social.instagram
+        },
+        date: profile.date
+      });
     })
     .catch(err => res.status(400).json(err));
 });

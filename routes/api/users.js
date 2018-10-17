@@ -16,52 +16,49 @@ const keys = require('./../../config/keys');
 const User = require('./../../models/User');
 const Profile = require('./../../models/Profile');
 
-// @route     /api/users/test
-// @desc      test users route
-// @access    public
-router.get('/test', (req, res) => res.json({ msg: 'users test working...' }));
-
-// @route     /api/users/register
+// @route     get /api/users/register
 // @desc      register new user
 // @access    public
 router.post('/register', (req, res) => {
-  const errors = validateRegisterInput(req.body);
+  let errors = {};
   User.findOne({ email: req.body.email })
     .then(async foundUser => {
-      if (foundUser) errors.email = 'Email already registered';
-      if (!isEmpty(errors)) res.status(400).json(errors);
-      else {
-        // create new user
-        const newUser = new User({
-          name: req.body.name,
-          email: req.body.email,
-          password: req.body.password
-        });
-        // use bcrypt to encrypt the password
-        await bcrypt
-          .genSalt(10)
-          .then(salt => {
-            if (!salt) throw 'Error generating salt.';
-            return bcrypt.hash(newUser.password, salt);
-          })
-          .then(hash => {
-            if (!hash) throw 'Error generating hash.';
-            newUser.password = hash;
-          })
-          .catch(err => res.status(400).json(err));
-        // save the new user
-        await newUser.save();
-        // create a new profile
-        const newProfile = new Profile({
-          user: newUser._id,
-          date: newUser.date
-        });
-        newProfile.favoriteBook = req.body.favoriteBook ? req.body.favoriteBook : '';
-        // save the new profile
-        await newProfile.save();
-        // output data to user
-        res.json(newUser);
+      if (foundUser) {
+        errors.email = 'Email already registered';
+        return res.status(400).json(errors);
       }
+      errors = validateRegisterInput(req.body);
+      if (!isEmpty(errors)) return res.status(400).json(errors);
+      // create new user
+      const newUser = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
+      });
+      // use bcrypt to encrypt the password
+      await bcrypt
+        .genSalt(10)
+        .then(salt => {
+          if (!salt) throw 'Error generating salt.';
+          return bcrypt.hash(newUser.password, salt);
+        })
+        .then(hash => {
+          if (!hash) throw 'Error generating hash.';
+          newUser.password = hash;
+        })
+        .catch(err => res.status(400).json(err));
+      // save the new user
+      await newUser.save();
+      // create a new profile
+      const newProfile = new Profile({
+        user: newUser._id,
+        date: newUser.date
+      });
+      newProfile.favoriteBook = req.body.favoriteBook ? req.body.favoriteBook : '';
+      // save the new profile
+      await newProfile.save();
+      // output data to user
+      res.json(newUser);
     })
     .catch(err => res.status(400).json(err));
 });
@@ -71,36 +68,35 @@ router.post('/register', (req, res) => {
 // @access    public
 router.post('/login', (req, res) => {
   const errors = validateLoginInput(req.body);
-  if (!isEmpty(errors)) res.status(400).json(errors);
-  else {
-    User.findOne({ email: req.body.email })
-      .then(foundUser => {
-        if (!foundUser) {
-          errors.email = 'User not found';
-          res.status(404).json(errors);
-        } else {
-          bcrypt
-            .compare(req.body.password, foundUser.password)
-            .then(isMatch => {
-              if (!isMatch) {
-                errors.password = 'Password is incorrect';
-                res.status(404).json(errors);
-              } else {
-                const payload = { _id: foundUser._id };
-                jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
-                  if (!token || err) throw 'Unable to sign token';
-                  res.json({
-                    success: true,
-                    token: `Bearer ${token}`
-                  });
-                });
-              }
-            })
-            .catch(err => res.status(400).json(err));
-        }
-      })
-      .catch(err => res.status(400).json(err));
-  }
+  if (!isEmpty(errors)) return res.status(400).json(errors);
+  User.findOne({ email: req.body.email })
+    .then(foundUser => {
+      if (!foundUser) {
+        errors.email = 'User not found';
+        return res.status(404).json(errors);
+      }
+      bcrypt
+        .compare(req.body.password, foundUser.password)
+        .then(isMatch => {
+          if (!isMatch) {
+            errors.password = 'Password is incorrect';
+            return res.status(404).json(errors);
+          }
+          const payload = { _id: foundUser._id };
+          jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
+            if (!token || err) {
+              errors.token = 'Unable to sign token';
+              return res.status(400).json(errors);
+            }
+            res.json({
+              success: true,
+              token: `Bearer ${token}`
+            });
+          });
+        })
+        .catch(err => res.status(400).json(err));
+    })
+    .catch(err => res.status(400).json(err));
 });
 
 // @route     /api/users/current
@@ -112,20 +108,6 @@ router.get('/current', passport.authenticate('jwt', { session: false }), (req, r
     name: req.user.name,
     email: req.user.email
   });
-});
-
-// @route     /api/users/:userId
-// @desc      view user page
-// @access    public
-router.get('/:userId', (req, res) => {
-  User.findById(req.params.userId)
-    .then(user => {
-      if (!user) res.status(404).json({ user: 'User not found' });
-      else {
-        res.json(user);
-      }
-    })
-    .catch(err => res.status(400).json(err));
 });
 
 module.exports = router;
