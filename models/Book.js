@@ -47,6 +47,10 @@ const BookSchema = new Schema({
   },
   rating: {
     type: Number
+  },
+  image: {
+    type: String,
+    required: true
   }
 });
 

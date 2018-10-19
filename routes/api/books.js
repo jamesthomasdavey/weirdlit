@@ -4,6 +4,7 @@ const axios = require('axios');
 const flatted = require('flatted');
 const googleBooksApiKey = require('./../../config/keys').googleBooksApiKey;
 const passport = require('passport');
+const imgur = require('imgur-node-api');
 
 // load input validation
 const isEmpty = require('./../../validation/is-empty');
@@ -84,7 +85,7 @@ router.put(
   }
 );
 
-// @route     /api/books/random
+// @route     get /api/books/random
 // @desc      view random books
 // @access    public
 router.get('/random', (req, res) => {
@@ -99,16 +100,74 @@ router.get('/random', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
+// @route     post /api/books/add/search
+// @desc      search for books to add
+// @access    private
+router.post('/add/search', passport.authenticate('jwt', { session: false }), (req, res) => {
+  axios
+    .get(
+      `https://www.googleapis.com/books/v1/volumes/?q=${
+        req.body.searchTerm
+      }&maxResults=10&key=${googleBooksApiKey}`
+    )
+    .then(googleResults => {
+      const googleList = flatted.parse(flatted.stringify(googleResults)).data.items;
+      res.json(
+        googleList.map(book => {
+          return {
+            googleId: book.id,
+            title: book.volumeInfo.title,
+            subtitle: book.volumeInfo.subtitle,
+            authors: book.volumeInfo.authors,
+            publishedDate: new Date(book.volumeInfo.publishedDate)
+          };
+        })
+      );
+    })
+    .catch(err => res.status(400).json(err));
+});
+
+// @route     get /api.books/add/:googleId
+// @desc      show image upload form
+// @access    private
+router.get('/add/:googleId', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Book.findOne({ 'identifiers.googleId': req.params.googleId }).then(book => {
+    if (book && book.isApproved)
+      return res.status(400).json({ googleId: 'This book has already been added' });
+    if (book && !book.isApproved)
+      return res.status(400).json({ googleId: 'This book has already been requested' });
+    axios
+      .get(
+        `https://www.googleapis.com/books/v1/volumes/${
+          req.params.googleId
+        }?key=${googleBooksApiKey}`
+      )
+      .then(async googleBookData => {
+        const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
+        res.json({
+          googleId: req.params.googleId,
+          googleImageUrl: volumeInfo.imageLinks.extraLarge
+        });
+      })
+      .catch(err => res.status(400).json(err));
+  });
+});
+
 // @route     post /api/books
 // @desc      new book route
 // @access    private
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Book.findOne({ 'identifiers.googleId': req.body.googleId }).then(book => {
-    if (book.isApproved) {
-      res.status(400).json({ googleId: 'This book has already been added' });
-    } else if (!book.isApproved) {
-      res.status(400).json({ googleId: 'This book has already been requested' });
-    } else {
+  // upload image to imgur
+  const imageUrl = req.body.imageUrl || req.body.googleImageUrl;
+  imgur.upload(imageUrl, (err, imgurImage) => {
+    if (err) return res.status(400).json(err);
+
+    Book.findOne({ 'identifiers.googleId': req.body.googleId }).then(book => {
+      if (book && book.isApproved)
+        return res.status(400).json({ googleId: 'This book has already been added' });
+      if (book && !book.isApproved)
+        return res.status(400).json({ googleId: 'This book has already been requested' });
+
       axios
         .get(
           `https://www.googleapis.com/books/v1/volumes/${
@@ -117,6 +176,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
         )
         .then(async googleBookData => {
           const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
+
           // create new book
           const newBook = new Book({
             identifiers: {
@@ -124,14 +184,13 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
             },
             title: volumeInfo.title,
             authors: [],
-            creator: req.user._id
+            creator: req.user._id,
+            image: imgurImage.data.link
           });
           // add subtitle if it exists
-          newBook.subtitle = volumeInfo.subtitle ? volumeInfo.subtitle : null;
-          newBook.publishedDate = volumeInfo.publishedDate
-            ? new Date(volumeInfo.publishedDate)
-            : null;
-          newBook.pageCount = volumeInfo.pageCount ? parseInt(volumeInfo.pageCount) : null;
+          if (volumeInfo.subtitle) newBook.subtitle = volumeInfo.subtitle;
+          if (volumeInfo.publishedDate) newBook.publishedDate = new Date(volumeInfo.publishedDate);
+          if (volumeInfo.pageCount) newBook.pageCount = parseInt(volumeInfo.pageCount);
           // add isbn numbers to book if they exist
           volumeInfo.industryIdentifiers.forEach(industryIdentifier => {
             if (industryIdentifier.type === 'ISBN_10') {
@@ -158,7 +217,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
           res.json(newBook);
         })
         .catch(err => res.status(400).json(err));
-    }
+    });
   });
 });
 
