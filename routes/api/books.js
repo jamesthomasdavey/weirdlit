@@ -89,15 +89,18 @@ router.put(
 // @desc      view random books
 // @access    public
 router.get('/random', (req, res) => {
+  const errors = {};
   Book.find({ isApproved: true })
     .then(books => {
-      if (books.length === 0) res.json({});
-      else {
-        const randomBook = books[Math.floor(Math.random() * books.length)];
-        res.redirect(`/api/books/${randomBook._id}`);
+      if (books.length === 0) {
+        errors.nobooks = 'No books found';
+        return res.status(404).json(errors);
       }
+
+      const randomBook = books[Math.floor(Math.random() * books.length)];
+      res.redirect(`/api/books/${randomBook._id}`);
     })
-    .catch(err => res.status(400).json(err));
+    .catch(err => res.status(404).json(err));
 });
 
 // @route     post /api/books/add/search
@@ -127,8 +130,8 @@ router.post('/add/search', passport.authenticate('jwt', { session: false }), (re
     .catch(err => res.status(400).json(err));
 });
 
-// @route     get /api.books/add/:googleId
-// @desc      show image upload form
+// @route     get /api/books/add/:googleId
+// @desc      show google book image and image upload form
 // @access    private
 router.get('/add/:googleId', passport.authenticate('jwt', { session: false }), (req, res) => {
   Book.findOne({ 'identifiers.googleId': req.params.googleId }).then(book => {
@@ -144,6 +147,7 @@ router.get('/add/:googleId', passport.authenticate('jwt', { session: false }), (
       )
       .then(async googleBookData => {
         const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
+        // return object with google id and google image url. these will be included as values in the post form.
         res.json({
           googleId: req.params.googleId,
           googleImageUrl: volumeInfo.imageLinks.extraLarge
@@ -153,10 +157,10 @@ router.get('/add/:googleId', passport.authenticate('jwt', { session: false }), (
   });
 });
 
-// @route     post /api/books
+// @route     post /api/books/new
 // @desc      new book route
 // @access    private
-router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
   // upload image to imgur
   const imageUrl = req.body.imageUrl || req.body.googleImageUrl;
   imgur.upload(imageUrl, (err, imgurImage) => {
