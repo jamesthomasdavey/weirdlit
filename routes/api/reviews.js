@@ -60,13 +60,39 @@ router.post('/', verifyBookId, passport.authenticate('jwt', { session: false }),
         book.rating = newRating;
         book.save();
       });
+      // send new review data
       res.json({ newReview });
     })
     .catch(err => res.status(400).json(err));
 });
 
-// @route     put /api/books/:bookId/reviews
+// @route     get /api/books/:bookId/reviews/:reviewId/edit
 // @desc      edit review to book
+// @access    private
+router.get(
+  '/:reviewId/edit',
+  verifyBookId,
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const errors = {};
+    Review.findById(req.params.reviewId)
+      .then(review => {
+        if (!review) {
+          errors.noreview = 'No review found';
+          return res.status(404).json(errors);
+        }
+        if (!review.creator.equals(req.user._id)) {
+          errors.unauthorized = 'You are not authorized to do that';
+          return res.status(400).json(errors);
+        }
+        res.json(review);
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route     put /api/books/:bookId/reviews/:reviewId
+// @desc      update review to book
 // @access    private
 router.put(
   '/:reviewId',

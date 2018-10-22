@@ -19,6 +19,12 @@ const ProfileSchema = new Schema({
   bio: {
     type: String
   },
+  hasRead: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'books'
+    }
+  ],
   social: {
     goodreads: {
       type: String

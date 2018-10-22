@@ -96,7 +96,6 @@ router.get('/random', (req, res) => {
         errors.nobooks = 'No books found';
         return res.status(404).json(errors);
       }
-
       const randomBook = books[Math.floor(Math.random() * books.length)];
       res.redirect(`/api/books/${randomBook._id}`);
     })
@@ -104,7 +103,7 @@ router.get('/random', (req, res) => {
 });
 
 // @route     post /api/books/add/search
-// @desc      search for books to add
+// @desc      search for books to add, return a list of up to 10 results
 // @access    private
 router.post('/add/search', passport.authenticate('jwt', { session: false }), (req, res) => {
   axios
@@ -158,7 +157,7 @@ router.get('/add/:googleId', passport.authenticate('jwt', { session: false }), (
 });
 
 // @route     post /api/books/new
-// @desc      new book route
+// @desc      new book route. upload image and store in data.
 // @access    private
 router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
   // upload image to imgur
