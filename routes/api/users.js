@@ -116,7 +116,7 @@ router.get('/current', passport.authenticate('jwt', { session: false }), (req, r
 router.delete('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   Profile.findOneAndRemove({ user: req.user._id })
     .then(() => User.findByIdAndRemove(req.user._id))
-    .then(() => res.json({ msg: 'Success' }))
+    .then(() => res.json({ success: true }))
     .catch(err => res.status(404).json(err));
 });
 

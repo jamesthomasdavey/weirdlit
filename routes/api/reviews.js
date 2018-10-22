@@ -18,7 +18,7 @@ const User = require('./../../models/User');
 const verifyBookId = (req, res, next) => {
   Book.findOne({ _id: req.params.bookId, isApproved: true })
     .then(book => {
-      if (!book) return res.status(404).json({ msg: 'Book not found' });
+      if (!book) return res.status(404).json({ nobook: 'Book not found' });
       next();
     })
     .catch(err => res.status(400).json(err));
@@ -62,7 +62,7 @@ router.post('/', verifyBookId, passport.authenticate('jwt', { session: false }),
         book.save();
       });
       // send new review data
-      res.json({ newReview });
+      res.json(newReview);
     })
     .catch(err => res.status(400).json(err));
 });
@@ -148,24 +148,170 @@ router.put(
 // @route     delete /api/books/:bookId/reviews/:reviewId
 // @desc      delete review of book
 // @access    private
-router.delete('/:reviewId', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Review.findById(req.params.reviewId)
-    .then(review => {
-      // check if review exists
-      if (!review) {
-        errors.noreview = 'No review found';
-        return res.status(404).json(errors);
-      }
-      // check if user owns review
-      if (!review.creator.equals(req.user._id)) {
-        errors.unauthorized = 'You are not authorized to do that';
-        return res.status(400).json(errors);
-      }
-      Review.findByIdAndRemove(req.params.reviewId)
-        .then(res.json({ msg: 'Success' }))
-        .catch(err => res.status(404).json(err));
-    })
-    .catch(err => res.status(404).json(err));
-});
+router.delete(
+  '/:reviewId',
+  verifyBookId,
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Review.findById(req.params.reviewId)
+      .then(review => {
+        // check if review exists
+        if (!review) {
+          errors.noreview = 'No review found';
+          return res.status(404).json(errors);
+        }
+        // check if user owns review
+        if (!review.creator.equals(req.user._id)) {
+          errors.unauthorized = 'You are not authorized to do that';
+          return res.status(400).json(errors);
+        }
+        review
+          .remove()
+          .then(res.json({ success: true }))
+          .catch(err => res.status(404).json(err));
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route     post /api/books/:bookId/reviews/:reviewId/like
+// @desc      like review of book
+// @access    private
+router.post(
+  '/:reviewId/like',
+  verifyBookId,
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const errors = {};
+    Review.findById(req.params.reviewId)
+      .then(review => {
+        if (!review) {
+          errors.noreview = 'Review not found';
+          return res.status(404).json(errors);
+        }
+        if (
+          review.likes.length > 0 &&
+          review.likes.filter(like => like.user.equals(req.user._id))
+        ) {
+          errors.alreadyLiked = 'User already liked this review';
+          return res.status(400).json(errors);
+        }
+        review.likes.unshift({ user: req.user._id });
+        review
+          .save()
+          .then(review => res.json(review))
+          .catch(err => res.status(400).json(err));
+      })
+      .catch(err => res.status(400).json(err));
+  }
+);
+
+// @route     post /api/books/:bookId/reviews/:reviewId/unlike
+// @desc      unlike review of book
+// @access    private
+router.post(
+  '/:reviewId/unlike',
+  verifyBookId,
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const errors = {};
+    Review.findById(req.params.reviewId)
+      .then(review => {
+        if (!review) {
+          errors.noreview = 'Review not found';
+          return res.status(404).json(errors);
+        }
+        if (
+          review.likes.length === 0 ||
+          !review.likes.filter(like => like.user.equals(req.user._id))
+        ) {
+          errors.notliked = 'User has not liked this review';
+          return res.status(400).json(errors);
+        }
+        const removeIndex = review.likes.map(like => like.user.toString()).indexOf(req.user._id);
+        review.likes.splice(removeIndex, 1);
+        review
+          .save()
+          .then(review => res.json(review))
+          .catch(err => res.status(400).json(err));
+      })
+      .catch(err => res.status(400).json(err));
+  }
+);
+
+// @route     post /api/books/:bookId/reviews/:reviewId/comments
+// @desc      add comment to review
+// @access    private
+router.post(
+  '/:reviewId/comments',
+  verifyBookId,
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const errors = {};
+    Review.findById(req.params.reviewId)
+      .then(review => {
+        if (!review) {
+          errors.noreview = 'Review not found';
+          return res.status(404).json(errors);
+        }
+        const newComment = {
+          text: req.body.text,
+          name: req.body.name,
+          user: req.body.user
+        };
+        review.comments.unshift(newComment);
+        review
+          .save()
+          .then(review => res.json(review))
+          .catch(err => res.status(400).json(err));
+      })
+      .catch(err => res.status(400).json(err));
+  }
+);
+
+// @route     delete /api/books/:bookId/reviews/:reviewId/comments/:commentId
+// @desc      delete comment from review
+// @access    private
+
+router.delete(
+  '/:reviewId/comments/:commentId',
+  verifyBookId,
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    const errors = {};
+    Review.findById(req.params.reviewId)
+      .then(review => {
+        if (!review) {
+          errors.noreview = 'Review not found';
+          return res.status(404).json(errors);
+        }
+        if (
+          review.comments.length === 0 ||
+          !review.comments.filter(comment => comment._id.equals(req.params.commentId))
+        ) {
+          errors.nocomments = 'Comment not found';
+          return res.status(404).json(errors);
+        }
+        if (
+          !review.comments
+            .filter(comment => comment._id.equals(req.params.commentId))[0]
+            .user.equals(req.params.user._id)
+        ) {
+          errors.unauthorized = 'You are not allowed to do that';
+          return res.status(400).json(errors);
+        }
+        const removeIndex = review.comments
+          .map(comment => comment._id.toString())
+          .indexOf(req.params.commentId);
+
+        review.comments.splice(removeIndex, 1);
+        review
+          .save()
+          .then(review => res.json(review))
+          .catch(err => res.status(400).json(err));
+      })
+      .catch(err => res.status(400).json(err));
+  }
+);
 
 module.exports = router;

@@ -43,6 +43,7 @@ const checkAuthLevel = (req, res, next) => {
 // @access    public
 router.get('/', (req, res) => {
   Book.find({ isApproved: true })
+    .sort({ date: -1 })
     .then(books => {
       res.json(books);
     })
@@ -79,7 +80,7 @@ router.put(
       // approve and save book
       book.isApproved = true;
       book.save().then(book => {
-        res.redirect(`/api/books/${book._id}`);
+        res.json(book);
       });
     });
   }
@@ -239,6 +240,7 @@ router.get('/:bookId', verifyBookId, (req, res) => {
       // get reviews for book
       let bookReviews = [];
       await Review.find({ book: book._id })
+        .sort({ date: -1 })
         .populate('creator', 'name')
         .then(reviews => {
           if (!reviews || reviews.length === 0) return;
