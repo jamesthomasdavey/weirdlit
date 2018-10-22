@@ -16,7 +16,7 @@ const keys = require('./../../config/keys');
 const User = require('./../../models/User');
 const Profile = require('./../../models/Profile');
 
-// @route     get /api/users/register
+// @route     post /api/users/register
 // @desc      register new user
 // @access    public
 router.post('/register', (req, res) => {
@@ -63,7 +63,7 @@ router.post('/register', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
-// @route     /api/users/login
+// @route     post /api/users/login
 // @desc      log in user
 // @access    public
 router.post('/login', (req, res) => {
@@ -99,7 +99,7 @@ router.post('/login', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
-// @route     /api/users/current
+// @route     get /api/users/current
 // @desc      return current user info
 // @access    private
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -108,6 +108,16 @@ router.get('/current', passport.authenticate('jwt', { session: false }), (req, r
     name: req.user.name,
     email: req.user.email
   });
+});
+
+// @route     delete /api/users
+// @desc      return current user info
+// @access    private
+router.delete('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Profile.findOneAndRemove({ user: req.user._id })
+    .then(() => User.findByIdAndRemove(req.user._id))
+    .then(() => res.json({ msg: 'Success' }))
+    .catch(err => res.status(404).json(err));
 });
 
 module.exports = router;
