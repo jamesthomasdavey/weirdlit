@@ -10,6 +10,9 @@ const ReviewSchema = new Schema({
     type: String,
     required: true
   },
+  name: {
+    type: String
+  },
   rating: {
     type: Number,
     required: true
@@ -26,6 +29,14 @@ const ReviewSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  likes: [
+    {
+      user: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+      }
+    }
+  ],
   lastUpdated: {
     type: Date
   }

@@ -21,8 +21,10 @@ const ProfileSchema = new Schema({
   },
   hasRead: [
     {
-      type: Schema.Types.ObjectId,
-      ref: 'books'
+      book: {
+        type: Schema.Types.ObjectId,
+        ref: 'books'
+      }
     }
   ],
   social: {

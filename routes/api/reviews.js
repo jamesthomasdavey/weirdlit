@@ -46,6 +46,7 @@ router.post('/', verifyBookId, passport.authenticate('jwt', { session: false }),
         headline: req.body.headline,
         text: req.body.text,
         book: req.params.bookId,
+        name: req.body.name,
         creator: req.user._id
       });
       await newReview.save();
@@ -120,6 +121,7 @@ router.put(
         const updatedReview = {
           headline: req.body.headline,
           text: req.body.text,
+          name: req.body.name,
           rating: req.body.rating,
           lastUpdated: Date.now()
         };
@@ -142,5 +144,28 @@ router.put(
       .catch(err => res.status(400).json(err));
   }
 );
+
+// @route     delete /api/books/:bookId/reviews/:reviewId
+// @desc      delete review of book
+// @access    private
+router.delete('/:reviewId', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Review.findById(req.params.reviewId)
+    .then(review => {
+      // check if review exists
+      if (!review) {
+        errors.noreview = 'No review found';
+        return res.status(404).json(errors);
+      }
+      // check if user owns review
+      if (!review.creator.equals(req.user._id)) {
+        errors.unauthorized = 'You are not authorized to do that';
+        return res.status(400).json(errors);
+      }
+      Review.findByIdAndRemove(req.params.reviewId)
+        .then(res.json({ msg: 'Success' }))
+        .catch(err => res.status(404).json(err));
+    })
+    .catch(err => res.status(404).json(err));
+});
 
 module.exports = router;
