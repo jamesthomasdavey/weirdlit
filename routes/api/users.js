@@ -23,11 +23,10 @@ router.post('/register', (req, res) => {
   let errors = {};
   User.findOne({ email: req.body.email })
     .then(async foundUser => {
-      if (foundUser) {
-        errors.email = 'Email already registered';
-        return res.status(400).json(errors);
-      }
-      errors = validateRegisterInput(req.body);
+      // check if user exists
+      if (foundUser) errors.email = 'Email already registered';
+      // check input validation
+      errors = { ...errors, ...validateRegisterInput(req.body) };
       if (!isEmpty(errors)) return res.status(400).json(errors);
       // create new user
       const newUser = new User({

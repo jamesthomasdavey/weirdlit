@@ -1,0 +1,12 @@
+.footer {
+  position: fixed;
+  height: 60px;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer__text {
+  display: block;
+  /* width: 100%; */
+  text-align: center;
+}

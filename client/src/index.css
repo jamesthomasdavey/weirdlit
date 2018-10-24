@@ -18,6 +18,7 @@ code {
 /* colors */
 
 :root {
+  --black: #333;
 }
 
 /* fonts */
@@ -36,7 +37,7 @@ code {
 ************************ BASE
 *****************************/
 
-.clearfix::after {
+/* .clearfix::after {
   content: '';
   clear: both;
   display: table;
@@ -56,15 +57,16 @@ html {
   box-sizing: inherit;
   margin: 0;
   padding: 0;
-}
+} */
 
 /*****************************
 ********************* GENERAL
 *****************************/
 
-body {
+/* body {
   height: 100%;
   font-family: var(--paragraph-font-stack);
+  color: var(--black);
 }
 
 h1 {
@@ -78,4 +80,4 @@ h4,
 h5 {
   font-family: var(--header-font-stack);
   font-weight: 400;
-}
+} */

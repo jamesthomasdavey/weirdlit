@@ -1,0 +1,29 @@
+.nav {
+  width: 100%;
+}
+
+.nav__container {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 18px;
+}
+
+.logo__link {
+  color: #333;
+  text-decoration: none;
+}
+
+.logo {
+  font-size: 36px;
+  letter-spacing: 3px;
+}
+
+.logo__weird {
+  font-weight: 700;
+}
+
+.logo__lit {
+  font-weight: 400;
+  color: #999;
+}
