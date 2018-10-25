@@ -1,0 +1,23 @@
+.logo__icon {
+  color: var(--black);
+}
+
+.logo__text {
+  font-family: 'Lora', serif;
+  font-size: 30px;
+  margin-left: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.logo__text_weird {
+  color: var(--black);
+}
+
+.logo__text_lit {
+  color: #acacac;
+}
+
+.user__container {
+  text-align: center !important;
+}
