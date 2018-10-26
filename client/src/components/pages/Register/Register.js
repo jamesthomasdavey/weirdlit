@@ -2,13 +2,13 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { registerUser } from './../../../actions/authActions';
 
-// import classes from './Register.module.css';
+import './Register.css';
 
 import Navbar from './../../layout/Navbar/Navbar';
+import InputField from './../../layout/InputField/InputField';
 
 class Register extends Component {
   state = {
@@ -16,6 +16,7 @@ class Register extends Component {
     email: '',
     password: '',
     password2: '',
+    favoriteBook: '',
     errors: {}
   };
 
@@ -62,51 +63,50 @@ class Register extends Component {
         <div className="ui container">
           <div className="ui one column stackable center aligned page grid">
             <div className="column nine wide">
-              <form noValidate onSubmit={this.submitFormHandler} className="ui fluid form">
-                <div className={classnames('field', { error: errors.name })}>
-                  <input
-                    name="name"
-                    type="text"
-                    placeholder="Name"
-                    value={this.state.name}
-                    onChange={this.changeInputHandler}
-                  />
-                  {errors.name && <div className="ui pointing basic label">{errors.name}</div>}
-                </div>
-                <div className={classnames('field', { error: errors.email })}>
-                  <input
-                    name="email"
-                    type="email"
-                    placeholder="Email"
-                    value={this.state.email}
-                    onChange={this.changeInputHandler}
-                  />
-                  {errors.email && <div className="ui pointing basic label">{errors.email}</div>}
-                </div>
-                <div className={classnames('field', { error: errors.password })}>
-                  <input
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    value={this.state.password}
-                    onChange={this.changeInputHandler}
-                  />
-                  {errors.password && (
-                    <div className="ui pointing basic label">{errors.password}</div>
-                  )}
-                </div>
-                <div className={classnames('field', { error: errors.password2 })}>
-                  <input
-                    name="password2"
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={this.state.password2}
-                    onChange={this.changeInputHandler}
-                  />
-                  {errors.password2 && (
-                    <div className="ui pointing basic label">{errors.password2}</div>
-                  )}
-                </div>
+              <form
+                noValidate
+                onSubmit={this.submitFormHandler}
+                className="register__form ui fluid form"
+              >
+                <InputField
+                  name="name"
+                  placeholder="Name"
+                  value={this.state.name}
+                  onChange={this.changeInputHandler}
+                  error={errors.name}
+                />
+                <InputField
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  value={this.state.email}
+                  onChange={this.changeInputHandler}
+                  error={errors.email}
+                />
+                <InputField
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={this.changeInputHandler}
+                  error={errors.password}
+                />
+                <InputField
+                  name="password2"
+                  type="password"
+                  placeholder="Confirm Password"
+                  value={this.state.password2}
+                  onChange={this.changeInputHandler}
+                  error={errors.password2}
+                />
+                <InputField
+                  name="favoriteBook"
+                  label="What is your favorite book?"
+                  placeholder="Book Title (optional)"
+                  value={this.state.favoriteBook}
+                  onChange={this.changeInputHandler}
+                  error={errors.favoriteBook}
+                />
                 <input type="submit" className="ui button" value="Sign Up" />
               </form>
               <div className="ui message">
@@ -118,54 +118,6 @@ class Register extends Component {
             </div>
           </div>
         </div>
-
-        {/* <div className="ui text container">
-          <form noValidate onSubmit={this.submitFormHandler} className="ui fluid form">
-            <div className={classnames('field', { error: errors.name })}>
-              <input
-                name="name"
-                type="text"
-                placeholder="Name"
-                value={this.state.name}
-                onChange={this.changeInputHandler}
-              />
-              {errors.name && <div className="ui pointing basic label">{errors.name}</div>}
-            </div>
-            <div className={classnames('field', { error: errors.email })}>
-              <input
-                name="email"
-                type="email"
-                placeholder="Email"
-                value={this.state.email}
-                onChange={this.changeInputHandler}
-              />
-              {errors.email && <div className="ui pointing basic label">{errors.email}</div>}
-            </div>
-            <div className={classnames('field', { error: errors.password })}>
-              <input
-                name="password"
-                type="password"
-                placeholder="Password"
-                value={this.state.password}
-                onChange={this.changeInputHandler}
-              />
-              {errors.password && <div className="ui pointing basic label">{errors.password}</div>}
-            </div>
-            <div className={classnames('field', { error: errors.password2 })}>
-              <input
-                name="password2"
-                type="password"
-                placeholder="Confirm Password"
-                value={this.state.password2}
-                onChange={this.changeInputHandler}
-              />
-              {errors.password2 && (
-                <div className="ui pointing basic label">{errors.password2}</div>
-              )}
-            </div>
-            <input type="submit" className="ui button" value="Sign Up" />
-          </form>
-        </div> */}
       </Fragment>
     );
   }

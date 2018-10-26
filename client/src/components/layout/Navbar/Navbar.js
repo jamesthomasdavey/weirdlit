@@ -1,14 +1,18 @@
+// packages
 import React, { Fragment, Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logoutUser } from './../../../actions/authActions';
 
+//images
 import './../../../img/bird-1903523.png';
 
+// components
 import shellLogo from './../../../img/beach-1297237.svg';
 import Search from './../Search/Search';
 
+// css
 import './Navbar.css';
 
 class Navbar extends Component {
@@ -18,25 +22,33 @@ class Navbar extends Component {
   };
 
   render() {
-    const { isAuthenticated } = this.props.auth;
+    const { isAuthenticated, user } = this.props.auth;
 
     const authLinks = (
       <div className="ui right simple dropdown item">
         <i className="user circle icon large" />
         <i className="dropdown icon" />
         <div className="menu">
+          <div className="header">{user.name && user.name.toUpperCase()}</div>
           <Link to="/profile">
-            <div className="item">Profile</div>
+            <div className="item">
+              <span className="menu__item-link">Profile</span>
+            </div>
           </Link>
           <Link to="/dashboard">
-            <div className="item">Dashboard</div>
+            <div className="item">
+              <span className="menu__item-link">Dashboard</span>
+            </div>
           </Link>
           <div className="divider" />
+          <div className="header">{'Account'.toUpperCase()}</div>
           <Link to="/settings">
-            <div className="item">Settings</div>
+            <div className="item">
+              <span className="menu__item-link">Settings</span>
+            </div>
           </Link>
           <div className="item" onClick={this.logoutHandler}>
-            Sign Out
+            <span className="menu__item-link">Sign Out</span>
           </div>
         </div>
       </div>
@@ -48,10 +60,15 @@ class Navbar extends Component {
         <i className="dropdown icon" />
         <div className="menu">
           <Link to="/login">
-            <div className="item">Sign In</div>
+            <div className="item">
+              <span className="menu__item-link">Sign In</span>
+            </div>
           </Link>
+
           <Link to="/register">
-            <div className="item">Register</div>
+            <div className="item">
+              <span className="menu__item-link">Register</span>
+            </div>
           </Link>
         </div>
       </div>

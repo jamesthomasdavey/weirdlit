@@ -81,7 +81,7 @@ router.post('/login', (req, res) => {
             errors.password = 'Password is incorrect';
             return res.status(404).json(errors);
           }
-          const payload = { _id: foundUser._id };
+          const payload = { _id: foundUser._id, name: foundUser.name };
           jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
             if (!token || err) {
               errors.token = 'Unable to sign token';

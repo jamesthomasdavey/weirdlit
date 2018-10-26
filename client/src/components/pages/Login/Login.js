@@ -2,10 +2,12 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
 import { loginUser } from './../../../actions/authActions';
 
 import Navbar from './../../layout/Navbar/Navbar';
+import InputField from './../../layout/InputField/InputField';
+
+import './Login.css';
 
 class Login extends Component {
   state = {
@@ -57,29 +59,27 @@ class Login extends Component {
         <div className="ui container">
           <div className="ui one column stackable center aligned page grid">
             <div className="column nine wide">
-              <form noValidate onSubmit={this.submitFormHandler} className="ui fluid form">
-                <div className={classnames('field', { error: errors.email })}>
-                  <input
-                    name="email"
-                    type="email"
-                    placeholder="Email"
-                    value={this.state.email}
-                    onChange={this.changeInputHandler}
-                  />
-                  {errors.email && <div className="ui pointing basic label">{errors.email}</div>}
-                </div>
-                <div className={classnames('field', { error: errors.password })}>
-                  <input
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    value={this.state.password}
-                    onChange={this.changeInputHandler}
-                  />
-                  {errors.password && (
-                    <div className="ui pointing basic label">{errors.password}</div>
-                  )}
-                </div>
+              <form
+                noValidate
+                onSubmit={this.submitFormHandler}
+                className="login__form ui fluid form"
+              >
+                <InputField
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  value={this.state.email}
+                  onChange={this.changeInputHandler}
+                  error={errors.email}
+                />
+                <InputField
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={this.changeInputHandler}
+                  error={errors.password}
+                />
                 <input type="submit" className="ui button" value="Sign In" />
               </form>
               <div className="ui message">

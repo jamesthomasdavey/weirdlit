@@ -1,0 +1,65 @@
+.landing {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+}
+
+.landing__container {
+  margin: 0 auto;
+  width: 100%;
+  height: 100vh;
+  max-width: 960px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.landing__logo-text {
+  margin-top: 4rem;
+  font-family: 'Lora', serif;
+  font-size: 48px;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+}
+
+.landing__logo-text-weird {
+  color: var(--black);
+}
+
+.landing__logo-text-lit {
+  color: #acacac;
+}
+
+.animation__container {
+  margin: 0 auto;
+  width: 100%;
+  height: 100vh;
+  max-width: 960px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.animation {
+  width: 75%;
+  padding-top: 75%;
+  overflow: hidden;
+  background-image: url('./../../../img/tentacles-351095-2.png');
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  background-size: 90%;
+  background-position: center center;
+  transform-origin: center center;
+  animation: spin 300s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
