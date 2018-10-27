@@ -31,23 +31,23 @@ class Navbar extends Component {
         <div className="menu">
           <div className="header">{user.name && user.name.toUpperCase()}</div>
           <Link to="/profile">
-            <div className="item">
+            <div className="item profile__item-link">
               <span className="menu__item-link">Profile</span>
             </div>
           </Link>
           <Link to="/dashboard">
-            <div className="item">
+            <div className="item profile__item-link">
               <span className="menu__item-link">Dashboard</span>
             </div>
           </Link>
           <div className="divider" />
           <div className="header">{'Account'.toUpperCase()}</div>
           <Link to="/settings">
-            <div className="item">
+            <div className="item profile__item-link">
               <span className="menu__item-link">Settings</span>
             </div>
           </Link>
-          <div className="item" onClick={this.logoutHandler}>
+          <div className="item profile__item-link" onClick={this.logoutHandler}>
             <span className="menu__item-link">Sign Out</span>
           </div>
         </div>
@@ -60,13 +60,12 @@ class Navbar extends Component {
         <i className="dropdown icon" />
         <div className="menu">
           <Link to="/login">
-            <div className="item">
+            <div className="item profile__item-link">
               <span className="menu__item-link">Sign In</span>
             </div>
           </Link>
-
           <Link to="/register">
-            <div className="item">
+            <div className="item profile__item-link">
               <span className="menu__item-link">Register</span>
             </div>
           </Link>

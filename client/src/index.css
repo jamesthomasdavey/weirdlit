@@ -36,14 +36,8 @@ body {
   color: var(--black);
 }
 
-/*****************************
-********************** NAVBAR
-*****************************/
-
-/* .ui.icon.input {
-  margin: 10px;
-} */
-
-.header.item {
-  display: inline-block;
+html {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
 }

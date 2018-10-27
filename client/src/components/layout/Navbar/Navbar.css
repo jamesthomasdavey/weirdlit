@@ -21,3 +21,7 @@
 .menu__item-link {
   color: #373737;
 }
+
+.profile__item-link:hover {
+  background: #F2F2F2 !important;
+}
