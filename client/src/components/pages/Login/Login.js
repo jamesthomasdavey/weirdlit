@@ -51,6 +51,7 @@ class Login extends Component {
   };
 
   render() {
+    document.title = 'Sign In | WeirdLit';
     const { errors } = this.state;
     return (
       <Fragment>

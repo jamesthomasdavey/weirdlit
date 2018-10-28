@@ -12,7 +12,7 @@ class Profile extends Component {
   };
   render() {
     const { user } = this.props.auth;
-    document.title = user.name + ' | WeirdLit';
+    document.title = user.name ? user.name + ' | WeirdLit' : 'Profile | WeirdLit';
     return (
       <Fragment>
         <Navbar />
