@@ -4,19 +4,15 @@ import { connect } from 'react-redux';
 
 import Navbar from './../../layout/Navbar/Navbar';
 
-class Dashboard extends Component {
-  componentDidMount = () => {
-    if (!this.props.auth.isAuthenticated) {
-      this.props.history.push('/browse');
-    }
-  };
+class Profile extends Component {
   componentDidUpdate = () => {
     if (!this.props.auth.isAuthenticated) {
       this.props.history.push('/browse');
     }
   };
   render() {
-    document.title = 'Dashboard | WeirdLit';
+    const { user } = this.props.auth;
+    document.title = user.name + ' | WeirdLit';
     return (
       <Fragment>
         <Navbar />
@@ -24,7 +20,8 @@ class Dashboard extends Component {
     );
   }
 }
-Dashboard.propTypes = {
+
+Profile.propTypes = {
   auth: PropTypes.object.isRequired
 };
 
@@ -35,4 +32,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {}
-)(Dashboard);
+)(Profile);

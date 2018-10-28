@@ -30,9 +30,19 @@
 .landing__content-logo-text {
   font-family: 'Lora', serif;
   font-size: 48px;
-  letter-spacing: 12px;
+  letter-spacing: 10px;
   text-transform: uppercase;
-  text-align: center;
+  animation: join 28s ease-in-out;
+  padding-right: -30px;
+}
+
+@keyframes join {
+  from {
+    letter-spacing: 28px;
+  }
+  to {
+    letter-spacing: 10px;
+  }
 }
 
 .text__weird {
@@ -43,8 +53,9 @@
   color: #acacac;
 }
 
-.ui__grey {
-  /* background: #acacac !important; */
+.text__lit::after {
+  content: 't';
+  letter-spacing: 0;
 }
 
 .background__animation {
@@ -61,14 +72,17 @@
   background-size: contain;
   background-position: center center;
   transform-origin: center center;
-  animation: spin 300s linear infinite;
+  animation: spin 400s linear infinite;
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
+  0% {
+    transform: rotate(0deg) scale(1);
   }
-  to {
-    transform: rotate(-360deg);
+  50% {
+    transform: rotate(-180deg) scale(1.5);
+  }
+  100% {
+    transform: rotate(-360deg) scale(1);
   }
 }

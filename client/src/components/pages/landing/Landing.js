@@ -9,19 +9,20 @@ import './Landing.css';
 class Landing extends Component {
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
+      this.props.history.push('/browse');
     }
   }
   render() {
+    document.title = 'WeirdLit | The Database for Strange Writings';
     return (
       <Fragment>
         <div className="ui text container landing__container">
           <div className="landing__content">
             <div className="landing__content-inner">
               <div className="landing__content-logo">
-                <Link to="/dashboard">
+                <Link to="/browse">
                   <span className="landing__content-logo-text text__weird">Weird</span>
-                  <span className="landing__content-logo-text text__lit">Lit</span>
+                  <span className="landing__content-logo-text text__lit">Li</span>
                 </Link>
               </div>
               <div className="landing__content-search">
@@ -31,7 +32,7 @@ class Landing extends Component {
                 <div className="row">
                   <div className="eight wide column">
                     <Link to="/login">
-                      <button className="ui right floated primary button">Sign In</button>
+                      <button className="ui right floated grey button">Sign In</button>
                     </Link>
                   </div>
                   <div className="eight wide column">
