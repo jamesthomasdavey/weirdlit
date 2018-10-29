@@ -1,3 +1,7 @@
+.landing {
+  animation: fadein 0.7s linear;
+}
+
 .landing__container {
   /* background-color: yellow; */
   /* opacity: 0.4; */

@@ -41,3 +41,16 @@ html {
   margin: 0;
   overflow: hidden;
 }
+
+/*****************************
+*********** GLOBAL ANIMATIONS
+*****************************/
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -48,7 +48,8 @@ class Register extends Component {
       name: this.state.name,
       email: this.state.email,
       password: this.state.password,
-      password2: this.state.password2
+      password2: this.state.password2,
+      favoriteBook: this.state.favoriteBook
     };
 
     this.props.registerUser(newUser, this.props.history);
@@ -107,7 +108,7 @@ class Register extends Component {
                   onChange={this.changeInputHandler}
                   error={errors.favoriteBook}
                 />
-                <input type="submit" className="ui button" value="Sign Up" />
+                <input type="submit" className="ui button grey" value="Register" />
               </form>
               <div className="ui message">
                 <p>Already have an account?</p>

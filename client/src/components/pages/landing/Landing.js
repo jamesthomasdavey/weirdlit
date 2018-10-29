@@ -16,36 +16,38 @@ class Landing extends Component {
     document.title = 'WeirdLit | The Database for Strange Writings';
     return (
       <Fragment>
-        <div className="ui text container landing__container">
-          <div className="landing__content">
-            <div className="landing__content-inner">
-              <div className="landing__content-logo">
-                <Link to="/browse">
-                  <span className="landing__content-logo-text text__weird">Weird</span>
-                  <span className="landing__content-logo-text text__lit">Li</span>
-                </Link>
-              </div>
-              <div className="landing__content-search">
-                <Search />
-              </div>
-              <div className="ui internally celled grid">
-                <div className="row">
-                  <div className="eight wide column">
-                    <Link to="/login">
-                      <button className="ui right floated grey button">Sign In</button>
-                    </Link>
-                  </div>
-                  <div className="eight wide column">
-                    <Link to="/register">
-                      <button className="ui left floated grey button">Register</button>
-                    </Link>
+        <div className="landing">
+          <div className="ui text container landing__container">
+            <div className="landing__content">
+              <div className="landing__content-inner">
+                <div className="landing__content-logo">
+                  <Link to="/browse">
+                    <span className="landing__content-logo-text text__weird">Weird</span>
+                    <span className="landing__content-logo-text text__lit">Li</span>
+                  </Link>
+                </div>
+                <div className="landing__content-search">
+                  <Search />
+                </div>
+                <div className="ui internally celled grid">
+                  <div className="row">
+                    <div className="eight wide column">
+                      <Link to="/login">
+                        <button className="ui right floated grey button">Sign In</button>
+                      </Link>
+                    </div>
+                    <div className="eight wide column">
+                      <Link to="/register">
+                        <button className="ui left floated grey button">Register</button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <div className="background__animation" />
         </div>
-        <div className="background__animation" />
       </Fragment>
     );
   }

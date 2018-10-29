@@ -80,7 +80,7 @@ class Login extends Component {
                   onChange={this.changeInputHandler}
                   error={errors.password}
                 />
-                <input type="submit" className="ui button" value="Sign In" />
+                <input type="submit" className="ui grey button" value="Sign In" />
               </form>
               <div className="ui message">
                 <p>Don't have an account?</p>

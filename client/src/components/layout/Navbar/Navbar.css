@@ -1,13 +1,16 @@
 .logo__icon {
   color: var(--black);
+  height: 43px;
+  width: 37.5px;
+  animation: fadein 0.3s linear;
 }
-
 .logo__text {
   font-family: 'Lora', serif;
   font-size: 30px;
   margin-left: 12px;
   letter-spacing: 3px;
   text-transform: uppercase;
+  animation: fadein 0.3s linear;
 }
 
 .logo__text_weird {
@@ -23,5 +26,5 @@
 }
 
 .profile__item-link:hover {
-  background: #F2F2F2 !important;
+  background: #f2f2f2 !important;
 }
