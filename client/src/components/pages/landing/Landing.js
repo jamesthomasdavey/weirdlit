@@ -7,13 +7,28 @@ import Search from './../../layout/Search/Search';
 import './Landing.css';
 
 class Landing extends Component {
-  componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/browse');
-    }
-  }
   render() {
     document.title = 'WeirdLit | The Database for Strange Writings';
+    const { isAuthenticated } = this.props.auth;
+    let authButtons;
+    if (!isAuthenticated) {
+      authButtons = (
+        <div className="ui internally celled grid">
+          <div className="row">
+            <div className="eight wide column">
+              <Link to="/login">
+                <button className="ui right floated grey button">Sign In</button>
+              </Link>
+            </div>
+            <div className="eight wide column">
+              <Link to="/register">
+                <button className="ui left floated grey button">Register</button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <Fragment>
         <div className="landing">
@@ -29,20 +44,7 @@ class Landing extends Component {
                 <div className="landing__content-search">
                   <Search />
                 </div>
-                <div className="ui internally celled grid">
-                  <div className="row">
-                    <div className="eight wide column">
-                      <Link to="/login">
-                        <button className="ui right floated grey button">Sign In</button>
-                      </Link>
-                    </div>
-                    <div className="eight wide column">
-                      <Link to="/register">
-                        <button className="ui left floated grey button">Register</button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
+                {authButtons}
               </div>
             </div>
           </div>

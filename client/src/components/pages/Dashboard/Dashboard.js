@@ -7,24 +7,13 @@ import Spinner from './../../layout/Spinner/Spinner';
 import Navbar from './../../layout/Navbar/Navbar';
 
 class Dashboard extends Component {
-  componentDidMount = () => {
-    this.props.getCurrentProfile();
-    if (!this.props.auth.isAuthenticated) {
-      this.props.history.push('/browse');
-    }
-  };
-  componentDidUpdate = () => {
-    if (!this.props.auth.isAuthenticated) {
-      this.props.history.push('/browse');
-    }
-  };
   render() {
     const { user } = this.props.auth;
     const { profile, loading } = this.props.profile;
 
     let dashboardContent;
 
-    if (profile === null || loading) {
+    if (loading) {
       dashboardContent = <Spinner />;
     } else {
       dashboardContent = <h4>Other stuff</h4>;

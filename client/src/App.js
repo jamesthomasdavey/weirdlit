@@ -1,6 +1,6 @@
 // packages
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // redux
 import { Provider } from 'react-redux';
@@ -11,12 +11,18 @@ import { clearCurrentProfile } from './actions/profileActions';
 import jwt_decode from 'jwt-decode';
 
 // components
+import Root from './components/pages/Root/Root';
 import Landing from './components/pages/Landing/Landing';
 import Register from './components/pages/Register/Register';
 import Login from './components/pages/Login/Login';
 import Browse from './components/pages/Browse/Browse';
 import Dashboard from './components/pages/Dashboard/Dashboard';
 import Profile from './components/pages/Profile/Profile';
+import Pending from './components/pages/Pending/Pending';
+
+// protected routes
+import PrivateRoute from './components/layout/PrivateRoute/PrivateRoute';
+import AdminRoute from './components/layout/AdminRoute/AdminRoute';
 
 // css
 import './App.css';
@@ -45,12 +51,18 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className="App">
-            <Route exact path="/" component={Landing} />
+            <Route exact path="/" component={Root} />
+            <Route exact path="/landing" component={Landing} />
             <Route exact path="/browse" component={Browse} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/dashboard" component={Dashboard} />
             <Route exact path="/profile" component={Profile} />
+            <Switch>
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+            </Switch>
+            <Switch>
+              <AdminRoute exact path="/books/pending" component={Pending} />
+            </Switch>
           </div>
         </Router>
       </Provider>
