@@ -4,10 +4,19 @@ import PropTypes from 'prop-types';
 
 const SocialInputField = ({ name, placeholder, value, error, icon, type, onChange }) => {
   return (
-    <div className={classnames('ui left icon input', { error: error })}>
-      <input id={name} name={name} placeholder={placeholder} value={value} onChange={onChange} />
-      {icon && <i className={['icon', { icon }].join(' ')} />}
-      {error && <div className="ui pointing basic label">{error}</div>}
+    <div className="field">
+      <div className={classnames('ui left icon input', { error: error })}>
+        <input
+          id={name}
+          name={name}
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+        />
+        {icon && <i className={['icon', icon].join(' ')} />}
+        {error && <div className="ui pointing basic label">{error}</div>}
+      </div>
     </div>
   );
 };

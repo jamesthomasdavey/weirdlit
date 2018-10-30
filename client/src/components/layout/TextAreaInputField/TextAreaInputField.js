@@ -2,14 +2,25 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const TextInputField = ({ name, type, placeholder, value, onChange, info, error, label }) => {
+const TextAreaInputField = ({
+  name,
+  rows,
+  placeholder,
+  value,
+  minHeight,
+  onChange,
+  info,
+  error,
+  label
+}) => {
   return (
     <div className={classnames('field', { error: error })}>
       {label && <label htmlFor={name}>{label}</label>}
-      <input
+      <textarea
+        rows={rows}
         id={name}
+        style={{ minHeight }}
         name={name}
-        type={type}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
@@ -20,19 +31,16 @@ const TextInputField = ({ name, type, placeholder, value, onChange, info, error,
   );
 };
 
-TextInputField.propTypes = {
+TextAreaInputField.propTypes = {
   name: PropTypes.string.isRequired,
+  minHeight: PropTypes.string,
+  rows: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   error: PropTypes.string,
   label: PropTypes.string,
   info: PropTypes.string
 };
 
-TextInputField.defaultProps = {
-  type: 'text'
-};
-
-export default TextInputField;
+export default TextAreaInputField;
