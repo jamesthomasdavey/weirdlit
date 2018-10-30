@@ -18,6 +18,7 @@ import Login from './components/pages/Login/Login';
 import Browse from './components/pages/Browse/Browse';
 import Dashboard from './components/pages/Dashboard/Dashboard';
 import Profile from './components/pages/Profile/Profile';
+import EditProfile from './components/pages/EditProfile/EditProfile';
 import Pending from './components/pages/Pending/Pending';
 
 // protected routes
@@ -56,9 +57,14 @@ class App extends Component {
             <Route exact path="/browse" component={Browse} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/profile" component={Profile} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/profile" component={Profile} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/profile/edit" component={EditProfile} />
             </Switch>
             <Switch>
               <AdminRoute exact path="/books/pending" component={Pending} />

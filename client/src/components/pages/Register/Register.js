@@ -8,7 +8,7 @@ import { registerUser } from './../../../actions/authActions';
 import './Register.css';
 
 import Navbar from './../../layout/Navbar/Navbar';
-import InputField from './../../layout/InputField/InputField';
+import TextInputField from '../../layout/TextInputField/TextInputField';
 
 class Register extends Component {
   state = {
@@ -69,14 +69,14 @@ class Register extends Component {
                 onSubmit={this.submitFormHandler}
                 className="register__form ui fluid form"
               >
-                <InputField
+                <TextInputField
                   name="name"
                   placeholder="Name"
                   value={this.state.name}
                   onChange={this.changeInputHandler}
                   error={errors.name}
                 />
-                <InputField
+                <TextInputField
                   name="email"
                   type="email"
                   placeholder="Email"
@@ -84,7 +84,7 @@ class Register extends Component {
                   onChange={this.changeInputHandler}
                   error={errors.email}
                 />
-                <InputField
+                <TextInputField
                   name="password"
                   type="password"
                   placeholder="Password"
@@ -92,7 +92,7 @@ class Register extends Component {
                   onChange={this.changeInputHandler}
                   error={errors.password}
                 />
-                <InputField
+                <TextInputField
                   name="password2"
                   type="password"
                   placeholder="Confirm Password"
@@ -100,7 +100,7 @@ class Register extends Component {
                   onChange={this.changeInputHandler}
                   error={errors.password2}
                 />
-                <InputField
+                <TextInputField
                   name="favoriteBook"
                   label="What is your favorite book?"
                   placeholder="Book Title (optional)"

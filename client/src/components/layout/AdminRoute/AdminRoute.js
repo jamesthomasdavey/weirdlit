@@ -7,7 +7,6 @@ const PrivateRoute = ({ component: Component, auth, ...rest }) => {
   if (!auth.isAuthenticated) {
     return <Redirect to="/login" />;
   } else {
-    console.log(auth.user);
     return (
       <Route
         {...rest}

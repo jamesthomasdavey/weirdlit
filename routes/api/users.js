@@ -56,7 +56,6 @@ router.post('/register', (req, res) => {
       });
       // save the new profile
       await newProfile.save();
-      console.log(newProfile);
       // output data to user
       res.json(newUser);
     })

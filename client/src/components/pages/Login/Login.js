@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { loginUser } from './../../../actions/authActions';
 
 import Navbar from './../../layout/Navbar/Navbar';
-import InputField from './../../layout/InputField/InputField';
+import TextInputField from '../../layout/TextInputField/TextInputField';
 
 import './Login.css';
 
@@ -64,7 +64,7 @@ class Login extends Component {
                 onSubmit={this.submitFormHandler}
                 className="login__form ui fluid form"
               >
-                <InputField
+                <TextInputField
                   name="email"
                   type="email"
                   placeholder="Email"
@@ -72,7 +72,7 @@ class Login extends Component {
                   onChange={this.changeInputHandler}
                   error={errors.email}
                 />
-                <InputField
+                <TextInputField
                   name="password"
                   type="password"
                   placeholder="Password"
