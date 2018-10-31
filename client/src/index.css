@@ -54,3 +54,8 @@ html {
     opacity: 1;
   }
 }
+
+.book__item {
+  animation: fadein 0.3s linear;
+  transition: 0.3s all linear;
+}

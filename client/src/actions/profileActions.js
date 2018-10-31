@@ -14,8 +14,27 @@ export const getCurrentProfile = () => dispatch => {
     )
     .catch(err =>
       dispatch({
+        type: GET_PROFILE,
+        payload: {}
+      })
+    );
+};
+
+// update current profile
+export const updateCurrentProfile = (profileData, history) => dispatch => {
+  axios
+    .put('/api/profile', profileData)
+    .then(res => {
+      history.push('/profile');
+      dispatch({
         type: GET_ERRORS,
         payload: {}
+      });
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
       })
     );
 };

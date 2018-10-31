@@ -1,11 +1,11 @@
 import React from 'react';
-import classnames from 'classnames';
+
 import PropTypes from 'prop-types';
 
 const SocialInputField = ({ name, placeholder, value, error, icon, type, onChange }) => {
   return (
     <div className="field">
-      <div className={classnames('ui left icon input', { error: error })}>
+      <div className="ui left icon input">
         <input
           id={name}
           name={name}
@@ -15,7 +15,7 @@ const SocialInputField = ({ name, placeholder, value, error, icon, type, onChang
           onChange={onChange}
         />
         {icon && <i className={['icon', icon].join(' ')} />}
-        {error && <div className="ui pointing basic label">{error}</div>}
+        {error && <div className="ui left pointing basic label">{error}</div>}
       </div>
     </div>
   );

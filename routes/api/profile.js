@@ -24,7 +24,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
         errors.noprofile = 'No profile found';
         return res.status(404).json(errors);
       }
-      let favoriteBook = null;
+      let favoriteBook = '';
       if (profile.favoriteBook) {
         await Book.findOne({ title: profile.favoriteBook })
           .populate('authors', 'name')
@@ -165,16 +165,16 @@ router.put('/', passport.authenticate('jwt', { session: false }), (req, res) => 
       }
       if (isEmpty(errors)) {
         const profileFields = {};
-        if (req.body.handle) profileFields.handle = req.body.handle.toLowerCase();
-        if (req.body.favoriteBook) profileFields.favoriteBook = req.body.favoriteBook;
-        if (req.body.location) profileFields.location = req.body.location;
-        if (req.body.bio) profileFields.bio = req.body.bio;
+        profileFields.handle = req.body.handle.toLowerCase();
+        profileFields.favoriteBook = req.body.favoriteBook;
+        profileFields.location = req.body.location;
+        profileFields.bio = req.body.bio;
         profileFields.social = {};
-        if (req.body.goodreads) profileFields.social.goodreads = req.body.goodreads;
-        if (req.body.facebook) profileFields.social.facebook = req.body.facebook;
-        if (req.body.instagram) profileFields.social.instagram = req.body.instagram;
+        profileFields.social.goodreads = req.body.goodreads;
+        profileFields.social.facebook = req.body.facebook;
+        profileFields.social.instagram = req.body.instagram;
         Profile.findOneAndUpdate({ user: req.user._id }, { $set: profileFields }, { new: true })
-          .then(profile => res.redirect('/api/profile'))
+          .then(profile => res.json(profile))
           .catch(err => res.status(400).json(err));
       }
     })

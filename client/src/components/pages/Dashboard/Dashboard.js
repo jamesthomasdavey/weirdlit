@@ -16,7 +16,7 @@ class Dashboard extends Component {
 
     let dashboardContent;
 
-    if (loading) {
+    if (profile === null || loading) {
       dashboardContent = <Spinner />;
     } else {
       dashboardContent = <h4>Other stuff</h4>;

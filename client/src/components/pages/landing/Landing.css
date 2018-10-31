@@ -1,5 +1,5 @@
 .landing {
-  animation: fadein 0.7s linear;
+  animation: fadein 0.8s linear;
 }
 
 .landing__container {
@@ -71,7 +71,6 @@
   overflow: visible;
   z-index: -5;
   background-image: url('./../../../img/tentacles-351095-2.png');
-  /* background-color: blue; */
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center center;

@@ -31,15 +31,9 @@ class Navbar extends Component {
         <i className="user circle icon large" />
         <i className="dropdown icon" />
         <div className="menu">
-          <div className="header">{user.name && user.name.toUpperCase()}</div>
           <Link to="/profile">
             <div className="item profile__item-link">
-              <span className="menu__item-link">Profile</span>
-            </div>
-          </Link>
-          <Link to="/dashboard">
-            <div className="item profile__item-link">
-              <span className="menu__item-link">Dashboard</span>
+              <span className="menu__item-link">{user.name ? user.name : 'Profile'}</span>
             </div>
           </Link>
           <div className="divider" />

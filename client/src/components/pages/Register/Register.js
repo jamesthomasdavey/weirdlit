@@ -56,6 +56,7 @@ class Register extends Component {
   };
 
   render() {
+    document.title = 'Register | WeirdLit';
     const { errors } = this.state;
 
     return (

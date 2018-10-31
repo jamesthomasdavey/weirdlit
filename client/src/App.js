@@ -20,6 +20,7 @@ import Dashboard from './components/pages/Dashboard/Dashboard';
 import Profile from './components/pages/Profile/Profile';
 import EditProfile from './components/pages/EditProfile/EditProfile';
 import Pending from './components/pages/Pending/Pending';
+import AddBook from './components/pages/AddBook/AddBook'
 
 // protected routes
 import PrivateRoute from './components/layout/PrivateRoute/PrivateRoute';
@@ -65,6 +66,9 @@ class App extends Component {
             </Switch>
             <Switch>
               <PrivateRoute exact path="/profile/edit" component={EditProfile} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/books/add" component={AddBook} />
             </Switch>
             <Switch>
               <AdminRoute exact path="/books/pending" component={Pending} />

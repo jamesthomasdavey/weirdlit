@@ -122,7 +122,8 @@ router.post('/add/search', passport.authenticate('jwt', { session: false }), (re
             title: book.volumeInfo.title,
             subtitle: book.volumeInfo.subtitle,
             authors: book.volumeInfo.authors,
-            publishedDate: new Date(book.volumeInfo.publishedDate)
+            publishedDate: (new Date(book.volumeInfo.publishedDate)).getFullYear(),
+            thumb: book.volumeInfo.imageLinks.thumbnail
           };
         })
       );
@@ -157,12 +158,12 @@ router.get('/add/:googleId', passport.authenticate('jwt', { session: false }), (
   });
 });
 
-// @route     post /api/books/new
+// @route     post /api/books/
 // @desc      new book route. upload image and store in data.
 // @access    private
-router.post('/new', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   // upload image to imgur
-  const imageUrl = req.body.imageUrl || req.body.googleImageUrl;
+  const imageUrl = req.body.imageUrl;
   imgur.upload(imageUrl, (err, imgurImage) => {
     if (err) return res.status(400).json(err);
 
