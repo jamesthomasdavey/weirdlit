@@ -75,7 +75,19 @@
   background-size: contain;
   background-position: center center;
   transform-origin: center center;
-  animation: spin 400s linear infinite;
+  animation: spin 400s linear infinite, backgroundFade 8s ease;
+}
+
+@keyframes backgroundFade {
+  0% {
+    opacity: 0;
+  }
+  28% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 100;
+  }
 }
 
 @keyframes spin {

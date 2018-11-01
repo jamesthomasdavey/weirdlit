@@ -18,7 +18,7 @@ const validateProfileInput = require('./../../validation/profile');
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const errors = {};
   Profile.findOne({ user: req.user._id })
-    .populate('user', 'name')
+    .populate('user', ['name', 'email'])
     .then(async profile => {
       if (!profile) {
         errors.noprofile = 'No profile found';

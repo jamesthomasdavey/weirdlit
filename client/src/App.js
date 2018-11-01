@@ -16,11 +16,12 @@ import Landing from './components/pages/Landing/Landing';
 import Register from './components/pages/Register/Register';
 import Login from './components/pages/Login/Login';
 import Browse from './components/pages/Browse/Browse';
-import Dashboard from './components/pages/Dashboard/Dashboard';
 import Profile from './components/pages/Profile/Profile';
 import EditProfile from './components/pages/EditProfile/EditProfile';
 import Pending from './components/pages/Pending/Pending';
-import AddBook from './components/pages/AddBook/AddBook'
+import NewBook from './components/pages/NewBook/NewBook';
+import Account from './components/pages/Account/Account';
+import DeleteAccount from './components/pages/DeleteAccount/DeleteAccount';
 
 // protected routes
 import PrivateRoute from './components/layout/PrivateRoute/PrivateRoute';
@@ -59,16 +60,19 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Switch>
-              <PrivateRoute exact path="/dashboard" component={Dashboard} />
-            </Switch>
-            <Switch>
               <PrivateRoute exact path="/profile" component={Profile} />
             </Switch>
             <Switch>
               <PrivateRoute exact path="/profile/edit" component={EditProfile} />
             </Switch>
             <Switch>
-              <PrivateRoute exact path="/books/add" component={AddBook} />
+              <PrivateRoute exact path="/account" component={Account} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/account/delete" component={DeleteAccount} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/books/new" component={NewBook} />
             </Switch>
             <Switch>
               <AdminRoute exact path="/books/pending" component={Pending} />

@@ -18,7 +18,7 @@ export const registerUser = (userData, history) => dispatch => {
     );
 };
 
-export const loginUser = userData => dispatch => {
+export const loginUser = (userData, callback) => dispatch => {
   axios
     .post('/api/users/login', userData)
     .then(res => {
@@ -28,6 +28,7 @@ export const loginUser = userData => dispatch => {
       const decoded = jwt_decode(token);
       dispatch(setCurrentUser(decoded));
     })
+    .then(callback)
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
@@ -48,3 +49,5 @@ export const logoutUser = () => dispatch => {
   setAuthToken(false);
   dispatch(setCurrentUser({}));
 };
+
+export const resetUser = () => dispatch => {};

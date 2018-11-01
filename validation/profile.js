@@ -21,9 +21,9 @@ module.exports = reqBody => {
 
   if (
     !Validator.isEmpty(reqBody.favoriteBook) &&
-    !Validator.isLength(reqBody.favoriteBook, { max: 100 })
+    !Validator.isLength(reqBody.favoriteBook, { max: 200 })
   ) {
-    errors.favoriteBook = 'Favorite Book must be 100 characters or less';
+    errors.favoriteBook = 'Favorite Book must be 200 characters or less';
   }
 
   if (

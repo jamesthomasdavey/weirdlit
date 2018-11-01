@@ -113,20 +113,30 @@ router.post('/add/search', passport.authenticate('jwt', { session: false }), (re
         req.body.searchTerm
       }&maxResults=10&key=${googleBooksApiKey}`
     )
-    .then(googleResults => {
+    .then(async googleResults => {
       const googleList = flatted.parse(flatted.stringify(googleResults)).data.items;
-      res.json(
-        googleList.map(book => {
-          return {
-            googleId: book.id,
-            title: book.volumeInfo.title,
-            subtitle: book.volumeInfo.subtitle,
-            authors: book.volumeInfo.authors,
-            publishedDate: (new Date(book.volumeInfo.publishedDate)).getFullYear(),
-            thumb: book.volumeInfo.imageLinks.thumbnail
-          };
-        })
-      );
+      bookList = googleList.map(book => {
+        return {
+          googleId: book.id,
+          title: book.volumeInfo.title,
+          subtitle: book.volumeInfo.subtitle,
+          authors: book.volumeInfo.authors,
+          publishedDate: new Date(book.volumeInfo.publishedDate).getFullYear(),
+          thumb: book.volumeInfo.imageLinks.thumbnail,
+          alreadySubmitted: false
+        };
+      });
+      const updatedBookList = [];
+      await asyncForEach(bookList, async book => {
+        await Book.findOne({ 'identifiers.googleId': book.googleId }).then(foundBook => {
+          if (foundBook) {
+            updatedBookList.push({ ...book, alreadySubmitted: true });
+          } else {
+            updatedBookList.push(book);
+          }
+        });
+      });
+      res.json(updatedBookList);
     })
     .catch(err => res.status(400).json(err));
 });

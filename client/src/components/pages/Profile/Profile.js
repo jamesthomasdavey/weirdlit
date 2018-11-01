@@ -19,13 +19,35 @@ class Profile extends Component {
     if (profile === null || loading) {
       profileContent = <Spinner />;
     } else {
+      const date = (
+        <span>
+          {profile &&
+            new Date(this.props.profile.profile.date).toLocaleString('en-us', { month: 'long' }) +
+              ' ' +
+              new Date(this.props.profile.profile.date).getFullYear()}
+        </span>
+      );
       profileContent = (
         <Fragment>
-          <h2>{profile.user.name}</h2>
-          <Fragment>
+          <div style={{ paddingBottom: '24px' }}>
+            <h2>{profile && profile.user.name}</h2>
+            {profile.social.instagram && (
+              <Fragment>
+                <div>
+                  <a href={profile.social.instagram} className="ui">
+                    <i className="instagram icon large" />
+                  </a>
+                </div>
+              </Fragment>
+            )}
+            <small>User since {date}</small>
+          </div>
+          {profile.favoriteBook && (
+            <Fragment>
               <h5>Favorite Book</h5>
               <p>{profile.favoriteBook}</p>
             </Fragment>
+          )}
           {profile.location && (
             <Fragment>
               <h5>Location</h5>

@@ -17,8 +17,7 @@ import Search from './../Search/Search';
 import './Navbar.css';
 
 class Navbar extends Component {
-  logoutHandler = e => {
-    e.preventDefault();
+  logoutHandler = () => {
     this.props.clearCurrentProfile();
     this.props.logoutUser();
   };
@@ -38,7 +37,7 @@ class Navbar extends Component {
           </Link>
           <div className="divider" />
           <div className="header">{'Account'.toUpperCase()}</div>
-          <Link to="/settings">
+          <Link to="/account">
             <div className="item profile__item-link">
               <span className="menu__item-link">Settings</span>
             </div>

@@ -21,11 +21,12 @@ class EditProfile extends Component {
     goodreads: '',
     facebook: '',
     instagram: '',
+    saving: false,
+    hasChanged: false,
     errors: {}
   };
   componentDidMount = () => {
     this.props.getCurrentProfile();
-    // this.setState({ errors: {} });
   };
   componentWillReceiveProps = nextProps => {
     if (!isEmpty(nextProps.errors)) {
@@ -47,7 +48,7 @@ class EditProfile extends Component {
     }
   };
   changeInputHandler = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ [e.target.name]: e.target.value, hasChanged: true });
   };
   formSubmitHandler = e => {
     e.preventDefault();
@@ -60,7 +61,11 @@ class EditProfile extends Component {
       facebook: this.state.facebook,
       instagram: this.state.instagram
     };
-    this.props.updateCurrentProfile(profileData, this.props.history);
+    this.setState({ saving: true }, () => {
+      this.props.updateCurrentProfile(profileData, this.props.history, () => {
+        this.setState({ saving: false });
+      });
+    });
   };
   render() {
     document.title = 'Edit Profile | WeirdLit';
@@ -75,12 +80,16 @@ class EditProfile extends Component {
             <form
               onSubmit={this.formSubmitHandler}
               noValidate
-              className={['ui form', profile === null || loading ? 'loading' : ''].join(' ')}
+              className={[
+                'ui form',
+                !profile || loading || this.state.saving ? 'loading' : ''
+              ].join(' ')}
               style={{ marginTop: '2rem' }}
             >
               <TextInputField
                 name="handle"
                 label="Handle"
+                maxLength="40"
                 value={this.state.handle}
                 onChange={this.changeInputHandler}
                 error={errors.handle}
@@ -94,6 +103,7 @@ class EditProfile extends Component {
               <TextInputField
                 name="favoriteBook"
                 label="Favorite Book"
+                maxLength="200"
                 value={this.state.favoriteBook}
                 onChange={this.changeInputHandler}
                 error={errors.favoriteBook}
@@ -101,6 +111,7 @@ class EditProfile extends Component {
               <TextInputField
                 name="location"
                 label="Location"
+                maxLength="100"
                 value={this.state.location}
                 onChange={this.changeInputHandler}
                 error={errors.location}
@@ -114,6 +125,8 @@ class EditProfile extends Component {
                 onChange={this.changeInputHandler}
                 error={errors.bio}
                 minHeight="100px"
+                maxLength="1000"
+                info={this.state.bio && `Characters remaining: ${1000 - this.state.bio.length}`}
               />
               <div className="ui segments">
                 <div className="ui segment">
@@ -148,9 +161,13 @@ class EditProfile extends Component {
                   />
                 </div>
               </div>
-              <input type="submit" className="ui primary button" value="Save" />
+              <input
+                type="submit"
+                className={['ui primary button', this.state.hasChanged ? '' : 'disabled'].join(' ')}
+                value="Save"
+              />
               <Link to="/profile" className="ui button">
-                Discard
+                Cancel
               </Link>
             </form>
           </div>

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { GET_PROFILE, PROFILE_LOADING, GET_ERRORS, CLEAR_CURRENT_PROFILE } from './types';
 
 // get current profile
-export const getCurrentProfile = () => dispatch => {
+export const getCurrentProfile = callback => dispatch => {
   dispatch(setProfileLoading());
   axios
     .get('/api/profile')
@@ -12,6 +12,7 @@ export const getCurrentProfile = () => dispatch => {
         payload: res.data
       })
     )
+    .then(callback)
     .catch(err =>
       dispatch({
         type: GET_PROFILE,
@@ -21,7 +22,7 @@ export const getCurrentProfile = () => dispatch => {
 };
 
 // update current profile
-export const updateCurrentProfile = (profileData, history) => dispatch => {
+export const updateCurrentProfile = (profileData, history, callback) => dispatch => {
   axios
     .put('/api/profile', profileData)
     .then(res => {
@@ -31,12 +32,13 @@ export const updateCurrentProfile = (profileData, history) => dispatch => {
         payload: {}
       });
     })
-    .catch(err =>
+    .catch(err => {
+      callback();
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      })
-    );
+      });
+    });
 };
 
 // profile loading

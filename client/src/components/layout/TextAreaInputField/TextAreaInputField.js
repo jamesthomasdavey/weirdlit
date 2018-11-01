@@ -8,6 +8,7 @@ const TextAreaInputField = ({
   placeholder,
   value,
   minHeight,
+  maxLength,
   onChange,
   info,
   error,
@@ -24,6 +25,7 @@ const TextAreaInputField = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        maxLength={maxLength}
       />
       {info && <small>{info}</small>}
       {error && <div className="ui pointing basic label">{error}</div>}
@@ -37,6 +39,7 @@ TextAreaInputField.propTypes = {
   rows: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
+  maxLength: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   error: PropTypes.string,
   label: PropTypes.string,

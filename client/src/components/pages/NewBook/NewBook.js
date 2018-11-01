@@ -4,10 +4,10 @@ import axios from 'axios';
 import imageCheck from 'image-check';
 
 // import components
-import Navbar from './../../layout/Navbar/Navbar';
-import Spinner from './../../layout/Spinner/Spinner';
+import Navbar from '../../layout/Navbar/Navbar';
+import Spinner from '../../layout/Spinner/Spinner';
 
-class AddBook extends Component {
+class NewBook extends Component {
   state = {
     search: '',
     results: [],
@@ -238,7 +238,10 @@ class AddBook extends Component {
                   </div>
                 )}
                 <button
-                  className="ui teal labeled icon button"
+                  className={[
+                    'ui teal labeled icon button',
+                    book.alreadySubmitted ? 'disabled' : ''
+                  ].join(' ')}
                   onClick={() => this.addBookHandler(book.googleId)}
                 >
                   Add This Book
@@ -281,4 +284,4 @@ class AddBook extends Component {
   }
 }
 
-export default AddBook;
+export default NewBook;

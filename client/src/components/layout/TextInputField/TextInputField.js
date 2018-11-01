@@ -2,7 +2,17 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const TextInputField = ({ name, type, placeholder, value, onChange, info, error, label }) => {
+const TextInputField = ({
+  name,
+  type,
+  maxLength,
+  placeholder,
+  value,
+  onChange,
+  info,
+  error,
+  label
+}) => {
   return (
     <div className={classnames('field', { error: error })}>
       {label && <label htmlFor={name}>{label}</label>}
@@ -13,6 +23,7 @@ const TextInputField = ({ name, type, placeholder, value, onChange, info, error,
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        maxLength={maxLength}
       />
       {info && <small>{info}</small>}
       {error && <div className="ui pointing basic label">{error}</div>}
@@ -26,6 +37,7 @@ TextInputField.propTypes = {
   value: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  maxLength: PropTypes.string,
   error: PropTypes.string,
   label: PropTypes.string,
   info: PropTypes.string

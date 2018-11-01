@@ -73,6 +73,7 @@ class Register extends Component {
                 <TextInputField
                   name="name"
                   placeholder="Name"
+                  maxLength="40"
                   value={this.state.name}
                   onChange={this.changeInputHandler}
                   error={errors.name}
@@ -88,6 +89,7 @@ class Register extends Component {
                 <TextInputField
                   name="password"
                   type="password"
+                  maxLength="30"
                   placeholder="Password"
                   value={this.state.password}
                   onChange={this.changeInputHandler}
@@ -96,6 +98,7 @@ class Register extends Component {
                 <TextInputField
                   name="password2"
                   type="password"
+                  maxLength="30"
                   placeholder="Confirm Password"
                   value={this.state.password2}
                   onChange={this.changeInputHandler}
@@ -104,6 +107,7 @@ class Register extends Component {
                 <TextInputField
                   name="favoriteBook"
                   label="What is your favorite book?"
+                  maxLength="200"
                   placeholder="Book Title (optional)"
                   value={this.state.favoriteBook}
                   onChange={this.changeInputHandler}
