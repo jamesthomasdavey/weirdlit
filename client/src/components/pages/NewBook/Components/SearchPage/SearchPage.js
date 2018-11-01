@@ -43,11 +43,15 @@ class SearchPage extends Component {
     }
   };
   render() {
+    document.title = 'Search for a Book to Add | WeirdLit';
+
     let searchResults;
 
     // if search results are loaded and there's nothing there, say no results found
     if (this.state.searchResults.loaded && this.state.searchResults.results.length === 0) {
-      searchResults = <span>No results found.</span>;
+      searchResults = (
+        <span>No results found. Please try adding more author or title details.</span>
+      );
     } else if (this.state.searchResults.loaded && this.state.searchResults.results.length > 0) {
       searchResults = this.state.searchResults.results.map(book => {
         return (

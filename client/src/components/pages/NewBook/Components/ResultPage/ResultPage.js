@@ -62,6 +62,7 @@ class ResultPage extends Component {
     this.props.submitImageHandler(this.state.submissionImageUrl);
   };
   render() {
+    document.title = 'Add a Cover | WeirdLit';
     return (
       <div className="ui container">
         <div className="ui text container">

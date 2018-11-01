@@ -21,6 +21,14 @@ class SubmitPage extends Component {
       });
   };
   render() {
+    if (this.state.loading) {
+      document.title = 'Submitting... | WeirdLit';
+    } else if (this.state.sucess) {
+      document.title = 'Success | WeirdLit';
+    } else if (!this.state.loading && !this.state.success) {
+      document.title = 'Error | WeirdLit';
+    }
+
     return (
       <div className="ui container">
         <div className="ui text container">
@@ -32,7 +40,7 @@ class SubmitPage extends Component {
                 !this.state.loading && !this.state.success ? 'negative' : ''
               ].join(' ')}
             >
-              {this.state.loading && <i className="notched circle loading icon" />}
+              {this.state.loading && <i className="spinner loading icon" />}
               {this.state.success && <i className="check circle outline icon" />}
               {!this.state.loading && !this.state.success && <i className="x icon" />}
               <div className="content">
@@ -40,7 +48,7 @@ class SubmitPage extends Component {
                 {this.state.success && (
                   <Fragment>
                     <div className="header">Success.</div>
-                    <p>This book has successfully been submitted</p>
+                    <p>This book has successfully been requested.</p>
                   </Fragment>
                 )}
                 {!this.state.loading &&
