@@ -110,7 +110,7 @@ router.post('/add/search', passport.authenticate('jwt', { session: false }), (re
   axios
     .get(
       `https://www.googleapis.com/books/v1/volumes/?q=${
-        req.body.searchTerm
+        req.body.searchQuery
       }&maxResults=10&key=${googleBooksApiKey}`
     )
     .then(async googleResults => {
@@ -160,7 +160,6 @@ router.get('/add/:googleId', passport.authenticate('jwt', { session: false }), (
         const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
         // return object with google id and google image url. these will be included as values in the post form.
         res.json({
-          googleId: req.params.googleId,
           googleImageUrl: volumeInfo.imageLinks.extraLarge
         });
       })

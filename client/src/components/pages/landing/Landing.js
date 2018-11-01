@@ -1,10 +1,16 @@
+// package
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
+
+// component
+import Logo from './Components/Logo';
+import BackgroundAnimation from './Components/BackgroundAnimation';
 import Search from './../../layout/Search/Search';
 
-import './Landing.css';
+// css
+import classes from './Landing.module.css';
 
 class Landing extends Component {
   render() {
@@ -31,24 +37,19 @@ class Landing extends Component {
     }
     return (
       <Fragment>
-        <div className="landing">
-          <div className="ui text container landing__container">
-            <div className="landing__content">
-              <div className="landing__content-inner">
-                <div className="landing__content-logo">
-                  <Link to="/browse">
-                    <span className="landing__content-logo-text text__weird">Weird</span>
-                    <span className="landing__content-logo-text text__lit">Li</span>
-                  </Link>
-                </div>
-                <div className="landing__content-search">
+        <div className={classes.container}>
+          <div className={['ui text container', classes.content__container].join(' ')}>
+            <div className={classes.content}>
+              <div className={classes.content__inner}>
+                <Logo />
+                <div className={classes.content__search}>
                   <Search />
                 </div>
                 {authButtons}
               </div>
             </div>
           </div>
-          <div className="background__animation" />
+          <BackgroundAnimation />
         </div>
       </Fragment>
     );
