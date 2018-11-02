@@ -20,6 +20,7 @@ class Account extends Component {
     form: {
       name: '',
       email: '',
+      oldEmail: '',
       newPassword: '',
       newPassword2: '',
       oldPassword: ''
@@ -32,14 +33,14 @@ class Account extends Component {
     errors: {}
   };
   componentDidMount = () => {
-    this.updateFromProfile();
+    this.updateFromUser();
   };
-  updateFromProfile = () => {
-    axios.get('api/profile').then(res => {
+  updateFromUser = () => {
+    axios.get('api/users/current').then(res => {
       const currentState = this.state;
-      currentState.date = res.data.date;
-      currentState.form.name = res.data.user.name;
-      currentState.form.email = res.data.user.email;
+      currentState.form.name = res.data.name;
+      currentState.form.email = res.data.email;
+      currentState.form.oldEmail = res.data.email;
       currentState.isLoading = false;
       this.setState(currentState);
     });
@@ -63,7 +64,7 @@ class Account extends Component {
           const currentState = this.state;
           this.props.loginUser(
             {
-              email: currentState.form.email,
+              email: currentState.form.email || currentState.form.oldEmail,
               password: currentState.form.newPassword || currentState.form.oldPassword
             },
             () => {
@@ -73,7 +74,8 @@ class Account extends Component {
               currentState.form.newPassword = '';
               currentState.form.newPassword2 = '';
               currentState.form.oldPassword = '';
-              this.setState(currentState, this.updateFromProfile);
+              currentState.errors = {};
+              this.setState(currentState, this.updateFromUser);
             }
           );
         }
@@ -81,16 +83,6 @@ class Account extends Component {
     });
   };
   render() {
-    let userSince;
-    if (this.state.date) {
-      const date = new Date(this.state.date);
-      userSince = (
-        <span>
-          User since {date.toLocaleString('en-us', { month: 'long' })} {date.getFullYear()}
-        </span>
-      );
-    }
-
     return (
       <Fragment>
         <Navbar />
@@ -101,10 +93,10 @@ class Account extends Component {
               className={['ui form', this.state.isLoading ? 'loading' : ''].join(' ')}
               onSubmit={this.formSubmitHandler}
             >
-              {' '}
               <div style={{ paddingBottom: '20px' }}>
-                <h2>{this.state.form.name}</h2>
-                {userSince}
+                <h2 style={this.state.form.name ? {} : { opacity: '0' }}>
+                  {this.state.form.name || '__'}
+                </h2>
               </div>
               <TextInputField
                 label="Name"
@@ -153,7 +145,7 @@ class Account extends Component {
               <input
                 type="submit"
                 className={['ui button primary', this.state.hasChanged ? '' : 'disabled'].join(' ')}
-                value={this.state.hasSaved ? 'Saved' : 'Save'}
+                value={this.state.hasSaved && !this.state.hasChanged ? 'Saved' : 'Save'}
               />
               <Link
                 to="/account/delete"

@@ -1,65 +1,91 @@
+// package
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getCurrentProfile } from './../../../actions/profileActions';
-import Spinner from './../../layout/Spinner/Spinner';
+import axios from 'axios';
 
+// component
+import Spinner from './../../layout/Spinner/Spinner';
 import Navbar from './../../layout/Navbar/Navbar';
 
 class Profile extends Component {
-  componentDidMount = () => {
-    this.props.getCurrentProfile();
+  state = {
+    name: '',
+    // favoriteBook: '',
+    location: '',
+    bio: '',
+    goodreads: '',
+    facebook: '',
+    instagram: '',
+    date: '',
+    isLoading: true,
+    errors: {}
   };
+
+  componentDidMount = () => {
+    axios
+      .get('/api/profile')
+      .then(res => {
+        const profile = res.data;
+        const currentState = this.state;
+        currentState.name = profile.user.name;
+        // currentState.favoriteBook = profile.favoriteBook;
+        currentState.location = profile.location;
+        currentState.bio = profile.bio;
+        currentState.goodreads = profile.social.goodreads;
+        currentState.facebook = profile.social.facebook;
+        currentState.instagram = profile.social.instagram;
+        currentState.date = profile.date;
+        currentState.isLoading = false;
+        this.setState(currentState);
+      })
+      .catch(err => {
+        this.setState({ errors: err });
+      });
+  };
+
   render() {
-    const { user } = this.props.auth;
-    const { profile, loading } = this.props.profile;
-    document.title = user.name ? user.name + ' | WeirdLit' : 'Profile | WeirdLit';
+    document.title = `${this.state.name || 'Profile'} | WeirdLit`;
+
+    let favoriteBook;
+
+    if (this.state.favoriteBook) {
+      if (typeof this.state.favoriteBook === 'string') {
+        favoriteBook = <span>{this.state.favoriteBook}</span>;
+      } else {
+        favoriteBook = (
+          <div className="ui card">
+            <h3>{this.state.favoriteBook.title}</h3>
+            <span>{this.state.favoriteBook.subtitle}</span>
+            <span>
+              {this.state.favoriteBook.authors.reduce((acc, current) => {
+                return `${acc}, ${current}`;
+              })}
+            </span>
+          </div>
+        );
+      }
+    }
+
     let profileContent;
-    if (profile === null || loading) {
+    if (this.state.isLoading) {
       profileContent = <Spinner />;
     } else {
-      const date = (
+      const date = new Date(this.state.date);
+      const userSince = (
         <span>
-          {profile &&
-            new Date(this.props.profile.profile.date).toLocaleString('en-us', { month: 'long' }) +
-              ' ' +
-              new Date(this.props.profile.profile.date).getFullYear()}
+          User since {date.toLocaleString('en-us', { month: 'long' })} {date.getFullYear()}
         </span>
       );
       profileContent = (
         <Fragment>
-          <div style={{ paddingBottom: '24px' }}>
-            <h2>{profile && profile.user.name}</h2>
-            {profile.social.instagram && (
-              <Fragment>
-                <div>
-                  <a href={profile.social.instagram} className="ui">
-                    <i className="instagram icon large" />
-                  </a>
-                </div>
-              </Fragment>
-            )}
-            <small>User since {date}</small>
+          <div style={{ paddingBottom: '20px' }}>
+            <h2>{this.state.name}</h2>
+            {userSince}
           </div>
-          {profile.favoriteBook && (
-            <Fragment>
-              <h5>Favorite Book</h5>
-              <p>{profile.favoriteBook}</p>
-            </Fragment>
-          )}
-          {profile.location && (
-            <Fragment>
-              <h5>Location</h5>
-              <p>{profile.location}</p>
-            </Fragment>
-          )}
-          {profile.bio && (
-            <Fragment>
-              <h5>Bio</h5>
-              <p>{profile.bio}</p>
-            </Fragment>
-          )}
+          {this.state.favoriteBook && favoriteBook}
+          <div />
           <Link to="/profile/edit" className="ui button">
             Edit Profile
           </Link>
@@ -78,16 +104,11 @@ class Profile extends Component {
 }
 
 Profile.propTypes = {
-  auth: PropTypes.object.isRequired,
-  getCurrentProfile: PropTypes.func.isRequired
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  profile: state.profile,
   auth: state.auth
 });
 
-export default connect(
-  mapStateToProps,
-  { getCurrentProfile }
-)(Profile);
+export default connect(mapStateToProps)(Profile);

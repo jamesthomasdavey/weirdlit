@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import isEmpty from './../../../validation/is-empty';
-import { clearCurrentProfile } from './../../../actions/profileActions';
 import { logoutUser } from './../../../actions/authActions';
 import PropTypes from 'prop-types';
 
@@ -16,7 +15,8 @@ class DeleteAccount extends Component {
     errors: {}
   };
   changeInputHandler = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    const value = e.target.value;
+    this.setState({ password: value });
   };
   formSubmitHandler = e => {
     e.preventDefault();
@@ -24,7 +24,6 @@ class DeleteAccount extends Component {
       if (!isEmpty(res.data.errors)) {
         this.setState({ errors: res.data.errors });
       } else {
-        this.props.clearCurrentProfile();
         this.props.logoutUser();
       }
     });
@@ -46,7 +45,11 @@ class DeleteAccount extends Component {
                 name="password"
                 error={this.state.errors.password}
               />
-              <input type="submit" className={["button negative ui", this.state.password ? "" : "disabled"].join(" ")} value="Delete My Account" />
+              <input
+                type="submit"
+                className={['button negative ui', this.state.password ? '' : 'disabled'].join(' ')}
+                value="Delete My Account"
+              />
               <Link to="/account" className="button ui" style={{ marginLeft: '1rem' }}>
                 Cancel
               </Link>
@@ -57,16 +60,17 @@ class DeleteAccount extends Component {
     );
   }
 }
+
 DeleteAccount.propTypes = {
   logoutUser: PropTypes.func.isRequired,
-  clearCurrentProfile: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth
 });
+
 export default connect(
   mapStateToProps,
-  { clearCurrentProfile, logoutUser }
+  { logoutUser }
 )(DeleteAccount);

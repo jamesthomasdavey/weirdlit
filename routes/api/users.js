@@ -109,7 +109,7 @@ router.put('/', passport.authenticate('jwt', { session: false }), (req, res) => 
       .compare(req.body.oldPassword, foundUser.password)
       .then(async isMatch => {
         errors = validateAccountEditInput(req.body);
-        if (!isMatch) errors.oldPassword = 'Password is incorrect';
+        if (!isMatch && !errors.oldPassword) errors.oldPassword = 'Password is incorrect';
         if (req.body.email) {
           User.findOne({ email: req.body.email }).then(matchedUser => {
             if (matchedUser && !matchedUser._id.equals(req.user._id))

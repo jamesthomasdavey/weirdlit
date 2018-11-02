@@ -8,6 +8,7 @@ module.exports = reqBody => {
   reqBody.email = !isEmpty(reqBody.email) ? reqBody.email : '';
   reqBody.newPassword = !isEmpty(reqBody.newPassword) ? reqBody.newPassword : '';
   reqBody.newPassword2 = !isEmpty(reqBody.newPassword2) ? reqBody.newPassword2 : '';
+  reqBody.oldPassword = !isEmpty(reqBody.oldPassword) ? reqBody.oldPassword : '';
 
   // name
   if (!Validator.isEmpty(reqBody.name)) {
@@ -41,6 +42,11 @@ module.exports = reqBody => {
 
   if (!Validator.equals(reqBody.newPassword, reqBody.newPassword2)) {
     errors.newPassword2 = 'Passwords do not match';
+  }
+
+  // oldPassword
+  if (Validator.isEmpty(reqBody.oldPassword)) {
+    errors.oldPassword = 'Current password is required';
   }
 
   return errors;
