@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logoutUser } from './../../../actions/authActions';
-import { clearCurrentProfile } from './../../../actions/profileActions';
 
 //images
 import './../../../img/bird-1903523.png';
@@ -17,11 +16,6 @@ import Search from './../Search/Search';
 import './Navbar.css';
 
 class Navbar extends Component {
-  logoutHandler = () => {
-    this.props.clearCurrentProfile();
-    this.props.logoutUser();
-  };
-
   render() {
     const { isAuthenticated, user } = this.props.auth;
 
@@ -42,7 +36,7 @@ class Navbar extends Component {
               <span className="menu__item-link">Settings</span>
             </div>
           </Link>
-          <div className="item profile__item-link" onClick={this.logoutHandler}>
+          <div className="item profile__item-link" onClick={this.props.logoutUser}>
             <span className="menu__item-link">Sign Out</span>
           </div>
         </div>
@@ -103,5 +97,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { logoutUser, clearCurrentProfile }
+  { logoutUser }
 )(Navbar);

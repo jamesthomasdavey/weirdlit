@@ -20,10 +20,13 @@ class Account extends Component {
     form: {
       name: '',
       email: '',
-      oldEmail: '',
       newPassword: '',
       newPassword2: '',
       oldPassword: ''
+    },
+    oldForm: {
+      name: '',
+      email: ''
     },
     date: '',
     isLoading: true,
@@ -40,7 +43,8 @@ class Account extends Component {
       const currentState = this.state;
       currentState.form.name = res.data.name;
       currentState.form.email = res.data.email;
-      currentState.form.oldEmail = res.data.email;
+      currentState.oldForm.name = res.data.name;
+      currentState.oldForm.email = res.data.email;
       currentState.isLoading = false;
       this.setState(currentState);
     });
@@ -48,8 +52,15 @@ class Account extends Component {
   changeInputHandler = e => {
     const currentState = this.state;
     currentState.form[e.target.name] = e.target.value;
-    if (e.target.name !== 'oldPassword') {
+    if (
+      (currentState.form.name !== currentState.oldForm.name && currentState.form.name) ||
+      (currentState.form.email !== currentState.oldForm.email && currentState.form.email) ||
+      currentState.form.newPassword ||
+      currentState.form.newPassword2
+    ) {
       currentState.hasChanged = true;
+    } else {
+      currentState.hasChanged = false;
     }
     this.setState(currentState);
   };
@@ -64,7 +75,7 @@ class Account extends Component {
           const currentState = this.state;
           this.props.loginUser(
             {
-              email: currentState.form.email || currentState.form.oldEmail,
+              email: currentState.form.email || currentState.oldForm.email,
               password: currentState.form.newPassword || currentState.form.oldPassword
             },
             () => {

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
+const prependHttp = require('prepend-http');
 
 // require mongoose models
 const Book = require('./../../models/Book');
@@ -24,27 +25,31 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
         errors.noprofile = 'No profile found';
         return res.status(404).json(errors);
       }
-      let favoriteBook = '';
+      let favoriteBookObj = '';
       if (profile.favoriteBook) {
         await Book.findOne({ title: profile.favoriteBook })
           .populate('authors', 'name')
           .then(book => {
             if (!book || !book.isApproved) return;
             else if (book.isApproved) {
-              favoriteBook = {
+              favoriteBookObj = {
                 _id: book._id,
                 title: book.title,
                 subtitle: book.subtitle,
-                authors: book.authors
+                authors: book.authors.map(author => author.name),
+                publishedDate: new Date(book.publishedDate).getFullYear(),
+                description: book.description,
+                image: book.image
               };
             }
           });
       }
       res.json({
         _id: profile._id,
-        user: profile.user,
+        name: req.user.name,
         handle: profile.handle,
-        favoriteBook: favoriteBook || profile.favoriteBook,
+        favoriteBook: profile.favoriteBook,
+        favoriteBookObj,
         location: profile.location,
         bio: profile.bio,
         social: {
@@ -170,9 +175,9 @@ router.put('/', passport.authenticate('jwt', { session: false }), (req, res) => 
         profileFields.location = req.body.location;
         profileFields.bio = req.body.bio;
         profileFields.social = {};
-        profileFields.social.goodreads = req.body.goodreads;
-        profileFields.social.facebook = req.body.facebook;
-        profileFields.social.instagram = req.body.instagram;
+        profileFields.social.goodreads = prependHttp(req.body.goodreads);
+        profileFields.social.facebook = prependHttp(req.body.facebook);
+        profileFields.social.instagram = prependHttp(req.body.instagram);
         Profile.findOneAndUpdate({ user: req.user._id }, { $set: profileFields }, { new: true })
           .then(profile => res.json(profile))
           .catch(err => res.status(400).json(err));
