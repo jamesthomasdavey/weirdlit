@@ -10,6 +10,7 @@ const TextAreaInputField = ({
   placeholder,
   value,
   minHeight,
+  autoFocus,
   maxLength,
   onChange,
   info,
@@ -25,6 +26,7 @@ const TextAreaInputField = ({
         className={classes.fix__font}
         style={{ minHeight }}
         name={name}
+        autoFocus={autoFocus}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
@@ -43,6 +45,7 @@ TextAreaInputField.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
   maxLength: PropTypes.string,
+  autoFocus: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   error: PropTypes.string,
   label: PropTypes.string,

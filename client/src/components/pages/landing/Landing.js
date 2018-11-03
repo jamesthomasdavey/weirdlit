@@ -43,7 +43,7 @@ class Landing extends Component {
               <div className={classes.content__inner}>
                 <Logo />
                 <div className={classes.content__search}>
-                  <Search />
+                  <Search autoFocus />
                 </div>
                 {authButtons}
               </div>

@@ -1,3 +1,4 @@
+// package
 import React, { Fragment, Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -6,7 +7,9 @@ import isEmpty from './../../../validation/is-empty';
 import { logoutUser } from './../../../actions/authActions';
 import PropTypes from 'prop-types';
 
+// component
 import Navbar from './../../layout/Navbar/Navbar';
+import Footer from './../../layout/Footer/Footer';
 import TextInputField from './../../layout/TextInputField/TextInputField';
 
 class DeleteAccount extends Component {
@@ -56,6 +59,7 @@ class DeleteAccount extends Component {
             </form>
           </div>
         </div>
+        <Footer />
       </Fragment>
     );
   }

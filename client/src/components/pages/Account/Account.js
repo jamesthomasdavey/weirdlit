@@ -13,6 +13,7 @@ import isEmpty from '../../../validation/is-empty';
 
 // component
 import Navbar from '../../layout/Navbar/Navbar';
+import Footer from '../../layout/Footer/Footer';
 import TextInputField from '../../layout/TextInputField/TextInputField';
 
 class Account extends Component {
@@ -112,6 +113,7 @@ class Account extends Component {
               <TextInputField
                 label="Name"
                 name="name"
+                autoFocus
                 type="text"
                 maxLength="40"
                 error={this.state.errors.name}
@@ -168,6 +170,7 @@ class Account extends Component {
             </form>
           </div>
         </div>
+        <Footer />
       </Fragment>
     );
   }

@@ -74,6 +74,7 @@ class Register extends Component {
                   name="name"
                   placeholder="Name"
                   maxLength="40"
+                  autoFocus
                   value={this.state.name}
                   onChange={this.changeInputHandler}
                   error={errors.name}

@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loginUser } from './../../../actions/authActions';
 
+// component
 import Navbar from './../../layout/Navbar/Navbar';
+import Footer from './../../layout/Footer/Footer';
 import TextInputField from '../../layout/TextInputField/TextInputField';
 
 import './Login.css';
@@ -68,6 +70,7 @@ class Login extends Component {
                   name="email"
                   type="email"
                   placeholder="Email"
+                  autoFocus={true}
                   value={this.state.email}
                   onChange={this.changeInputHandler}
                   error={errors.email}
@@ -91,6 +94,7 @@ class Login extends Component {
             </div>
           </div>
         </div>
+        <Footer />
       </Fragment>
     );
   }
@@ -98,6 +102,7 @@ class Login extends Component {
 
 Login.propTypes = {
   loginUser: PropTypes.func.isRequired,
+  autoFocus: PropTypes.bool,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };

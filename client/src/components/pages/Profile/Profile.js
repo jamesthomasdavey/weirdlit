@@ -10,6 +10,7 @@ import isEmpty from '../../../validation/is-empty';
 
 // component
 import Navbar from '../../layout/Navbar/Navbar';
+import Footer from '../../layout/Footer/Footer';
 
 // image
 import goodreadsIcon from './../../../img/icons/goodreads.svg';
@@ -76,7 +77,7 @@ class Profile extends Component {
       const nameHeading = <h2>{this.state.profile.name}</h2>;
       const date = new Date(this.state.profile.date);
       const userSince = (
-        <span className="muted ui">
+        <span style={{ color: '#888' }}>
           User since {date.toLocaleString('en-us', { month: 'long' })} {date.getFullYear()}
         </span>
       );
@@ -220,7 +221,7 @@ class Profile extends Component {
             </h5>
             <div className="ui raised segment" style={{ padding: '22px' }}>
               <div
-                className={['ui stackable two column grid', favoriteBookObj ? 'two' : 'one'].join(
+                className={['ui stackable', favoriteBookObj ? 'two' : 'one', 'column grid'].join(
                   ' '
                 )}
               >
@@ -266,6 +267,7 @@ class Profile extends Component {
             {profileContent}
           </div>
         </div>
+        <Footer />
       </Fragment>
     );
   }

@@ -23,7 +23,7 @@ class Navbar extends Component {
       <div className="ui right simple dropdown item">
         <i className="user circle icon large" />
         <i className="dropdown icon" />
-        <div className="menu">
+        <div className="menu" style={{ zIndex: '999' }}>
           <Link to="/profile">
             <div className="item profile__item-link">
               <span className="menu__item-link">{user.name ? user.name : 'Profile'}</span>
@@ -47,7 +47,7 @@ class Navbar extends Component {
       <div className="ui right simple dropdown item">
         <i className="user circle outline icon large" />
         <i className="dropdown icon" />
-        <div className="menu">
+        <div className="menu" style={{ zIndex: '999' }}>
           <Link to="/login">
             <div className="item profile__item-link">
               <span className="menu__item-link">Sign In</span>

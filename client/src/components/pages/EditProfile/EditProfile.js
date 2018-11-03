@@ -10,6 +10,7 @@ import isEmpty from '../../../validation/is-empty';
 
 // component
 import Navbar from '../../layout/Navbar/Navbar';
+import Footer from '../../layout/Footer/Footer';
 import TextInputField from '../../layout/TextInputField/TextInputField';
 import TextAreaInputField from '../../layout/TextAreaInputField/TextAreaInputField';
 import SocialInputField from '../../layout/SocialInputField/SocialInputField';
@@ -110,6 +111,7 @@ class EditProfile extends Component {
                 name="handle"
                 label="Handle"
                 maxLength="40"
+                autoFocus
                 value={this.state.form.handle}
                 onChange={this.changeInputHandler}
                 error={this.state.errors.handle}
@@ -195,6 +197,7 @@ class EditProfile extends Component {
             </form>
           </div>
         </div>
+        <Footer />
       </Fragment>
     );
   }

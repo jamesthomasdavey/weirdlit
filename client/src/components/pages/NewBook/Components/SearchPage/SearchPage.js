@@ -99,6 +99,7 @@ class SearchPage extends Component {
               <input
                 id="search"
                 type="text"
+                autoFocus
                 onChange={this.changeSearchHandler}
                 name="search"
                 value={this.state.searchQuery}

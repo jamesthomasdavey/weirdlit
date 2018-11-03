@@ -94,6 +94,7 @@ class ResultPage extends Component {
                 <input
                   id="alternateImageUrl"
                   name="alternateImageUrl"
+                  autoFocus
                   type="text"
                   placeholder="Paste an image URL here."
                   onChange={this.validateUserImageUrlHandler}

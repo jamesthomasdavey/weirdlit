@@ -1,8 +1,9 @@
 // package
 import React, { Component, Fragment } from 'react';
 
-// components
+// component
 import Navbar from '../../layout/Navbar/Navbar';
+import Footer from '../../layout/Footer/Footer';
 import SearchPage from './Components/SearchPage/SearchPage';
 import ResultPage from './Components/ResultPage/ResultPage';
 import SubmitPage from './Components/SubmitPage/SubmitPage';
@@ -67,6 +68,7 @@ class NewBook extends Component {
             setSearchPageHandler={this.setSearchPageHandler}
           />
         )}
+        <Footer />
       </Fragment>
     );
   }

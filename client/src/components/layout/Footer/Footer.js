@@ -1,10 +1,23 @@
 import React from 'react';
-import classes from './Footer.module.css';
+import { Link } from 'react-router-dom';
 
 export default () => {
   return (
-    <footer className={classes.footer}>
-      <span className={classes.footer__text}>&copy; {new Date().getFullYear()} WeirdLit</span>
-    </footer>
+    <div
+      className="ui vertical footer segment"
+      style={{ paddingTop: '2rem', paddingBottom: '2rem' }}
+    >
+      <div className="ui center aligned container">
+        <div className="ui horizontal small divided link list">
+          <Link to="/books/new" className="item">
+            Request Literature
+          </Link>
+          <Link to="/about" className="item">
+            About
+          </Link>
+          <span className="item">&copy; {new Date().getFullYear()} WeirdLit</span>
+        </div>
+      </div>
+    </div>
   );
 };

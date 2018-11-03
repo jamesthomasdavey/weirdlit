@@ -70,7 +70,7 @@ router.post('/login', (req, res) => {
   const errors = validateLoginInput(req.body);
   User.findOne({ email: req.body.email })
     .then(foundUser => {
-      if (!foundUser) errors.email = 'User not found';
+      if (!foundUser && !errors.email) errors.email = 'User not found';
       if (!isEmpty(errors)) return res.status(400).json(errors);
       bcrypt
         .compare(req.body.password, foundUser.password)

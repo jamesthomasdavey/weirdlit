@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 const TextInputField = ({
   name,
   type,
+  autoFocus,
   maxLength,
   placeholder,
   value,
@@ -20,6 +21,7 @@ const TextInputField = ({
         id={name}
         name={name}
         type={type}
+        autoFocus={autoFocus}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
@@ -36,6 +38,7 @@ TextInputField.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  autoFocus: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   maxLength: PropTypes.string,
   error: PropTypes.string,
