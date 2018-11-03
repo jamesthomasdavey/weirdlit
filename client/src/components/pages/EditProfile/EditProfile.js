@@ -189,7 +189,7 @@ class EditProfile extends Component {
                 className={['ui primary button', this.state.hasChanged ? '' : 'disabled'].join(' ')}
                 value={this.state.hasSaved ? 'Saved' : 'Save'}
               />
-              <Link to="/profile" className="ui button">
+              <Link to="/profile" style={{ marginLeft: '1rem' }} className="ui button">
                 {this.state.hasSaved ? 'Back to Profile' : 'Cancel'}
               </Link>
             </form>
