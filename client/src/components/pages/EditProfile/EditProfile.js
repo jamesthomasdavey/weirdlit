@@ -140,11 +140,11 @@ class EditProfile extends Component {
                 name="bio"
                 placeholder="Write a short bio about yourself."
                 label="Bio"
-                rows="3"
+                rows="1"
                 value={this.state.form.bio}
                 onChange={this.changeInputHandler}
                 error={this.state.errors.bio}
-                minHeight="100px"
+                minHeight="136px"
                 maxLength="1000"
                 info={
                   this.state.form.bio &&

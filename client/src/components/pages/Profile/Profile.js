@@ -218,7 +218,7 @@ class Profile extends Component {
               <i className="user icon" />
               About
             </h5>
-            <div className="ui raised segment">
+            <div className="ui raised segment" style={{ padding: '22px' }}>
               <div
                 className={['ui stackable two column grid', favoriteBookObj ? 'two' : 'one'].join(
                   ' '

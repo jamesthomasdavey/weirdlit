@@ -2,6 +2,8 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
+import classes from './TextAreaInputField.module.css';
+
 const TextAreaInputField = ({
   name,
   rows,
@@ -20,6 +22,7 @@ const TextAreaInputField = ({
       <textarea
         rows={rows}
         id={name}
+        className={classes.fix__font}
         style={{ minHeight }}
         name={name}
         placeholder={placeholder}
@@ -36,7 +39,7 @@ const TextAreaInputField = ({
 TextAreaInputField.propTypes = {
   name: PropTypes.string.isRequired,
   minHeight: PropTypes.string,
-  rows: PropTypes.string.isRequired,
+  rows: PropTypes.string,
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
   maxLength: PropTypes.string,
