@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import store from './store';
 import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutUser } from './actions/authActions';
-import { clearCurrentProfile } from './actions/profileActions';
 import jwt_decode from 'jwt-decode';
 
 // components
@@ -43,7 +42,6 @@ if (localStorage.jwtToken) {
   // compare expiration time
   if (decoded.exp < currentTime) {
     store.dispatch(logoutUser());
-    store.dispatch(clearCurrentProfile());
     window.location.href = '/login';
   }
 }

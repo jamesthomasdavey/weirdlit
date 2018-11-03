@@ -76,7 +76,7 @@ class Profile extends Component {
       const nameHeading = <h2>{this.state.profile.name}</h2>;
       const date = new Date(this.state.profile.date);
       const userSince = (
-        <span>
+        <span className="muted ui">
           User since {date.toLocaleString('en-us', { month: 'long' })} {date.getFullYear()}
         </span>
       );
