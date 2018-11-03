@@ -1,4 +1,11 @@
 .social__icon {
+  display: inline-block;
+  margin: 0 8px;
   height: 40px;
   width: 40px;
+  transition: 0.2s all ease;
+}
+
+.social__icon:hover {
+  transform: scale(1.07);
 }

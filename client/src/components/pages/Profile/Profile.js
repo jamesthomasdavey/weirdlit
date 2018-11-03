@@ -173,24 +173,36 @@ class Profile extends Component {
       ) {
         social = (
           <Fragment>
-            <h5>Social Media</h5>
+            <h5>Social</h5>
             <div>
               {this.state.profile.social.goodreads && (
                 <Fragment>
-                  <a href={this.state.profile.social.goodreads} target="_blank">
+                  <a
+                    href={this.state.profile.social.goodreads}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <img className={classes.social__icon} alt="goodreads" src={goodreadsIcon} />
-                  </a>{' '}
+                  </a>
                 </Fragment>
               )}
               {this.state.profile.social.facebook && (
                 <Fragment>
-                  <a href={this.state.profile.social.facebook} target="_blank">
+                  <a
+                    href={this.state.profile.social.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <img className={classes.social__icon} alt="facebook" src={facebookIcon} />
-                  </a>{' '}
+                  </a>
                 </Fragment>
               )}
               {this.state.profile.social.instagram && (
-                <a href={this.state.profile.social.instagram} target="_blank">
+                <a
+                  href={this.state.profile.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <img className={classes.social__icon} alt="instagram" src={instagramIcon} />
                 </a>
               )}

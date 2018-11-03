@@ -160,30 +160,32 @@ router.get('/user/:userId', passport.authenticate('jwt', { session: false }), (r
 // @access    private
 router.put('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const errors = validateProfileInput(req.body);
-  if (!isEmpty(errors)) return res.status(400).json(errors);
-  Profile.findOne({ handle: req.body.handle.toLowerCase() })
-    .then(profile => {
-      if (profile && !profile.user.equals(req.user._id)) {
-        // check if the id is taken, or if it is, make sure it is owned by the current user
-        errors.handle = 'This handle has already been taken';
-        return res.status(400).json(errors);
-      }
-      if (isEmpty(errors)) {
-        const profileFields = {};
-        profileFields.handle = req.body.handle.toLowerCase();
-        profileFields.favoriteBook = req.body.favoriteBook;
-        profileFields.location = req.body.location;
-        profileFields.bio = req.body.bio;
-        profileFields.social = {};
-        profileFields.social.goodreads = prependHttp(req.body.goodreads);
-        profileFields.social.facebook = prependHttp(req.body.facebook);
-        profileFields.social.instagram = prependHttp(req.body.instagram);
-        Profile.findOneAndUpdate({ user: req.user._id }, { $set: profileFields }, { new: true })
-          .then(profile => res.json(profile))
-          .catch(err => res.status(400).json(err));
-      }
-    })
-    .catch(err => res.status(400).json(err));
+  if (!isEmpty(errors)) return res.json({ errors });
+  Profile.findOne({ handle: req.body.handle.toLowerCase() }).then(profile => {
+    if (profile && !profile.user.equals(req.user._id)) {
+      // check if the handle is taken, or if it is, make sure it is owned by the current user
+      errors.handle = 'This handle has already been taken';
+      return res.json({ errors });
+    }
+    if (isEmpty(errors)) {
+      const updatedProfile = {
+        handle: req.body.handle.toLowerCase(),
+        favoriteBook: req.body.favoriteBook,
+        location: req.body.location,
+        bio: req.body.bio,
+        social: {
+          goodreads: req.body.goodreads ? prependHttp(req.body.goodreads) : '',
+          facebook: req.body.facebook ? prependHttp(req.body.facebook) : '',
+          instagram: req.body.instagram ? prependHttp(req.body.instagram) : ''
+        },
+        date: req.body.date
+      };
+      Profile.findOneAndUpdate({ user: req.user._id }, { $set: updatedProfile }, { new: true })
+        .then(profile => res.json(profile))
+        .catch(err => res.status(400).json(err));
+    }
+  });
+  // .catch(err => res.status(400).json(err));
 });
 
 module.exports = router;

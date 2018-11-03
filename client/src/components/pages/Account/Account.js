@@ -1,8 +1,8 @@
 // package
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 // action
@@ -30,7 +30,6 @@ class Account extends Component {
     },
     date: '',
     isLoading: true,
-    isSaving: false,
     hasChanged: false,
     hasSaved: false,
     errors: {}
@@ -59,6 +58,7 @@ class Account extends Component {
       currentState.form.newPassword2
     ) {
       currentState.hasChanged = true;
+      currentState.hasSaved = false;
     } else {
       currentState.hasChanged = false;
     }
@@ -156,7 +156,7 @@ class Account extends Component {
               <input
                 type="submit"
                 className={['ui button primary', this.state.hasChanged ? '' : 'disabled'].join(' ')}
-                value={this.state.hasSaved && !this.state.hasChanged ? 'Saved' : 'Save'}
+                value={this.state.hasSaved ? 'Saved' : 'Save'}
               />
               <Link
                 to="/account/delete"
