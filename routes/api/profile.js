@@ -19,7 +19,7 @@ const validateProfileInput = require('./../../validation/profile');
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const errors = {};
   Profile.findOne({ user: req.user._id })
-    .populate('user', ['name', 'email'])
+    .populate('user', ['_id', 'name'])
     .then(async profile => {
       if (!profile) {
         errors.noprofile = 'No profile found';
@@ -46,7 +46,10 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
       }
       res.json({
         _id: profile._id,
-        name: req.user.name,
+        user: {
+          _id: profile.user._id,
+          name: profile.user.name
+        },
         handle: profile.handle,
         favoriteBook: profile.favoriteBook,
         favoriteBookObj,
@@ -63,39 +66,60 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
     .catch(err => res.status(404).json(err));
 });
 
+// @route     get /api/profile/reviews
+// @desc      get reviews for specific userId
+// @access    private
+router.get('/reviews', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const errors = {};
+  Review.find({ creator: req.body.userId })
+    .populate('book', ['title', 'subtitle', 'authors'])
+    .populate('comments', 'user')
+    .populate('likes', 'user')
+    .then(reviews => {
+      res.json(reviews);
+    });
+});
+
 // @route     get /api/profile/handle/:handle
 // @desc      get specific profile from profile handle
 // @access    private
 router.get('/handle/:handle', passport.authenticate('jwt', { session: false }), (req, res) => {
   const errors = {};
   Profile.findOne({ handle: req.params.handle })
-    .populate('user', 'name')
+    .populate('user', ['_id', 'name'])
     .then(async profile => {
       if (!profile) {
         errors.noprofile = 'No profile found';
         return res.status(404).json(errors);
       }
-      let favoriteBook = null;
+      let favoriteBookObj = '';
       if (profile.favoriteBook) {
         await Book.findOne({ title: profile.favoriteBook })
           .populate('authors', 'name')
           .then(book => {
             if (!book || !book.isApproved) return;
             else if (book.isApproved) {
-              favoriteBook = {
+              favoriteBookObj = {
                 _id: book._id,
                 title: book.title,
                 subtitle: book.subtitle,
-                authors: book.authors
+                authors: book.authors.map(author => author.name),
+                publishedDate: new Date(book.publishedDate).getFullYear(),
+                description: book.description,
+                image: book.image
               };
             }
           });
       }
       res.json({
         _id: profile._id,
-        user: profile.user,
+        user: {
+          _id: profile.user._id,
+          name: profile.user.name
+        },
         handle: profile.handle,
-        favoriteBook: favoriteBook || profile.favoriteBook,
+        favoriteBook: profile.favoriteBook,
+        favoriteBookObj,
         location: profile.location,
         bio: profile.bio,
         social: {
@@ -115,33 +139,40 @@ router.get('/handle/:handle', passport.authenticate('jwt', { session: false }), 
 router.get('/user/:userId', passport.authenticate('jwt', { session: false }), (req, res) => {
   const errors = {};
   Profile.findOne({ user: req.params.userId })
-    .populate('user', 'name')
+    .populate('user', ['_id', 'name'])
     .then(async profile => {
       if (!profile) {
         errors.noprofile = 'No profile found';
         return res.status(404).json(errors);
       }
-      let favoriteBook = null;
+      let favoriteBookObj = '';
       if (profile.favoriteBook) {
         await Book.findOne({ title: profile.favoriteBook })
           .populate('authors', 'name')
           .then(book => {
             if (!book || !book.isApproved) return;
             else if (book.isApproved) {
-              favoriteBook = {
+              favoriteBookObj = {
                 _id: book._id,
                 title: book.title,
                 subtitle: book.subtitle,
-                authors: book.authors
+                authors: book.authors.map(author => author.name),
+                publishedDate: new Date(book.publishedDate).getFullYear(),
+                description: book.description,
+                image: book.image
               };
             }
           });
       }
       res.json({
         _id: profile._id,
-        user: profile.user,
+        user: {
+          _id: profile.user._id,
+          name: profile.user.name
+        },
         handle: profile.handle,
-        favoriteBook: favoriteBook || profile.favoriteBook,
+        favoriteBook: profile.favoriteBook,
+        favoriteBookObj,
         location: profile.location,
         bio: profile.bio,
         social: {

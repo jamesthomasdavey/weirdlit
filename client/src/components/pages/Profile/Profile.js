@@ -1,29 +1,23 @@
 // package
 import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-// validation
-import isEmpty from '../../../validation/is-empty';
-
 // component
 import Navbar from '../../layout/Navbar/Navbar';
 import Footer from '../../layout/Footer/Footer';
-
-// image
-import goodreadsIcon from './../../../img/icons/goodreads.svg';
-import facebookIcon from './../../../img/icons/facebook.svg';
-import instagramIcon from './../../../img/icons/instagram.svg';
-
-// css
-import classes from './Profile.module.css';
+import About from './components/About/About';
+import Heading from './components/Heading/Heading';
 
 class Profile extends Component {
   state = {
     profile: {
-      name: '',
+      _id: '',
+      user: {
+        _id: '',
+        name: ''
+      },
       handle: '',
       favoriteBook: '',
       favoriteBookObj: {
@@ -42,9 +36,9 @@ class Profile extends Component {
         facebook: '',
         instagram: ''
       },
-      date: ''
+      date: '',
+      isLoading: true
     },
-    isLoading: true,
     errors: {}
   };
 
@@ -59,7 +53,7 @@ class Profile extends Component {
         const profile = res.data;
         const currentState = this.state;
         currentState.profile = profile;
-        currentState.isLoading = false;
+        currentState.profile.isLoading = false;
         this.setState(currentState);
       })
       .catch(err => {
@@ -68,204 +62,46 @@ class Profile extends Component {
   };
 
   render() {
-    document.title = `${this.state.profile.name || 'Profile'} | WeirdLit`;
-
-    let heading;
-    let about;
-
-    if (!this.state.isLoading) {
-      const nameHeading = <h2>{this.state.profile.name}</h2>;
-      const date = new Date(this.state.profile.date);
-      const userSince = (
-        <span style={{ color: '#888' }}>
-          User since {date.toLocaleString('en-us', { month: 'long' })} {date.getFullYear()}
-        </span>
-      );
-
-      heading = (
-        <Fragment>
-          {nameHeading}
-          {userSince}
-          <Link to="/profile/edit" className="ui right floated button tiny">
-            Edit Profile
-          </Link>
-        </Fragment>
-      );
-
-      let favoriteBookObj;
-      let favoriteBook;
-      let location;
-      let bio;
-      let social;
-
-      if (this.state.profile.favoriteBookObj._id) {
-        favoriteBookObj = (
-          <div className="column">
-            <h5>Favorite Book</h5>
-            <div className="ui items">
-              <div className="ui item">
-                <div className="ui small image">
-                  <img
-                    src={this.state.profile.favoriteBookObj.image}
-                    alt={this.state.profile.favoriteBookObj.title}
-                  />
-                </div>
-                <div className="content">
-                  <div className="header">{this.state.profile.favoriteBookObj.title}</div>
-                  <div className="meta">{this.state.profile.favoriteBookObj.publishedDate}</div>
-                  {this.state.profile.favoriteBookObj.authors.length > 0 && (
-                    <div className="meta">
-                      {this.state.profile.favoriteBookObj.authors.length > 1
-                        ? this.state.profile.favoriteBookObj.authors.reduce(
-                            (acc, current) => acc + ', ' + current
-                          )
-                        : this.state.profile.favoriteBookObj.authors[0]}
-                    </div>
-                  )}
-                  {this.state.profile.favoriteBookObj.description && (
-                    <div className="description">
-                      {this.state.profile.favoriteBookObj.description}
-                    </div>
-                  )}
-                  <Link
-                    to={`/books/${this.state.profile.favoriteBookObj._id}`}
-                    className="button ui"
-                  >
-                    View
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      }
-
-      if (!favoriteBookObj && this.state.profile.favoriteBook) {
-        favoriteBook = (
-          <Fragment>
-            <h5>Favorite Book</h5>
-            <span>{this.state.profile.favoriteBook}</span>
-          </Fragment>
-        );
-      }
-
-      if (this.state.profile.location) {
-        location = (
-          <Fragment>
-            <h5>Location</h5>
-            <span>{this.state.profile.location}</span>
-          </Fragment>
-        );
-      }
-
-      if (this.state.profile.bio) {
-        bio = (
-          <Fragment>
-            <h5>Bio</h5>
-            <span>{this.state.profile.bio}</span>
-          </Fragment>
-        );
-      }
-
-      if (
-        this.state.profile.social.goodreads ||
-        this.state.profile.social.facebook ||
-        this.state.profile.social.instagram
-      ) {
-        social = (
-          <Fragment>
-            <h5>Social</h5>
-            <div>
-              {this.state.profile.social.goodreads && (
-                <Fragment>
-                  <a
-                    href={this.state.profile.social.goodreads}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img className={classes.social__icon} alt="goodreads" src={goodreadsIcon} />
-                  </a>
-                </Fragment>
-              )}
-              {this.state.profile.social.facebook && (
-                <Fragment>
-                  <a
-                    href={this.state.profile.social.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img className={classes.social__icon} alt="facebook" src={facebookIcon} />
-                  </a>
-                </Fragment>
-              )}
-              {this.state.profile.social.instagram && (
-                <a
-                  href={this.state.profile.social.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <img className={classes.social__icon} alt="instagram" src={instagramIcon} />
-                </a>
-              )}
-            </div>
-          </Fragment>
-        );
-      }
-
-      if (favoriteBook || location || bio || social) {
-        about = (
-          <Fragment>
-            <h5 className="ui horizontal divider header">
-              <i className="user icon" />
-              About
-            </h5>
-            <div className="ui raised segment" style={{ padding: '22px' }}>
-              <div
-                className={['ui stackable', favoriteBookObj ? 'two' : 'one', 'column grid'].join(
-                  ' '
-                )}
-              >
-                {favoriteBookObj}
-                <div className="column">
-                  {favoriteBook}
-                  {location}
-                  {bio}
-                  {social}
-                </div>
-              </div>
-            </div>
-          </Fragment>
-        );
-      }
-    }
+    document.title = `${this.state.profile.user.name || 'Profile'} | WeirdLit`;
 
     let profileContent = (
-      <Fragment>
-        {heading}
-        {about}
-      </Fragment>
+      <div className={['ui segment', this.state.profile.isLoading ? 'loading' : ''].join(' ')}>
+        {this.state.profile.isLoading && (
+          <Fragment>
+            <br />
+            <br />
+            <br />
+            <br />
+          </Fragment>
+        )}
+        {!this.state.profile.isLoading && (
+          <Fragment>
+            <Heading
+              name={this.state.profile.user.name}
+              date={this.state.profile.date}
+              isCurrentUser={true}
+            />
+            <About
+              favoriteBook={this.state.profile.favoriteBook}
+              favoriteBookObj={this.state.profile.favoriteBookObj}
+              location={this.state.profile.location}
+              bio={this.state.profile.bio}
+              social={this.state.profile.social}
+            />
+          </Fragment>
+        )}
+      </div>
     );
 
     return (
       <Fragment>
         <Navbar />
         <div
-          className={[
-            'ui container',
-            !isEmpty(this.state.profile.favoriteBookObj) ? '' : 'text'
-          ].join(' ')}
+          className={['ui container', this.state.profile.favoriteBookObj._id ? '' : 'text'].join(
+            ' '
+          )}
         >
-          <div className={['ui segment', this.state.isLoading ? 'loading' : ''].join(' ')}>
-            {this.state.isLoading && (
-              <Fragment>
-                <br />
-                <br />
-                <br />
-                <br />
-              </Fragment>
-            )}
-            {profileContent}
-          </div>
+          {profileContent}
         </div>
         <Footer />
       </Fragment>

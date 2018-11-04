@@ -31,18 +31,18 @@
 .content__logo-text {
   font-family: 'Lora', serif;
   font-size: 48px;
-  letter-spacing: 10px;
+  letter-spacing: 32px;
   text-transform: uppercase;
-  animation: join 28s ease-in-out;
+  animation: expand 28s ease-in-out;
   padding-right: -30px;
 }
 
-@keyframes join {
+@keyframes expand {
   from {
-    letter-spacing: 28px;
+    letter-spacing: 13px;
   }
   to {
-    letter-spacing: 10px;
+    letter-spacing: 32px;
   }
 }
 
