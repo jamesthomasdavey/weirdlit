@@ -2,7 +2,7 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import ArrayToSentence from 'array-to-sentence';
+import arrayToSentence from 'array-to-sentence';
 
 // image
 import goodreadsIcon from './../../../../../img/icons/goodreads.svg';
@@ -20,13 +20,12 @@ const About = props => {
         <h5>Favorite Book</h5>
         <div className="ui items">
           <div className="ui item">
-            <div
-              className="ui small image book__image"
-              onClick={() => props.history.push(`/books/${props.favoriteBookObj._id}`)}
-            >
+            <div className="ui small image">
               <img
                 src={props.favoriteBookObj.image.largeThumbnail}
+                className="book__image"
                 alt={props.favoriteBookObj.title}
+                onClick={() => props.history.push(`/books/${props.favoriteBookObj._id}`)}
               />
             </div>
             <div className="content">
@@ -34,7 +33,7 @@ const About = props => {
               <div className="meta">{props.favoriteBookObj.publishedDate}</div>
               {props.favoriteBookObj.authors.length > 0 && (
                 <div className="meta">
-                  {ArrayToSentence(props.favoriteBookObj.authors, { lastSeparator: ' & ' })}
+                  {arrayToSentence(props.favoriteBookObj.authors, { lastSeparator: ' & ' })}
                 </div>
               )}
               {props.favoriteBookObj.description && (

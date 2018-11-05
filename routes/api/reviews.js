@@ -61,6 +61,10 @@ router.post('/', verifyBookId, passport.authenticate('jwt', { session: false }),
         book.rating = newRating;
         book.save();
       });
+      await User.findById(req.user._id).then(user => {
+        user.booksRead.push(req.params.bookId);
+        user.save();
+      })
       // send new review data
       res.json(newReview);
     })

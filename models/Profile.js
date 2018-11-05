@@ -19,12 +19,10 @@ const ProfileSchema = new Schema({
   bio: {
     type: String
   },
-  hasRead: [
+  booksRead: [
     {
-      book: {
-        type: Schema.Types.ObjectId,
-        ref: 'books'
-      }
+      type: Schema.Types.ObjectId,
+      ref: 'books'
     }
   ],
   social: {

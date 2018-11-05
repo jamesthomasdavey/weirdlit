@@ -33,6 +33,7 @@ class Profile extends Component {
       },
       location: '',
       bio: '',
+      booksRead: [],
       social: {
         goodreads: '',
         facebook: '',
@@ -110,6 +111,7 @@ class Profile extends Component {
           )}
         >
           {profileContent}
+          {console.log(this.state.profile.booksRead)}
         </div>
         <Footer />
       </Fragment>

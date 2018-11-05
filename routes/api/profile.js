@@ -20,6 +20,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
   const errors = {};
   Profile.findOne({ user: req.user._id })
     .populate('user', ['_id', 'name'])
+    .populate({ path: 'booksRead', populate: { path: 'authors' } })
     .then(async profile => {
       if (!profile) {
         errors.noprofile = 'No profile found';
@@ -60,6 +61,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
           facebook: profile.social.facebook,
           instagram: profile.social.instagram
         },
+        booksRead: profile.booksRead,
         date: profile.date
       });
     })
@@ -69,18 +71,21 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
 // @route     get /api/profile/user/:userId/reviews
 // @desc      get reviews for specific userId
 // @access    private
-router.get('/user/:userId/reviews', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Review.find({ creator: req.params.userId })
-    .populate({path: 'book', populate: {path: 'authors'}})
-    // .populate('book', ['title', 'subtitle', 'image'])
-    .populate('comments', 'user')
-    .populate('likes', 'user')
-    .then(reviews => {
-      if (reviews.length > 0) return res.json({ reviews });
-      res.json({ reviews: [] });
-    })
-    .catch(() => res.status(404).json({ reviews: [] }));
-});
+router.get(
+  '/user/:userId/reviews',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    Review.find({ creator: req.params.userId })
+      .populate({ path: 'book', populate: { path: 'authors' } })
+      .populate('comments', 'user')
+      .populate('likes', 'user')
+      .then(reviews => {
+        if (reviews.length > 0) return res.json({ reviews });
+        res.json({ reviews: [] });
+      })
+      .catch(() => res.status(404).json({ reviews: [] }));
+  }
+);
 
 // @route     get /api/profile/handle/:handle
 // @desc      get specific profile from profile handle

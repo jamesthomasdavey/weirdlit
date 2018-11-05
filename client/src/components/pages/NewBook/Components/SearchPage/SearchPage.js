@@ -1,6 +1,7 @@
 // package
 import React, { Component } from 'react';
 import axios from 'axios';
+import arrayToSentence from 'array-to-sentence';
 
 class SearchPage extends Component {
   state = {
@@ -65,9 +66,7 @@ class SearchPage extends Component {
               <div className="meta">{book.publishedDate}</div>
               {book.authors && (
                 <div className="meta">
-                  {book.authors.length > 1
-                    ? book.authors.reduce((acc, current) => acc + ', ' + current)
-                    : book.authors[0]}
+                  {arrayToSentence(book.authors, { lastSeparator: ' & ' })}
                 </div>
               )}
               <button

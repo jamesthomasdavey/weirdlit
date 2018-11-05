@@ -10,11 +10,13 @@ import RatingDisplay from './../../../../../layout/RatingDisplay/RatingDisplay';
 const Review = props => {
   return (
     <div className="ui item">
-      <div
-        className="ui tiny image book__image"
-        onClick={() => props.history.push(`/books/${props.book._id}`)}
-      >
-        <img alt="cover" src={props.book.image} />
+      <div className="ui tiny image">
+        <img
+          alt="cover"
+          className="book__image"
+          src={props.book.image.mediumThumbnail}
+          onClick={() => props.history.push(`/books/${props.book._id}`)}
+        />
       </div>
       <div className="content">
         <div className="header">{props.headline}</div>

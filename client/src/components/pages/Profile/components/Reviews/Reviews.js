@@ -27,7 +27,7 @@ class Reviews extends Component {
   render() {
     let reviewsContent;
 
-    const sortedReviews = this.state.reviews
+    const sortedReviews = [...this.state.reviews]
       .sort((a, b) => {
         return new Date(a.date) - new Date(b.date);
       })
@@ -36,13 +36,13 @@ class Reviews extends Component {
     const numberOfReviewsToDisplay = 5;
 
     if (this.state.reviews.length > 0) {
-      let recentReviews;
+      let recentSortedReviews;
       if (this.state.reviews.length > numberOfReviewsToDisplay) {
-        recentReviews = sortedReviews.splice(0, numberOfReviewsToDisplay);
+        recentSortedReviews = sortedReviews.splice(0, numberOfReviewsToDisplay);
       } else {
-        recentReviews = sortedReviews;
+        recentSortedReviews = sortedReviews;
       }
-      reviewsContent = recentReviews.map(review => {
+      reviewsContent = recentSortedReviews.map(review => {
         return (
           <ProfileReview
             key={review._id}
@@ -78,7 +78,6 @@ class Reviews extends Component {
               </Fragment>
             )}
             {!this.state.isLoading && <div className="ui divided items">{reviewsContent}</div>}
-
             {this.state.reviews.length > numberOfReviewsToDisplay && (
               <div style={{ textAlign: 'center' }}>
                 <Link to={`/profile/user/${this.props.userId}/reviews`} className="ui tiny button">
