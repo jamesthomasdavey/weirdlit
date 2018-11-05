@@ -1,3 +1,4 @@
+// package
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -5,10 +6,11 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from './../../../actions/authActions';
 
-import './Register.css';
-
-import Navbar from './../../layout/Navbar/Navbar';
+// component
 import TextInputField from '../../layout/TextInputField/TextInputField';
+
+// css
+import './Register.css';
 
 class Register extends Component {
   state = {
@@ -61,7 +63,6 @@ class Register extends Component {
 
     return (
       <Fragment>
-        <Navbar isAuthPage={true} />
         <div className="ui container">
           <div className="ui one column stackable center aligned page grid">
             <div className="column nine wide">

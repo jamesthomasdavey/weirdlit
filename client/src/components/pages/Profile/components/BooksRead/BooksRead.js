@@ -1,5 +1,6 @@
 // package
 import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // component
@@ -26,6 +27,13 @@ const BooksRead = props => {
         </h5>
         <div className="ui raised segment">
           <div className={classes.books__wrapper}>{booksReadContent}</div>
+          {props.books.length > numberOfBooksToDisplay && (
+            <div style={{ textAlign: 'center' }}>
+              <Link to={`/profile/user/${props.userId}/books`} className="ui tiny button">
+                View All
+              </Link>
+            </div>
+          )}
         </div>
       </Fragment>
     );
@@ -36,7 +44,8 @@ const BooksRead = props => {
 
 BooksRead.propTypes = {
   books: PropTypes.array.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
+  userId: PropTypes.string.isRequired
 };
 
 export default BooksRead;

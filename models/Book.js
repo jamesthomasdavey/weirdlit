@@ -52,6 +52,10 @@ const BookSchema = new Schema({
   rating: {
     type: Number
   },
+  ratingDisplay: {
+    type: Boolean,
+    default: false
+  },
   image: {
     original: {
       type: String

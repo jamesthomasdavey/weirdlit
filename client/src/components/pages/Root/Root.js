@@ -6,8 +6,7 @@ import Landing from './../Landing/Landing';
 
 class Root extends Component {
   render() {
-    const { isAuthenticated } = this.props.auth;
-    if (isAuthenticated) {
+    if (this.props.auth.isAuthenticated) {
       return <Browse />;
     } else {
       return <Landing />;

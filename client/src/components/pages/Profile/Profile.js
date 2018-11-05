@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 // component
-import Navbar from '../../layout/Navbar/Navbar';
-import Footer from '../../layout/Footer/Footer';
 import Heading from './components/Heading/Heading';
 import About from './components/About/About';
 import BooksRead from './components/BooksRead/BooksRead';
@@ -92,7 +90,11 @@ class Profile extends Component {
               social={this.state.profile.social}
               history={this.props.history}
             />
-            <BooksRead books={this.state.profile.booksRead} history={this.props.history} />
+            <BooksRead
+              books={this.state.profile.booksRead}
+              history={this.props.history}
+              userId={this.state.profile.user._id}
+            />
             <Reviews
               userId={this.state.profile.user._id}
               name={this.state.profile.user.name}
@@ -105,7 +107,6 @@ class Profile extends Component {
 
     return (
       <Fragment>
-        <Navbar />
         <div
           className={['ui container', this.state.profile.favoriteBookObj._id ? '' : 'text'].join(
             ' '
@@ -113,7 +114,6 @@ class Profile extends Component {
         >
           {profileContent}
         </div>
-        <Footer />
       </Fragment>
     );
   }

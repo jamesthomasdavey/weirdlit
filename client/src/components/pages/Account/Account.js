@@ -12,8 +12,6 @@ import { loginUser, logoutUser } from '../../../actions/authActions';
 import isEmpty from '../../../validation/is-empty';
 
 // component
-import Navbar from '../../layout/Navbar/Navbar';
-import Footer from '../../layout/Footer/Footer';
 import TextInputField from '../../layout/TextInputField/TextInputField';
 
 class Account extends Component {
@@ -97,7 +95,6 @@ class Account extends Component {
   render() {
     return (
       <Fragment>
-        <Navbar />
         <div className="ui container">
           <div className="ui text container">
             <form
@@ -170,7 +167,6 @@ class Account extends Component {
             </form>
           </div>
         </div>
-        <Footer />
       </Fragment>
     );
   }

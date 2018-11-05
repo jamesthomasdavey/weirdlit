@@ -10,7 +10,7 @@ const Footer = () => {
       <div className="ui center aligned container">
         <div className="ui horizontal small divided link list">
           <Link to="/books/new" className="item">
-            Request Literature
+            Request
           </Link>
           <Link to="/about" className="item">
             About

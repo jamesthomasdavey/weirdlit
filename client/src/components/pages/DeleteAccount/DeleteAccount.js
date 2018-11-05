@@ -8,8 +8,6 @@ import { logoutUser } from './../../../actions/authActions';
 import PropTypes from 'prop-types';
 
 // component
-import Navbar from './../../layout/Navbar/Navbar';
-import Footer from './../../layout/Footer/Footer';
 import TextInputField from './../../layout/TextInputField/TextInputField';
 
 class DeleteAccount extends Component {
@@ -34,7 +32,6 @@ class DeleteAccount extends Component {
   render() {
     return (
       <Fragment>
-        <Navbar />
         <div className="ui container">
           <div className="ui text container">
             <h1>Delete Account</h1>
@@ -59,7 +56,6 @@ class DeleteAccount extends Component {
             </form>
           </div>
         </div>
-        <Footer />
       </Fragment>
     );
   }

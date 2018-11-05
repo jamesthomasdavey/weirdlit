@@ -9,8 +9,6 @@ import axios from 'axios';
 import isEmpty from '../../../validation/is-empty';
 
 // component
-import Navbar from '../../layout/Navbar/Navbar';
-import Footer from '../../layout/Footer/Footer';
 import TextInputField from '../../layout/TextInputField/TextInputField';
 import TextAreaInputField from '../../layout/TextAreaInputField/TextAreaInputField';
 import SocialInputField from '../../layout/SocialInputField/SocialInputField';
@@ -98,7 +96,6 @@ class EditProfile extends Component {
 
     return (
       <Fragment>
-        <Navbar />
         <div className="ui container">
           <div className="ui text container">
             <form
@@ -197,7 +194,6 @@ class EditProfile extends Component {
             </form>
           </div>
         </div>
-        <Footer />
       </Fragment>
     );
   }

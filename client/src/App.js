@@ -10,6 +10,12 @@ import { setCurrentUser, logoutUser } from './actions/authActions';
 import jwt_decode from 'jwt-decode';
 
 // components
+// parts
+import Navbar from './components/layout/Navbar/Navbar';
+import Footer from './components/layout/Footer/Footer';
+
+// components
+// pages
 import Root from './components/pages/Root/Root';
 import Landing from './components/pages/Landing/Landing';
 import Register from './components/pages/Register/Register';
@@ -52,6 +58,7 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className="App">
+            <Navbar />
             <Route exact path="/" component={Root} />
             <Route exact path="/landing" component={Landing} />
             <Route exact path="/browse" component={Browse} />
@@ -75,6 +82,7 @@ class App extends Component {
             <Switch>
               <AdminRoute exact path="/books/pending" component={Pending} />
             </Switch>
+            <Footer />
           </div>
         </Router>
       </Provider>

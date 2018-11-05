@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import { loginUser } from './../../../actions/authActions';
 
 // component
-import Navbar from './../../layout/Navbar/Navbar';
-import Footer from './../../layout/Footer/Footer';
 import TextInputField from '../../layout/TextInputField/TextInputField';
 
 import './Login.css';
@@ -57,7 +55,6 @@ class Login extends Component {
     const { errors } = this.state;
     return (
       <Fragment>
-        <Navbar isAuthPage={true} />
         <div className="ui container">
           <div className="ui one column stackable center aligned page grid">
             <div className="column nine wide">
@@ -94,7 +91,6 @@ class Login extends Component {
             </div>
           </div>
         </div>
-        <Footer />
       </Fragment>
     );
   }
