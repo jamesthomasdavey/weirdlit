@@ -66,18 +66,20 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
     .catch(err => res.status(404).json(err));
 });
 
-// @route     get /api/profile/reviews
+// @route     get /api/profile/user/:userId/reviews
 // @desc      get reviews for specific userId
 // @access    private
-router.get('/reviews', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const errors = {};
-  Review.find({ creator: req.body.userId })
-    .populate('book', ['title', 'subtitle', 'authors'])
+router.get('/user/:userId/reviews', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Review.find({ creator: req.params.userId })
+    .populate({path: 'book', populate: {path: 'authors'}})
+    // .populate('book', ['title', 'subtitle', 'image'])
     .populate('comments', 'user')
     .populate('likes', 'user')
     .then(reviews => {
-      res.json(reviews);
-    });
+      if (reviews.length > 0) return res.json({ reviews });
+      res.json({ reviews: [] });
+    })
+    .catch(() => res.status(404).json({ reviews: [] }));
 });
 
 // @route     get /api/profile/handle/:handle

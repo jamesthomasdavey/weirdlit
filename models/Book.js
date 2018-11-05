@@ -53,8 +53,27 @@ const BookSchema = new Schema({
     type: Number
   },
   image: {
-    type: String,
-    required: true
+    original: {
+      type: String
+    },
+    smallSquare: {
+      type: String
+    },
+    bigSqure: {
+      type: String
+    },
+    smallThumbnail: {
+      type: String
+    },
+    mediumThumbnail: {
+      type: String
+    },
+    largeThumbnail: {
+      type: String
+    },
+    hugeThumbnail: {
+      type: String
+    }
   }
 });
 

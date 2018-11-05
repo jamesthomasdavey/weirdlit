@@ -22,6 +22,21 @@ const asyncForEach = async (arr, callback) => {
   }
 };
 
+const getImageLinks = imageUrl => {
+  const imageArray = imageUrl.split('.');
+  const fileExtension = imageArray.splice(-1);
+  const url = imageArray.join('.');
+  return {
+    original: imageUrl,
+    smallSquare: `${url}s.${fileExtension}`,
+    bigSquare: `${url}b.${fileExtension}`,
+    smallThumbnail: `${url}t.${fileExtension}`,
+    mediumThumbnail: `${url}m.${fileExtension}`,
+    largeThumbnail: `${url}l.${fileExtension}`,
+    hugeThumbnail: `${url}l.${fileExtension}`
+  };
+};
+
 // middleware
 const verifyBookId = (req, res, next) => {
   Book.findOne({ _id: req.params.bookId, isApproved: true })
@@ -192,6 +207,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
           const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
 
           // create new book
+          const imageLinks = getImageLinks(imgurImage.data.link);
           const newBook = new Book({
             identifiers: {
               googleId: req.body.googleId
@@ -199,7 +215,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
             title: volumeInfo.title,
             authors: [],
             creator: req.user._id,
-            image: imgurImage.data.link
+            image: imageLinks
           });
           // add subtitle if it exists
           if (volumeInfo.subtitle) newBook.subtitle = volumeInfo.subtitle;

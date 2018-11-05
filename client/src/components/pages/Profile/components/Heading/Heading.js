@@ -8,7 +8,7 @@ const Heading = props => {
   return (
     <Fragment>
       <h2>{props.name}</h2>
-      <span style={{ color: '#888' }}>
+      <span style={{ color: '#717171' }}>
         User since {date.toLocaleString('en-us', { month: 'long' })} {date.getFullYear()}
       </span>
       {props.isCurrentUser && (

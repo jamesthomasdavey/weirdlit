@@ -7,8 +7,10 @@ import axios from 'axios';
 // component
 import Navbar from '../../layout/Navbar/Navbar';
 import Footer from '../../layout/Footer/Footer';
-import About from './components/About/About';
 import Heading from './components/Heading/Heading';
+import About from './components/About/About';
+import BooksRead from './components/BooksRead/BooksRead';
+import Reviews from './components/Reviews/Reviews';
 
 class Profile extends Component {
   state = {
@@ -26,7 +28,7 @@ class Profile extends Component {
         subtitle: '',
         authors: '',
         publishedDate: '',
-        image: '',
+        image: {},
         description: ''
       },
       location: '',
@@ -87,6 +89,12 @@ class Profile extends Component {
               location={this.state.profile.location}
               bio={this.state.profile.bio}
               social={this.state.profile.social}
+              history={this.props.history}
+            />
+            <Reviews
+              userId={this.state.profile.user._id}
+              name={this.state.profile.user.name}
+              history={this.props.history}
             />
           </Fragment>
         )}

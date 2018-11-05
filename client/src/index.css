@@ -59,3 +59,7 @@ html {
   animation: fadein 0.3s linear;
   transition: 0.3s all linear;
 }
+
+.book__image:hover {
+  cursor: pointer;
+}
