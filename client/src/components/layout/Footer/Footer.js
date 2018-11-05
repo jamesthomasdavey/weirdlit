@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default () => {
+const Footer = () => {
   return (
     <div
       className="ui vertical footer segment"
@@ -21,3 +21,5 @@ export default () => {
     </div>
   );
 };
+
+export default Footer;

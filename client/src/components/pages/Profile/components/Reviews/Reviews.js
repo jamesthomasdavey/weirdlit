@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 
 // component
-import ProfileReview from './ProfileReview/ProfileReview';
+import Review from './Review/Review';
 
 class Reviews extends Component {
   state = {
@@ -44,7 +44,7 @@ class Reviews extends Component {
       }
       reviewsContent = recentSortedReviews.map(review => {
         return (
-          <ProfileReview
+          <Review
             key={review._id}
             book={review.book}
             headline={review.headline}

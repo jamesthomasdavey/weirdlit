@@ -92,6 +92,7 @@ class Profile extends Component {
               social={this.state.profile.social}
               history={this.props.history}
             />
+            <BooksRead books={this.state.profile.booksRead} />
             <Reviews
               userId={this.state.profile.user._id}
               name={this.state.profile.user.name}

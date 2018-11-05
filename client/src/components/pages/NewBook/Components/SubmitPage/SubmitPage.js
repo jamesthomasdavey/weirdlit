@@ -1,5 +1,6 @@
 // package
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 
 class SubmitPage extends Component {
@@ -74,5 +75,11 @@ class SubmitPage extends Component {
     );
   }
 }
+
+SubmitPage.propTypes = {
+  googleId: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string.isRequired,
+  setSearchPageHandler: PropTypes.func.isRequired
+};
 
 export default SubmitPage;

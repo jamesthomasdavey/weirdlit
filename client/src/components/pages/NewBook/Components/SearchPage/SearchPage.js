@@ -1,5 +1,6 @@
 // package
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import arrayToSentence from 'array-to-sentence';
 
@@ -113,5 +114,10 @@ class SearchPage extends Component {
     );
   }
 }
+
+SearchPage.propTypes = {
+  selectBookHandler: PropTypes.func.isRequired,
+  initialSearch: PropTypes.string.isRequired
+};
 
 export default SearchPage;

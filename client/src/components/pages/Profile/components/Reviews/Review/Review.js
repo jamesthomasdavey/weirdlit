@@ -1,11 +1,12 @@
 // package
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import timeAgo from 'time-ago';
 import arrayToSentence from 'array-to-sentence';
 
 // component
-import RatingDisplay from './../../../../../layout/RatingDisplay/RatingDisplay';
+import RatingDisplay from '../../../../../layout/RatingDisplay/RatingDisplay';
 
 const Review = props => {
   return (
@@ -45,6 +46,16 @@ const Review = props => {
       </div>
     </div>
   );
+};
+
+Review.propTypes = {
+  book: PropTypes.object.isRequired,
+  history: PropTypes.array.isRequired,
+  headline: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  rating: PropTypes.number.isRequired,
+  lastUpdated: PropTypes.string.isRequired
 };
 
 export default Review;

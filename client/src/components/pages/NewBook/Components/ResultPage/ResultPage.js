@@ -1,5 +1,6 @@
 // package
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import imageCheck from 'image-check';
 
@@ -120,5 +121,11 @@ class ResultPage extends Component {
     );
   }
 }
+
+ResultPage.propTypes = {
+  setSearchPageHandler: PropTypes.func.isRequired,
+  submitImageHandler: PropTypes.func.isRequired,
+  googleId: PropTypes.string.isRequired
+};
 
 export default ResultPage;
