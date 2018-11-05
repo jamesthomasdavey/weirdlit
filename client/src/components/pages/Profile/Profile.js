@@ -92,7 +92,7 @@ class Profile extends Component {
               social={this.state.profile.social}
               history={this.props.history}
             />
-            <BooksRead books={this.state.profile.booksRead} />
+            <BooksRead books={this.state.profile.booksRead} history={this.props.history} />
             <Reviews
               userId={this.state.profile.user._id}
               name={this.state.profile.user.name}
@@ -112,7 +112,6 @@ class Profile extends Component {
           )}
         >
           {profileContent}
-          {console.log(this.state.profile.booksRead)}
         </div>
         <Footer />
       </Fragment>

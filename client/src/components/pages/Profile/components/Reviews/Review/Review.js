@@ -50,12 +50,12 @@ const Review = props => {
 
 Review.propTypes = {
   book: PropTypes.object.isRequired,
-  history: PropTypes.array.isRequired,
+  history: PropTypes.object.isRequired,
   headline: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   rating: PropTypes.number.isRequired,
-  lastUpdated: PropTypes.string.isRequired
+  lastUpdated: PropTypes.string
 };
 
 export default Review;
