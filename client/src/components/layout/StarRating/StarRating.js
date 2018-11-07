@@ -12,15 +12,31 @@ class StarRating extends Component {
     value: 0
   };
   componentDidMount = () => {
-    if (!this.props.readOnly) {
+    if (this.props.changeRatingHandler) {
       this.setState({ value: this.props.value });
     }
   };
   changeRatingHandler = value => {
-    this.setState({ value });
+    this.setState({ value }, () => {
+      this.props.changeRatingHandler(this.state.value);
+    });
   };
   render() {
-    if (this.props.readOnly) {
+    if (this.props.changeRatingHandler) {
+      return (
+        <Fragment>
+          <div className={[classes.wrapper, classes.wrapper__edit].join(' ')}>
+            <ReactStars
+              count={4}
+              value={this.state.value}
+              color="#666"
+              color2="orange"
+              onChange={this.changeRatingHandler}
+            />
+          </div>
+        </Fragment>
+      );
+    } else if (!this.props.noRating) {
       return (
         <Fragment>
           <div className={classes.wrapper}>
@@ -36,25 +52,19 @@ class StarRating extends Component {
         </Fragment>
       );
     } else {
-      return (
-        <Fragment>
-          <div className={[classes.wrapper, classes.wrapper__edit].join(' ')}>
-            <ReactStars count={4} value={this.state.value} color="#666" color2="orange" />
-          </div>
-        </Fragment>
-      );
+      return <Fragment />;
     }
   }
 }
 
 StarRating.propTypes = {
-  readOnly: PropTypes.bool,
+  noRating: PropTypes.bool,
   value: PropTypes.number,
   changeRatingHandler: PropTypes.func
 };
 
 StarRating.defaultProps = {
-  readOnly: true,
+  noRating: false,
   value: 0
 };
 
