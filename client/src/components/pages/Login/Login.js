@@ -13,21 +13,22 @@ class Login extends Component {
   state = {
     email: '',
     password: '',
+    loading: false,
     errors: {}
   };
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/');
+      this.props.history.push('/browse');
     }
   }
 
   componentWillReceiveProps = nextProps => {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push('/');
+      this.props.history.push('/browse');
     }
     if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
+      this.setState({ errors: nextProps.errors, loading: false });
     }
   };
 
@@ -35,19 +36,15 @@ class Login extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  removeErrorHandler = e => {
-    const { errors } = this.state;
-    errors[e.target.name] = '';
-    this.setState({ errors });
-  };
-
   submitFormHandler = e => {
     e.preventDefault();
-    const userData = {
-      email: this.state.email,
-      password: this.state.password
-    };
-    this.props.loginUser(userData);
+    this.setState({ loading: true }, () => {
+      const userData = {
+        email: this.state.email,
+        password: this.state.password
+      };
+      this.props.loginUser(userData);
+    });
   };
 
   render() {
@@ -61,7 +58,9 @@ class Login extends Component {
               <form
                 noValidate
                 onSubmit={this.submitFormHandler}
-                className="login__form ui fluid form"
+                className={['login__form ui fluid form', this.state.loading ? 'loading' : ''].join(
+                  ' '
+                )}
               >
                 <TextInputField
                   name="email"

@@ -21,7 +21,30 @@ const UserSchema = new Schema({
   isAdmin: {
     type: Boolean,
     default: false
-  }
+  },
+  notifications: [
+    {
+      message: {
+        type: String,
+        required: true
+      },
+      link: {
+        type: String
+      },
+      category: {
+        type: String,
+        required: true
+      },
+      book: {
+        type: Schema.Types.ObjectId,
+        ref: 'books'
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ]
 });
 
 module.exports = User = mongoose.model('users', UserSchema);

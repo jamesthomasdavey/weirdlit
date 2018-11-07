@@ -27,6 +27,7 @@ import Pending from './components/pages/Pending/Pending';
 import NewBook from './components/pages/NewBook/NewBook';
 import Account from './components/pages/Account/Account';
 import DeleteAccount from './components/pages/DeleteAccount/DeleteAccount';
+import Unauthorized from './components/pages/Unauthorized/Unauthorized';
 
 // protected routes
 import PrivateRoute from './components/layout/PrivateRoute/PrivateRoute';
@@ -64,6 +65,7 @@ class App extends Component {
             <Route exact path="/browse" component={Browse} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/authorized" component={Unauthorized} />
             <Switch>
               <PrivateRoute exact path="/profile" component={Profile} />
             </Switch>

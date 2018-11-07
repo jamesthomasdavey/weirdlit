@@ -34,6 +34,13 @@ class Navbar extends Component {
               <span className="menu__item-link">Notifications</span>
             </div>
           </Link>
+          {user.isAdmin && (
+            <Link to="/books/pending">
+              <div className="item profile__item-link">
+                <span className="menu__item-link">Pending</span>
+              </div>
+            </Link>
+          )}
           <div className="divider" />
           <div className="header">{'Account'.toUpperCase()}</div>
           <Link to="/account">

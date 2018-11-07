@@ -168,4 +168,36 @@ router.post('/delete', passport.authenticate('jwt', { session: false }), (req, r
   });
 });
 
+// @route     post /api/users/:userId/notifications
+// @desc      notify a user
+// @access    private
+router.post(
+  '/:userId/notifications',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    User.findById(req.params.userId).then(user => {
+      if (!user) return res.status(404).json({ user: 'User not found' });
+      user.notifications.push({
+        message: req.body.message,
+        link: req.body.link,
+        category: req.body.category,
+        book: req.body.book
+      });
+      user.save().then(user => res.json({ msg: 'Success' }));
+    });
+  }
+);
+
+// @route     get /api/users/notifications
+// @desc      get notifications for a user
+// @access    private
+router.get('/notifications', passport.authenticate('jwt', { session: false }), (req, res) => {
+  User.findById(req.user._id).then(user => {
+    if (!user) return res.status(404).json({ user: 'User not found' });
+    if (!user.notifications.length === 0 || !user.notifications)
+      return res.json({ notifications: [] });
+    return res.json({ notifications: user.notifications });
+  });
+});
+
 module.exports = router;

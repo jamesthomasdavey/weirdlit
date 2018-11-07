@@ -19,18 +19,19 @@ class Register extends Component {
     password: '',
     password2: '',
     favoriteBook: '',
+    loading: false,
     errors: {}
   };
 
   componentDidMount = () => {
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/');
+      this.props.history.push('/browse');
     }
   };
 
   componentWillReceiveProps = nextProps => {
     if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
+      this.setState({ errors: nextProps.errors, loading: false });
     }
   };
 
@@ -38,23 +39,18 @@ class Register extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  removeErrorHandler = e => {
-    const { errors } = this.state;
-    errors[e.target.name] = '';
-    this.setState({ errors });
-  };
-
   submitFormHandler = e => {
     e.preventDefault();
-    const newUser = {
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password,
-      password2: this.state.password2,
-      favoriteBook: this.state.favoriteBook
-    };
-
-    this.props.registerUser(newUser, this.props.history);
+    this.setState({ loading: true }, () => {
+      const newUser = {
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password,
+        password2: this.state.password2,
+        favoriteBook: this.state.favoriteBook
+      };
+      this.props.registerUser(newUser, this.props.history);
+    });
   };
 
   render() {
@@ -69,7 +65,10 @@ class Register extends Component {
               <form
                 noValidate
                 onSubmit={this.submitFormHandler}
-                className="register__form ui fluid form"
+                className={[
+                  'register__form ui fluid form',
+                  this.state.loading ? 'loading' : ''
+                ].join(' ')}
               >
                 <TextInputField
                   name="name"

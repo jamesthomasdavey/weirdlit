@@ -52,7 +52,9 @@ class SearchPage extends Component {
     // if search results are loaded and there's nothing there, say no results found
     if (this.state.searchResults.loaded && this.state.searchResults.results.length === 0) {
       searchResults = (
-        <span>No results found. Please try adding more author or title details.</span>
+        <h5 style={{ textAlign: 'center', padding: '2rem' }}>
+          No results found. Please try adding more author or title details.
+        </h5>
       );
     } else if (this.state.searchResults.loaded && this.state.searchResults.results.length > 0) {
       searchResults = this.state.searchResults.results.map(book => {

@@ -73,9 +73,22 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   checkAuthLevel,
   (req, res) => {
-    Book.find({ isApproved: false })
+    Book.find({ isApproved: false, isRejected: false })
+      .populate('authors', 'name')
+      .populate('creator', ['name', '_id'])
       .then(books => {
-        res.json(books);
+        res.json(
+          books.map(book => {
+            return {
+              _id: book._id,
+              title: book.title,
+              publishedDate: new Date(book.publishedDate).getFullYear(),
+              creator: book.creator,
+              authors: book.authors.map(author => author.name),
+              image: book.image
+            };
+          })
+        );
       })
       .catch(err => res.status(400).json(err));
   }
@@ -94,6 +107,24 @@ router.put(
       if (book.isApproved) return res.status(400).json({ msg: 'Book has already been approved' });
       // approve and save book
       book.isApproved = true;
+      book.save().then(book => {
+        res.json(book);
+      });
+    });
+  }
+);
+
+// @route     put /api/books/:bookId/reject
+// @desc      reject book
+// @access    admin
+router.put(
+  '/:bookId/reject',
+  passport.authenticate('jwt', { session: false }),
+  checkAuthLevel,
+  (req, res) => {
+    Book.findById(req.params.bookId).then(book => {
+      book.isApproved = false;
+      book.isRejected = true;
       book.save().then(book => {
         res.json(book);
       });
