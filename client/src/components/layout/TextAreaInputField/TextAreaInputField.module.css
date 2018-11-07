@@ -2,3 +2,7 @@
   font-family: 'Oswald', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   line-height: 22px !important;
 }
+
+.fix__white-space {
+  white-space: pre-line;
+}

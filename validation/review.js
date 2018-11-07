@@ -9,8 +9,8 @@ module.exports = reqBody => {
 
   if (!reqBody.rating) {
     errors.rating = 'Rating is required';
-  } else if (parseInt(reqBody.rating) < 1 || parseInt(reqBody.rating) > 5) {
-    errors.rating = 'Rating must be between 1 and 5 stars';
+  } else if (parseInt(reqBody.rating) < 1 / 2 || parseInt(reqBody.rating) > 4) {
+    errors.rating = 'Rating must be between half a star and 4 stars';
   }
 
   if (Validator.isEmpty(reqBody.headline)) {

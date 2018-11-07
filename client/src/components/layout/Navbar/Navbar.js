@@ -28,6 +28,11 @@ class Navbar extends Component {
             <div className="item profile__item-link">
               <span className="menu__item-link">{user.name ? user.name : 'Profile'}</span>
             </div>
+          </Link>{' '}
+          <Link to="/notifications">
+            <div className="item profile__item-link">
+              <span className="menu__item-link">Notifications</span>
+            </div>
           </Link>
           <div className="divider" />
           <div className="header">{'Account'.toUpperCase()}</div>

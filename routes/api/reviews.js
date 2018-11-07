@@ -44,7 +44,7 @@ router.post('/', verifyBookId, passport.authenticate('jwt', { session: false }),
       const newReview = new Review({
         rating: req.body.rating,
         headline: req.body.headline,
-        text: req.body.text,
+        text: req.body.text.replace(/\n\s*\n\s*\n/g, '\n\n'),
         book: req.params.bookId,
         name: req.body.name,
         creator: req.user._id
@@ -60,7 +60,11 @@ router.post('/', verifyBookId, passport.authenticate('jwt', { session: false }),
       await Book.findById(req.params.bookId).then(async book => {
         book.rating = newRating;
         await Review.find({ book: req.params.bookId }).then(async reviews => {
-          if (reviews.length > 2) book.ratingDisplay = true;
+          if (reviews.length > 2) {
+            book.ratingDisplay = true;
+          } else {
+            book.ratingDisplay = false;
+          }
         });
         await book.save();
       });
@@ -127,7 +131,7 @@ router.put(
         // create the new review
         const updatedReview = {
           headline: req.body.headline,
-          text: req.body.text,
+          text: req.body.text.replace(/\n\s*\n\s*\n/g, '\n\n'),
           name: req.body.name,
           rating: req.body.rating,
           lastUpdated: Date.now()

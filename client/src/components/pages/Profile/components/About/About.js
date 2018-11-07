@@ -69,7 +69,16 @@ const About = props => {
     bio = (
       <Fragment>
         <h5>Bio</h5>
-        <span>{props.bio}</span>
+        <p>
+          {props.bio.split('\n').map((item, key) => {
+            return (
+              <span key={key}>
+                {item}
+                <br />
+              </span>
+            );
+          })}
+        </p>
       </Fragment>
     );
   }

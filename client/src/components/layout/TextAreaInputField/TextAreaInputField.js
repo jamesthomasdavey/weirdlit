@@ -23,7 +23,7 @@ const TextAreaInputField = ({
       <textarea
         rows={rows}
         id={name}
-        className={classes.fix__font}
+        className={[classes.fix__font, classes['fix__white-space']].join(' ')}
         style={{ minHeight }}
         name={name}
         autoFocus={autoFocus}

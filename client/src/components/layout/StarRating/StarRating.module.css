@@ -1,0 +1,8 @@
+.wrapper {
+  /* background: blue; */
+  padding: 4px 0;
+}
+
+.wrapper__edit:hover {
+  cursor: pointer;
+}

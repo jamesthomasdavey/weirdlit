@@ -210,7 +210,7 @@ router.put('/', passport.authenticate('jwt', { session: false }), (req, res) => 
         handle: req.body.handle.toLowerCase(),
         favoriteBook: req.body.favoriteBook,
         location: req.body.location,
-        bio: req.body.bio,
+        bio: req.body.bio.replace(/\n\s*\n\s*\n/g, '\n\n'),
         social: {
           goodreads: req.body.goodreads ? prependHttp(req.body.goodreads) : '',
           facebook: req.body.facebook ? prependHttp(req.body.facebook) : '',
