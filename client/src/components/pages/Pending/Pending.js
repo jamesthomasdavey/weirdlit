@@ -55,6 +55,7 @@ class Pending extends Component {
     });
   };
   render() {
+    document.title = 'Pending Books | WeirdLit';
     let pendingResults;
     if (this.state.isLoading) {
       pendingResults = <Spinner />;

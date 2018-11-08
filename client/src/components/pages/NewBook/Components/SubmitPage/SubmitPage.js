@@ -7,27 +7,42 @@ class SubmitPage extends Component {
   state = {
     loading: true,
     success: false,
-    errors: {}
+    errors: []
   };
   componentDidMount = () => {
     const googleId = this.props.googleId;
     const imageUrl = this.props.imageUrl;
     axios
       .post('/api/books', { googleId, imageUrl })
-      .then(() => {
-        this.setState({ loading: false, success: true, errors: {} });
+      .then(res => {
+        if (res.data.errors && res.data.errors.length > 0) {
+          this.setState({ loading: false, success: false, errors: res.data.errors });
+        } else {
+          this.setState({ loading: false, success: true, errors: [] });
+        }
       })
       .catch(err => {
-        this.setState({ loading: false, success: false, errors: err });
+        this.setState({
+          loading: false,
+          success: false,
+          errors: ["We're sorry, we were unable to process your request. Please try again later."]
+        });
       });
   };
   render() {
     if (this.state.loading) {
       document.title = 'Submitting... | WeirdLit';
-    } else if (this.state.sucess) {
+    } else if (this.state.success) {
       document.title = 'Success | WeirdLit';
     } else if (!this.state.loading && !this.state.success) {
       document.title = 'Error | WeirdLit';
+    }
+
+    let errorsList;
+
+    if (this.state.errors.length > 0) {
+      const errorsListItems = this.state.errors.map(error => <li key="error">{error}</li>);
+      errorsList = <ul className="list">{errorsListItems}</ul>;
     }
 
     return (
@@ -52,16 +67,12 @@ class SubmitPage extends Component {
                     <p>This book has successfully been requested.</p>
                   </Fragment>
                 )}
-                {!this.state.loading &&
-                  !this.state.success && (
-                    <Fragment>
-                      <div className="header">Something went wrong.</div>
-                      <p>
-                        We're sorry, we had an issue processing your request. Please try again
-                        later.
-                      </p>
-                    </Fragment>
-                  )}
+                {!this.state.loading && !this.state.success && (
+                  <Fragment>
+                    <div className="header">Something went wrong.</div>
+                    {errorsList}
+                  </Fragment>
+                )}
               </div>
             </div>
             {!this.state.loading && (

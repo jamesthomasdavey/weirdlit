@@ -17,7 +17,8 @@ class ResultPage extends Component {
     userImage: {
       status: false,
       userImageUrl: '',
-      loading: false
+      loading: false,
+      error: ''
     },
     submissionImageUrl: ''
   };
@@ -37,19 +38,37 @@ class ResultPage extends Component {
   };
   validateUserImageUrlHandler = e => {
     const userImageUrl = e.target.value;
-    this.setState({ userImage: { loading: true } }, () => {
-      imageCheck(userImageUrl)
-        .then(() => {
-          this.setState({
-            userImage: { status: true, userImageUrl, loading: false }
+    if (userImageUrl.length > 500) {
+      this.setState({
+        userImage: {
+          status: false,
+          userImageUrl: '',
+          loading: false,
+          error: 'Please use a shorter image URL'
+        }
+      });
+    } else if (userImageUrl) {
+      this.setState({ userImage: { loading: true } }, () => {
+        imageCheck(userImageUrl)
+          .then(() => {
+            this.setState({
+              userImage: { status: true, userImageUrl, loading: false, error: '' }
+            });
+          })
+          .catch(() => {
+            this.setState({
+              userImage: {
+                status: false,
+                userImageUrl: '',
+                loading: false,
+                error: 'Invalid image URL'
+              }
+            });
           });
-        })
-        .catch(() => {
-          this.setState({
-            userImage: { status: false, userImageUrl: '', loading: false }
-          });
-        });
-    });
+      });
+    } else {
+      this.setState({ userImage: { status: false, userImageUrl: '', loading: false, error: '' } });
+    }
   };
   selectGoogleImageHandler = () => {
     const googleImageUrl = this.state.googleImage.googleImageUrl;
@@ -91,7 +110,7 @@ class ResultPage extends Component {
               )}
             </div>
             <div className="ui form" style={{ marginTop: '1rem' }}>
-              <div className="field">
+              <div className={['field', this.state.userImage.error ? 'error' : ''].join(' ')}>
                 <input
                   id="alternateImageUrl"
                   name="alternateImageUrl"
@@ -100,6 +119,9 @@ class ResultPage extends Component {
                   placeholder="Paste an image URL here."
                   onChange={this.validateUserImageUrlHandler}
                 />
+                {this.state.userImage.error && (
+                  <div className="ui pointing basic label">{this.state.userImage.error}</div>
+                )}
               </div>
               <button
                 className={[

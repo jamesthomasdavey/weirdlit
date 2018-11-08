@@ -33,6 +33,8 @@ class Notifications extends Component {
     }, 400);
   };
   render() {
+    document.title = 'Notifications | WeirdLit';
+
     let notificationsContent;
 
     if (this.state.isLoading) {

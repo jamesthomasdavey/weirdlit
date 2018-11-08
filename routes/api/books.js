@@ -218,15 +218,16 @@ router.get('/add/:googleId', passport.authenticate('jwt', { session: false }), (
 // @access    private
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   // upload image to imgur
+  const errors = [];
   const imageUrl = req.body.imageUrl;
   imgur.upload(imageUrl, (err, imgurImage) => {
-    if (err) return res.status(400).json(err);
+    if (err) errors.push('Unable to upload image. Please try again using a different image URL.');
+    if (errors.length > 0) return res.json({ errors });
 
     Book.findOne({ 'identifiers.googleId': req.body.googleId }).then(book => {
-      if (book && book.isApproved)
-        return res.status(400).json({ googleId: 'This book has already been added' });
-      if (book && !book.isApproved)
-        return res.status(400).json({ googleId: 'This book has already been requested' });
+      if (book && book.isApproved) errors.push('This book has already been added.');
+      if (book && !book.isApproved) errors.push('This book has already been requested.');
+      if (errors.length > 0) return res.json({ errors });
 
       axios
         .get(
@@ -235,6 +236,8 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
           }?key=${googleBooksApiKey}`
         )
         .then(async googleBookData => {
+          if (!googleBookData) errors.push('Unable to receive data from Google Books.');
+          if (errors.length > 0) return res.json({ errors });
           const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
 
           // create new book
@@ -253,31 +256,48 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
           if (volumeInfo.publishedDate) newBook.publishedDate = new Date(volumeInfo.publishedDate);
           if (volumeInfo.pageCount) newBook.pageCount = parseInt(volumeInfo.pageCount);
           // add isbn numbers to book if they exist
-          volumeInfo.industryIdentifiers.forEach(industryIdentifier => {
-            if (industryIdentifier.type === 'ISBN_10') {
-              newBook.identifiers.isbn10 = industryIdentifier.identifier;
-            } else if (industryIdentifier.type === 'ISBN_13') {
-              newBook.identifiers.isbn13 = industryIdentifier.identifier;
-            }
-          });
-          // check if authors exist in our db. if not, create them.
-          await asyncForEach(volumeInfo.authors, async authorName => {
-            await Author.findOne({ name: authorName }).then(async foundAuthor => {
-              if (!foundAuthor) {
-                await Author.create({ name: authorName }).then(createdAuthor => {
-                  newBook.authors.push(createdAuthor._id);
-                });
-              } else {
-                newBook.authors.push(foundAuthor._id);
+          if (volumeInfo.industryIdentifiers) {
+            volumeInfo.industryIdentifiers.forEach(industryIdentifier => {
+              if (industryIdentifier.type === 'ISBN_10') {
+                newBook.identifiers.isbn10 = industryIdentifier.identifier;
+              } else if (industryIdentifier.type === 'ISBN_13') {
+                newBook.identifiers.isbn13 = industryIdentifier.identifier;
               }
             });
+          }
+          // check if authors exist in our db. if not, create them.
+          await asyncForEach(volumeInfo.authors, async authorName => {
+            await Author.findOne({ name: authorName })
+              .then(async foundAuthor => {
+                if (!foundAuthor) {
+                  await Author.create({ name: authorName })
+                    .then(createdAuthor => {
+                      newBook.authors.push(createdAuthor._id);
+                    })
+                    .catch(() => {
+                      errors.push('Unable to create author.');
+                    });
+                } else {
+                  newBook.authors.push(foundAuthor._id);
+                }
+              })
+              .catch(() => {
+                errors.push('Unable to find author.');
+              });
           });
+          if (errors.length > 0) return res.json({ errors });
           // save new book
-          await newBook.save();
+          await newBook.save().catch(() => {
+            errors.push('Unable to save to our database.');
+          });
           // send data (we'll have it redirect somewhere else in the future)
-          res.json(newBook);
+          if (errors.length > 0) return res.json({ errors });
+          res.json({ msg: 'Success' });
         })
-        .catch(err => res.status(400).json(err));
+        .catch(() => {
+          errors.push('Unknown Error');
+          return res.json({ errors });
+        });
     });
   });
 });
