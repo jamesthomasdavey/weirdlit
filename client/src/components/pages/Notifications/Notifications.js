@@ -1,12 +1,11 @@
 // package
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 // component
-import Spinner from './../../layout/Spinner/Spinner';
 import Notification from './components/Notification/Notification';
 
 class Notifications extends Component {
@@ -37,9 +36,7 @@ class Notifications extends Component {
 
     let notificationsContent;
 
-    if (this.state.isLoading) {
-      notificationsContent = <Spinner />;
-    } else if (this.state.notifications.length > 0) {
+    if (!this.state.isLoading && this.state.notifications.length > 0) {
       const notifications = [...this.state.notifications];
       notificationsContent = notifications.reverse().map(notification => {
         return (
@@ -58,12 +55,20 @@ class Notifications extends Component {
 
     return (
       <div className="ui text container">
-        <div className="ui segment">
+        <div className={['ui segment', this.state.isLoading ? 'loading' : ''].join(' ')}>
           {this.state.notifications.length > 0 && !this.state.isLoading && (
             <h5 className="ui horizontal divider header">
               <i className="exclamation circle icon" />
               Notifications
             </h5>
+          )}
+          {this.state.isLoading && (
+            <Fragment>
+              <br />
+              <br />
+              <br />
+              <br />
+            </Fragment>
           )}
           {notificationsContent}
         </div>

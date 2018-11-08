@@ -30,14 +30,14 @@ class Navbar extends Component {
   };
 
   getNotificationsCount = () => {
-    axios.get('/api/users/notifications/count').then(res => {
-      this.setState({ notificationsCount: res.data.notificationsCount });
-    });
+    if (this.props.auth.isAuthenticated) {
+      axios.get('/api/users/notifications/count').then(res => {
+        this.setState({ notificationsCount: res.data.notificationsCount });
+      });
+    }
   };
 
   render() {
-    const { isAuthenticated, user } = this.props.auth;
-
     const authLinks = (
       <div className="ui right simple dropdown item">
         <i className="user circle icon large" />
@@ -45,7 +45,9 @@ class Navbar extends Component {
         <div className="menu" style={{ zIndex: '999' }}>
           <Link to="/profile">
             <div className="item profile__item-link">
-              <span className="menu__item-link">{user.name ? user.name : 'Profile'}</span>
+              <span className="menu__item-link">
+                {this.props.auth.user.name ? this.props.auth.user.name : 'Profile'}
+              </span>
             </div>
           </Link>{' '}
           <Link to="/notifications">
@@ -56,7 +58,7 @@ class Navbar extends Component {
               </span>
             </div>
           </Link>
-          {user.isAdmin && (
+          {this.props.auth.user.isAdmin && (
             <Link to="/books/pending">
               <div className="item profile__item-link">
                 <span className="menu__item-link">Pending Books</span>
@@ -96,7 +98,7 @@ class Navbar extends Component {
       </div>
     );
 
-    const userLinks = isAuthenticated ? authLinks : guestLinks;
+    const userLinks = this.props.auth.isAuthenticated ? authLinks : guestLinks;
 
     return (
       <Fragment>

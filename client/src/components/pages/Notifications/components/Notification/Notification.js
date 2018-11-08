@@ -42,18 +42,26 @@ class Notification extends Component {
           this.state.isBeingDeleted ? classes.deleted : ''
         ].join(' ')}
       >
-        <i
-          onClick={() => this.deleteNotificationHandler(this.props.notification._id)}
-          className="close icon"
-        />
         {this.state.isLoading && <div className="ui active loader" />}
-        <p>{renderHTML(this.props.notification.content)}</p>
-        <button
-          onClick={this.readNotificationHandler}
-          className={['ui tiny button', this.props.notification.read ? '' : 'blue'].join(' ')}
-        >
-          View
-        </button>
+        <div className={classes.content}>
+          <div className={classes.book__title}>{renderHTML(this.props.notification.content)}</div>
+          <div className={classes.buttons}>
+            <button
+              onClick={this.readNotificationHandler}
+              className={[
+                'ui tiny button',
+                classes.view__button,
+                this.props.notification.read ? 'grey' : 'blue'
+              ].join(' ')}
+            >
+              View
+            </button>{' '}
+            <i
+              onClick={() => this.deleteNotificationHandler(this.props.notification._id)}
+              className={['close icon', classes.close__button].join(' ')}
+            />
+          </div>
+        </div>
       </div>
     );
   }

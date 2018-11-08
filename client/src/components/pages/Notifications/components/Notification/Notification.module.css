@@ -2,3 +2,37 @@
   transition: 0.4s opacity ease !important;
   opacity: 0;
 }
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.book__title {
+}
+
+.buttons {
+  float: right;
+  display: flex;
+  /* width: 120px; */
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 24px;
+  /* background: yellow; */
+}
+
+.view__button {
+  display: block;
+}
+
+.close__button {
+  display: block;
+  font-size: 20px !important;
+  margin-left: 12px !important;
+  margin-right: -4px !important;
+}
+
+.close__button:hover {
+  cursor: pointer;
+}
