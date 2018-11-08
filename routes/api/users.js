@@ -80,7 +80,7 @@ router.post('/login', (req, res) => {
             return res.status(400).json(errors);
           }
           const payload = { _id: foundUser._id, name: foundUser.name, isAdmin: foundUser.isAdmin };
-          jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (err, token) => {
+          jwt.sign(payload, keys.secretOrKey, { expiresIn: 604800 }, (err, token) => {
             if (!token || err) {
               errors.token = 'Unable to sign token';
               return res.status(400).json(errors);
@@ -178,10 +178,8 @@ router.post(
     User.findById(req.params.userId).then(user => {
       if (!user) return res.status(404).json({ user: 'User not found' });
       user.notifications.push({
-        message: req.body.message,
-        link: req.body.link,
-        category: req.body.category,
-        book: req.body.book
+        content: req.body.content,
+        link: req.body.link
       });
       user.save().then(user => res.json({ msg: 'Success' }));
     });
@@ -193,11 +191,73 @@ router.post(
 // @access    private
 router.get('/notifications', passport.authenticate('jwt', { session: false }), (req, res) => {
   User.findById(req.user._id).then(user => {
-    if (!user) return res.status(404).json({ user: 'User not found' });
     if (!user.notifications.length === 0 || !user.notifications)
       return res.json({ notifications: [] });
     return res.json({ notifications: user.notifications });
   });
 });
 
+// @route     get /api/users/notifications/count
+// @desc      get number of unread notifications for a user
+// @access    private
+router.get('/notifications/count', passport.authenticate('jwt', { session: false }), (req, res) => {
+  User.findById(req.user._id).then(user => {
+    if (user.notifications.length === 0) return res.json({ notificationsCount: 0 });
+    const notificationsCount = user.notifications.reduce((acc, current) => {
+      if (!current.read) {
+        return acc + 1;
+      } else {
+        return acc;
+      }
+    }, 0);
+    res.json({ notificationsCount });
+  });
+});
+
+// @route     put /api/users/notifications/:notificationId
+// @desc      read a notification
+// @access    private
+router.put(
+  '/notifications/:notificationId',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    User.findById(req.user._id).then(user => {
+      const newNotifications = user.notifications.map(notification => {
+        if (notification._id.equals(req.params.notificationId)) {
+          notification.read = true;
+          return notification;
+        } else {
+          return notification;
+        }
+      });
+      user.notifications = newNotifications;
+      user.save().then(user => res.json({ msg: 'success' }));
+    });
+  }
+);
+
+// @route     delete /api/users/notifications/:notificationId
+// @desc      delete a notification
+// @access    private
+router.delete(
+  '/notifications/:notificationId',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    User.findById(req.user._id).then(user => {
+      if (!user) return res.status(404).json({ user: 'User not found' });
+      let deleteNotificationIndex;
+      user.notifications.forEach((notification, index) => {
+        if (notification._id.equals(req.params.notificationId)) {
+          deleteNotificationIndex = index;
+        }
+      });
+      user.notifications.splice(deleteNotificationIndex, 1);
+      user.save().then(user => {
+        res.json({ msg: 'success' });
+      });
+    });
+  }
+);
+
+//
 module.exports = router;

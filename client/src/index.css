@@ -32,6 +32,12 @@ code {
 ********************* GENERAL
 *****************************/
 
+.clearfix::after {
+  content: '';
+  clear: both;
+  display: table;
+}
+
 body {
   color: var(--black);
 }
@@ -40,6 +46,15 @@ html {
   height: 100%;
   margin: 0;
   overflow: hidden;
+}
+
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
 }
 
 /*****************************

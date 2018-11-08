@@ -29,32 +29,30 @@ class Pending extends Component {
     });
   };
   approveBookHandler = book => {
-    axios
-      .put(`/api/books/${book._id}/approve`)
-      .then(res => {
-        return axios.post(`/api/users/${book.creator._id}`, {
-          message: `${book.title} has been approved`,
-          link: `/books/${book._id}`,
-          category: 'bookApproved',
-          book: book._id
-        });
-      })
-      .then(res => {
-        this.updateFromPendingBooks();
-      })
-      .catch(err => {
-        this.updateFromPendingBooks();
-      });
+    this.setState({ isLoading: true }, () => {
+      axios
+        .put(`/api/books/${book._id}/approve`)
+        .then(() => {
+          return axios.post(`/api/users/${book.creator._id}/notifications`, {
+            content: `<strong>${book.title}</strong> has been added.`,
+            link: `/books/${book._id}`
+          });
+        })
+        .then(this.updateFromPendingBooks)
+        .catch(this.updateFromPendingBooks);
+    });
   };
   rejectBookHandler = book => {
-    axios
-      .put(`/api/books/${book._id}/reject`)
-      .then(res => {
-        this.updateFromPendingBooks();
-      })
-      .catch(err => {
-        this.updateFromPendingBooks();
-      });
+    this.setState({ isLoading: true }, () => {
+      axios
+        .put(`/api/books/${book._id}/reject`)
+        .then(res => {
+          this.updateFromPendingBooks();
+        })
+        .catch(err => {
+          this.updateFromPendingBooks();
+        });
+    });
   };
   render() {
     let pendingResults;

@@ -26,6 +26,7 @@ import EditProfile from './components/pages/EditProfile/EditProfile';
 import Pending from './components/pages/Pending/Pending';
 import NewBook from './components/pages/NewBook/NewBook';
 import Account from './components/pages/Account/Account';
+import Notifications from './components/pages/Notifications/Notifications';
 import DeleteAccount from './components/pages/DeleteAccount/DeleteAccount';
 import Unauthorized from './components/pages/Unauthorized/Unauthorized';
 
@@ -74,6 +75,9 @@ class App extends Component {
             </Switch>
             <Switch>
               <PrivateRoute exact path="/account" component={Account} />
+            </Switch>
+            <Switch>
+              <PrivateRoute exact path="/notifications" component={Notifications} />
             </Switch>
             <Switch>
               <PrivateRoute exact path="/account/delete" component={DeleteAccount} />

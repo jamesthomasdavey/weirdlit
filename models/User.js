@@ -24,24 +24,20 @@ const UserSchema = new Schema({
   },
   notifications: [
     {
-      message: {
+      content: {
         type: String,
         required: true
       },
       link: {
         type: String
       },
-      category: {
-        type: String,
-        required: true
-      },
-      book: {
-        type: Schema.Types.ObjectId,
-        ref: 'books'
-      },
       date: {
         type: Date,
         default: Date.now
+      },
+      read: {
+        type: Boolean,
+        default: false
       }
     }
   ]

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logoutUser } from './../../../actions/authActions';
+import axios from 'axios';
 
 //images
 import './../../../img/bird-1903523.png';
@@ -16,6 +17,24 @@ import Search from './../Search/Search';
 import './Navbar.css';
 
 class Navbar extends Component {
+  state = {
+    notificationsCount: 0
+  };
+
+  componentDidMount = () => {
+    this.getNotificationsCount();
+  };
+
+  componentDidUpdate = () => {
+    this.getNotificationsCount();
+  };
+
+  getNotificationsCount = () => {
+    axios.get('/api/users/notifications/count').then(res => {
+      this.setState({ notificationsCount: res.data.notificationsCount });
+    });
+  };
+
   render() {
     const { isAuthenticated, user } = this.props.auth;
 
@@ -31,13 +50,16 @@ class Navbar extends Component {
           </Link>{' '}
           <Link to="/notifications">
             <div className="item profile__item-link">
-              <span className="menu__item-link">Notifications</span>
+              <span className="menu__item-link">
+                Notifications
+                {this.state.notificationsCount > 0 && ` (${this.state.notificationsCount})`}
+              </span>
             </div>
           </Link>
           {user.isAdmin && (
             <Link to="/books/pending">
               <div className="item profile__item-link">
-                <span className="menu__item-link">Pending</span>
+                <span className="menu__item-link">Pending Books</span>
               </div>
             </Link>
           )}
@@ -90,7 +112,7 @@ class Navbar extends Component {
               </div>
             </Link>
             <Search />
-            {!this.props.isAuthPage && userLinks}
+            {userLinks}
           </div>
         </div>
       </Fragment>
@@ -100,8 +122,7 @@ class Navbar extends Component {
 
 Navbar.propTypes = {
   logoutUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
-  isAuthPage: PropTypes.bool
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
