@@ -11,7 +11,8 @@ import classes from './Notification.module.css';
 class Notification extends Component {
   state = {
     isBeingDeleted: false,
-    isLoading: false
+    isLoading: false,
+    isRedirecting: false
   };
   deleteNotificationHandler = notificationId => {
     this.setState({ isLoading: true }, () => {
@@ -26,7 +27,7 @@ class Notification extends Component {
     if (this.props.notification.read) {
       this.props.history.push(this.props.notification.link);
     } else {
-      this.setState({ isLoading: true }, () => {
+      this.setState({ isRedirecting: true }, () => {
         axios.put(`/api/users/notifications/${this.props.notification._id}`).then(res => {
           this.props.history.push(this.props.notification.link);
         });
@@ -44,14 +45,15 @@ class Notification extends Component {
       >
         {this.state.isLoading && <div className="ui active loader" />}
         <div className={classes.content}>
-          <div className={classes.book__title}>{renderHTML(this.props.notification.content)}</div>
+          <div>{renderHTML(this.props.notification.content)}</div>
           <div className={classes.buttons}>
             <button
               onClick={this.readNotificationHandler}
               className={[
                 'ui tiny button',
                 classes.view__button,
-                this.props.notification.read ? 'grey' : 'blue'
+                this.props.notification.read ? 'grey' : 'blue',
+                this.state.isRedirecting ? 'loading' : ''
               ].join(' ')}
             >
               View

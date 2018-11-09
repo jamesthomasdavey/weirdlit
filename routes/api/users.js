@@ -244,7 +244,6 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     User.findById(req.user._id).then(user => {
-      if (!user) return res.status(404).json({ user: 'User not found' });
       let deleteNotificationIndex;
       user.notifications.forEach((notification, index) => {
         if (notification._id.equals(req.params.notificationId)) {
@@ -258,6 +257,17 @@ router.delete(
     });
   }
 );
+
+// @route     delete /api/users/notifications
+// @desc      delete all notifications
+// @access    private
+router.delete('/notifications', passport.authenticate('jwt', { session: false }), (req, res) => {
+  User.findById(req.user._id).then(user => {
+    user.notifications = [];
+    user.save();
+    res.json({ msg: 'Success' });
+  });
+});
 
 //
 module.exports = router;

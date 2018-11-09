@@ -9,17 +9,12 @@
   align-items: center;
 }
 
-.book__title {
-}
-
 .buttons {
   float: right;
   display: flex;
-  /* width: 120px; */
   align-items: center;
   justify-content: space-between;
   padding-left: 24px;
-  /* background: yellow; */
 }
 
 .view__button {
