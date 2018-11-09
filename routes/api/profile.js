@@ -134,6 +134,7 @@ router.get('/handle/:handle', passport.authenticate('jwt', { session: false }), 
           facebook: profile.social.facebook,
           instagram: profile.social.instagram
         },
+        booksRead: profile.booksRead,
         date: profile.date
       });
     })
@@ -187,6 +188,7 @@ router.get('/user/:userId', passport.authenticate('jwt', { session: false }), (r
           facebook: profile.social.facebook,
           instagram: profile.social.instagram
         },
+        booksRead: profile.booksRead,
         date: profile.date
       });
     })

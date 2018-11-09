@@ -47,7 +47,8 @@ const About = props => {
         </div>
       </div>
     );
-  } else if (props.favoriteBook) {
+  }
+  if (props.favoriteBook) {
     favoriteBook = (
       <Fragment>
         <h5>Favorite Book</h5>
@@ -55,7 +56,6 @@ const About = props => {
       </Fragment>
     );
   }
-
   if (props.location) {
     location = (
       <Fragment>
@@ -125,7 +125,7 @@ const About = props => {
           >
             {favoriteBookObj}
             <div className="column">
-              {favoriteBook}
+              {!favoriteBookObj && favoriteBook}
               {location}
               {bio}
               {social}

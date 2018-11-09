@@ -56,6 +56,11 @@ const BookSchema = new Schema({
     type: Boolean,
     default: false
   },
+  tags: [
+    {
+      type: String
+    }
+  ],
   image: {
     original: {
       type: String

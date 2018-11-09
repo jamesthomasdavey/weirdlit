@@ -43,7 +43,7 @@ class Navbar extends Component {
         <i className="user circle icon large" />
         <i className="dropdown icon" />
         <div className="menu" style={{ zIndex: '999' }}>
-          <Link to="/profile">
+          <Link to={`/profile/user/${this.props.auth.user._id}`}>
             <div className="item profile__item-link">
               <span className="menu__item-link">
                 {this.props.auth.user.name ? this.props.auth.user.name : 'Profile'}

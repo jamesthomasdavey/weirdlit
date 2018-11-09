@@ -67,11 +67,13 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/authorized" component={Unauthorized} />
+            <Route exact path="/profile/:handle" component={Profile} />
+            <Route exact path="/profile/user/:userId" component={Profile} />
             <Switch>
               <PrivateRoute exact path="/profile" component={Profile} />
             </Switch>
             <Switch>
-              <PrivateRoute exact path="/profile/edit" component={EditProfile} />
+              <PrivateRoute exact path="/edit-profile" component={EditProfile} />
             </Switch>
             <Switch>
               <PrivateRoute exact path="/account" component={Account} />

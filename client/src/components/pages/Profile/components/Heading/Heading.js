@@ -7,15 +7,17 @@ const Heading = props => {
   const date = new Date(props.date);
   return (
     <Fragment>
-      <h2>{props.name}</h2>
-      <span style={{ color: '#717171' }}>
-        User since {date.toLocaleString('en-us', { month: 'long' })} {date.getFullYear()}
-      </span>
-      {props.isCurrentUser && (
-        <Link to="/profile/edit" className="ui right floated button tiny">
-          Edit Profile
-        </Link>
-      )}
+      <div style={{ paddingBottom: '16px' }}>
+        <h2>{props.name}</h2>
+        <span style={{ color: '#717171' }}>
+          User since {date.toLocaleString('en-us', { month: 'long' })} {date.getFullYear()}
+        </span>
+        {props.isCurrentUser && (
+          <Link to="/edit-profile" className="ui right floated button tiny">
+            Edit Profile
+          </Link>
+        )}
+      </div>
     </Fragment>
   );
 };

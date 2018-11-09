@@ -44,12 +44,37 @@ class Profile extends Component {
   };
 
   componentDidMount = () => {
-    this.updateFromProfile();
+    if (this.props.match.params.userId) {
+      this.updateFromProfileByUserId(this.props.match.params.userId);
+    } else if (this.props.match.params.handle) {
+      this.updateFromProfileByHandle(this.props.match.params.handle);
+    } else {
+      this.props.history.push(`/profile/user/${this.props.auth.user._id}`);
+    }
   };
 
-  updateFromProfile = () => {
+  updateFromProfileByUserId = userId => {
     axios
-      .get('/api/profile')
+      .get(`/api/profile/user/${userId}`)
+      .then(res => {
+        if (res.data.handle) {
+          this.props.history.push(`/profile/${res.data.handle}`);
+        } else {
+          const profile = res.data;
+          const currentState = this.state;
+          currentState.profile = profile;
+          currentState.profile.isLoading = false;
+          this.setState(currentState);
+        }
+      })
+      .catch(err => {
+        this.setState({ errors: err });
+      });
+  };
+
+  updateFromProfileByHandle = handle => {
+    axios
+      .get(`/api/profile/handle/${handle}`)
       .then(res => {
         const profile = res.data;
         const currentState = this.state;
