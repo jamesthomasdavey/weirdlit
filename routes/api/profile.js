@@ -30,7 +30,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
       if (profile.favoriteBook) {
         await Book.findOne({ title: profile.favoriteBook })
           .populate('authors', 'name')
-          .then(book => {
+          .then(async book => {
             if (!book || !book.isApproved) return;
             else if (book.isApproved) {
               favoriteBookObj = {
@@ -42,6 +42,17 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
                 description: book.description,
                 image: book.image
               };
+
+              let hasReadFavoriteBook;
+              profile.booksRead.forEach(book => {
+                if (book._id.equals(favoriteBookObj._id)) {
+                  hasReadFavoriteBook = true;
+                }
+              });
+              if (!hasReadFavoriteBook) {
+                profile.booksRead.push(favoriteBookObj._id);
+                await profile.save();
+              }
             }
           });
       }
@@ -94,6 +105,7 @@ router.get('/handle/:handle', passport.authenticate('jwt', { session: false }), 
   const errors = {};
   Profile.findOne({ handle: req.params.handle })
     .populate('user', ['_id', 'name'])
+    .populate({ path: 'booksRead', populate: { path: 'authors' } })
     .then(async profile => {
       if (!profile) {
         errors.noprofile = 'No profile found';
@@ -148,6 +160,7 @@ router.get('/user/:userId', passport.authenticate('jwt', { session: false }), (r
   const errors = {};
   Profile.findOne({ user: req.params.userId })
     .populate('user', ['_id', 'name'])
+    .populate({ path: 'booksRead', populate: { path: 'authors' } })
     .then(async profile => {
       if (!profile) {
         errors.noprofile = 'No profile found';
@@ -220,6 +233,7 @@ router.put('/', passport.authenticate('jwt', { session: false }), (req, res) => 
         },
         date: req.body.date
       };
+
       Profile.findOneAndUpdate({ user: req.user._id }, { $set: updatedProfile }, { new: true })
         .then(profile => res.json(profile))
         .catch(err => res.status(400).json(err));

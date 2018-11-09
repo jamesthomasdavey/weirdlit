@@ -105,7 +105,7 @@ class Profile extends Component {
             <Heading
               name={this.state.profile.user.name}
               date={this.state.profile.date}
-              isCurrentUser={true}
+              isCurrentUser={this.state.profile.user._id === this.props.auth.user._id}
             />
             <About
               favoriteBook={this.state.profile.favoriteBook}

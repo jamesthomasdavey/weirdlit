@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import timeAgo from 'time-ago';
-import arrayToSentence from 'array-to-sentence';
 
 // component
 import StarRating from '../../../../../layout/StarRating/StarRating';
@@ -34,32 +33,18 @@ class Review extends Component {
 
     return (
       <div className="ui item">
-        <div className="ui tiny image">
-          <img
-            alt="cover"
-            className="book__image"
-            src={this.props.book.image.mediumThumbnail}
-            onClick={() => this.props.history.push(`/books/${this.props.book._id}`)}
-          />
-        </div>
         <div className="content">
           <div className="header">{this.props.headline}</div>
           <div className="meta">
             <span>
-              <Link className="meta" to={`/books/${this.props.book._id}`}>
-                <strong>{this.props.book.title}</strong>
-              </Link>
-              {' by '}
-              {arrayToSentence(this.props.book.authors.map(author => author.name), {
-                lastSeparator: ' & '
-              })}
+              Posted {timeAgo.ago(this.props.date)} by{' '}
+              <Link to={`/profile/user/${this.props.creator._id}`}>{this.props.creator.name}</Link>
             </span>
           </div>
           <div className="meta">
-            <span>Posted {timeAgo.ago(this.props.date)}</span>
             <StarRating value={Number(this.props.rating)} />
           </div>
-          <p>
+          <p className={classes.review__text}>
             {reviewText.split('\n').map((item, key) => {
               return (
                 <span key={key}>
@@ -89,9 +74,9 @@ class Review extends Component {
 }
 
 Review.propTypes = {
-  book: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   headline: PropTypes.string.isRequired,
+  creator: PropTypes.object.isRequired,
   date: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   rating: PropTypes.number.isRequired,

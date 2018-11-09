@@ -1,8 +1,5 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-const axios = require('axios');
-const flatted = require('flatted');
-const googleBooksApiKey = require('./../../config/keys').googleBooksApiKey;
 const passport = require('passport');
 
 // load input validation
@@ -23,6 +20,18 @@ const verifyBookId = (req, res, next) => {
     })
     .catch(err => res.status(400).json(err));
 };
+
+// @route     get /api/books/:bookId/reviews
+// @desc      get all reviews for a book
+// @access    public
+router.get('/', verifyBookId, (req, res) => {
+  Review.find({ book: req.params.bookId })
+    .populate('creator', 'name')
+    .then(reviews => {
+      if (!reviews || reviews.length === 0) return res.json([]);
+      res.json(reviews);
+    });
+});
 
 // @route     post /api/books/:bookId/reviews
 // @desc      add new review to book

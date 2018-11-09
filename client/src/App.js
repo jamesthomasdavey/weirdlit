@@ -24,6 +24,7 @@ import Browse from './components/pages/Browse/Browse';
 import Profile from './components/pages/Profile/Profile';
 import EditProfile from './components/pages/EditProfile/EditProfile';
 import Pending from './components/pages/Pending/Pending';
+import Book from './components/pages/Book/Book';
 import NewBook from './components/pages/NewBook/NewBook';
 import Account from './components/pages/Account/Account';
 import Notifications from './components/pages/Notifications/Notifications';
@@ -67,6 +68,7 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/authorized" component={Unauthorized} />
+            <Route exact path="/books/:bookId" component={Book} />
             <Route exact path="/profile/:handle" component={Profile} />
             <Route exact path="/profile/user/:userId" component={Profile} />
             <Switch>

@@ -314,28 +314,6 @@ router.get('/:bookId', verifyBookId, (req, res) => {
         errors._id = 'Book not found';
         return res.status(404).json(errors);
       }
-      // get reviews for book
-      let bookReviews = [];
-      await Review.find({ book: book._id })
-        .sort({ date: -1 })
-        .populate('creator', 'name')
-        .then(reviews => {
-          if (!reviews || reviews.length === 0) return;
-          // push each review
-          else
-            bookReviews = reviews.map(review => {
-              return {
-                _id: review._id,
-                creator: review.creator,
-                rating: review.rating,
-                headline: review.headline,
-                text: review.text,
-                date: review.date,
-                lastUpdated: review.lastUpdated
-              };
-            });
-        })
-        .catch(err => res.status(400).json(err));
       // get additional info from google
       const googleInfo = {};
       await axios
@@ -360,7 +338,6 @@ router.get('/:bookId', verifyBookId, (req, res) => {
         description: googleInfo.description,
         pageCount: book.pageCount,
         rating: book.rating,
-        reviews: bookReviews,
         identifiers: book.identifiers
       });
     })

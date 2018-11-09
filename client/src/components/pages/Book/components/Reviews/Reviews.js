@@ -15,9 +15,9 @@ class Reviews extends Component {
   };
   componentDidMount = () => {
     axios
-      .get(`/api/profile/user/${this.props.userId}/reviews`)
+      .get(`/api/books/${this.props.bookId}/reviews`)
       .then(res => {
-        this.setState({ reviews: res.data.reviews, isLoading: false });
+        this.setState({ reviews: res.data, isLoading: false, errors: {} });
       })
       .catch(err => {
         this.setState({ reviews: [], isLoading: false, errors: err });
@@ -46,12 +46,12 @@ class Reviews extends Component {
         return (
           <Review
             key={review._id}
-            book={review.book}
             headline={review.headline}
             rating={review.rating}
             text={review.text}
             date={review.date}
             lastUpdated={review.lastUpdated}
+            creator={review.creator}
             history={this.props.history}
           />
         );
@@ -62,7 +62,7 @@ class Reviews extends Component {
       <Fragment>
         <h5 className="ui horizontal divider header">
           <i className="align left icon" />
-          Reviews by {this.props.name.split(' ')[0]}
+          Reviews for {this.props.bookTitle}
         </h5>
         <div
           className={['ui raised segment', this.state.isLoading ? 'loading' : ''].join(' ')}
@@ -78,7 +78,8 @@ class Reviews extends Component {
           )}
           {!this.state.isLoading && this.state.reviews.length === 0 && (
             <h5 style={{ textAlign: 'center' }}>
-              {this.props.name.split(' ')[0]} has not yet written any reviews.
+              Nobody has written any reviews for {this.props.bookTitle}.{' '}
+              <Link to={`/books/${this.props.bookId}/reviews/new`}>Be the first!</Link>
             </h5>
           )}
           {!this.state.isLoading && this.state.reviews.length > 0 && (
@@ -86,7 +87,7 @@ class Reviews extends Component {
           )}
           {this.state.reviews.length > numberOfReviewsToDisplay && (
             <div style={{ textAlign: 'center' }}>
-              <Link to={`/profile/user/${this.props.userId}/reviews`} className="ui tiny button">
+              <Link to={`/books/${this.props.bookId}/reviews`} className="ui tiny button">
                 View All
               </Link>
             </div>
@@ -98,8 +99,8 @@ class Reviews extends Component {
 }
 
 Reviews.propTypes = {
-  userId: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired
+  bookId: PropTypes.string.isRequired,
+  bookTitle: PropTypes.string.isRequired
 };
 
 export default Reviews;
