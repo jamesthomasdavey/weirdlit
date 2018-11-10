@@ -99,11 +99,13 @@ class EditProfile extends Component {
         <div className="ui text container">
           <div className="ui segment">
             <form
-              onSubmit={this.formSubmitHandler}
               noValidate
               className={['ui form', this.state.isLoading ? 'loading' : ''].join(' ')}
-              style={{ marginTop: '10px' }}
+              onSubmit={this.formSubmitHandler}
             >
+              <div style={{ paddingBottom: '20px' }}>
+                <h2>Edit Profile</h2>
+              </div>
               <TextInputField
                 name="handle"
                 label="Handle"

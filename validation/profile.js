@@ -20,6 +20,14 @@ module.exports = reqBody => {
   }
 
   if (
+    reqBody.handle.toLowerCase() === 'edit' ||
+    reqBody.handle.toLowerCase() === 'user' ||
+    reqBody.handle.toLowerCase() === 'users'
+  ) {
+    errors.handle = 'Invalid handle';
+  }
+
+  if (
     !Validator.isEmpty(reqBody.favoriteBook) &&
     !Validator.isLength(reqBody.favoriteBook, { max: 200 })
   ) {

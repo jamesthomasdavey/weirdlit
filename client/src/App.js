@@ -26,6 +26,10 @@ import EditProfile from './components/pages/EditProfile/EditProfile';
 import Pending from './components/pages/Pending/Pending';
 import Book from './components/pages/Book/Book';
 import AddBook from './components/pages/AddBook/AddBook';
+import BookReviews from './components/pages/BookReviews/BookReviews';
+import Review from './components/pages/Review/Review';
+import NewReview from './components/pages/NewReview/NewReview';
+import EditReview from './components/pages/EditReview/EditReview';
 import Account from './components/pages/Account/Account';
 import Notifications from './components/pages/Notifications/Notifications';
 import DeleteAccount from './components/pages/DeleteAccount/DeleteAccount';
@@ -67,30 +71,30 @@ class App extends Component {
             <Route exact path="/browse" component={Browse} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-            <Route exact path="/authorized" component={Unauthorized} />
-            <Route exact path="/profile/:handle" component={Profile} />
-            <Route exact path="/profile/user/:userId" component={Profile} />
-            <Route exact path="/books/:bookId" component={Book} />
+            <Route exact path="/unauthorized" component={Unauthorized} />
             <Switch>
-              <PrivateRoute exact path="/profile" component={Profile} />
+              <AdminRoute exact path="/books/pending" component={Pending} />
+              <PrivateRoute exact path="/books/add" component={AddBook} />
+              <Route exact path="/books/:bookId" component={Book} />
+              <Route exact path="/books/:bookId/reviews" component={BookReviews} />
+              <Route exact path="/books/:bookId/reviews/new" component={NewReview} />
+              <Route exact path="/books/:bookId/reviews/:reviewId" component={Review} />
+              <Route exact path="/books/:bookId/reviews/:reviewId/edit" component={EditReview} />
             </Switch>
             <Switch>
-              <PrivateRoute exact path="/edit-profile" component={EditProfile} />
+              <PrivateRoute exact path="/profile" component={Profile} />
+              <PrivateRoute exact path="/profile/edit" component={EditProfile} />
+              <Route exact path="/profile/user/:userId" component={Profile} />
+              {/* <Route exact path="/profile/user/:userId/books" component={ProfileBooks} /> */}
+              <Route exact path="/profile/:handle" component={Profile} />
+              {/* <Route exact path="/profile/:handle/books" component={ProfileBooks} /> */}
             </Switch>
             <Switch>
               <PrivateRoute exact path="/account" component={Account} />
-            </Switch>
-            <Switch>
-              <PrivateRoute exact path="/notifications" component={Notifications} />
-            </Switch>
-            <Switch>
               <PrivateRoute exact path="/account/delete" component={DeleteAccount} />
             </Switch>
             <Switch>
-              <PrivateRoute exact path="/books/add" component={AddBook} />
-            </Switch>
-            <Switch>
-              <AdminRoute exact path="/pending-books" component={Pending} />
+              <PrivateRoute exact path="/notifications" component={Notifications} />
             </Switch>
             <Footer />
           </div>

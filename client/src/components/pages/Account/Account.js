@@ -93,6 +93,7 @@ class Account extends Component {
     });
   };
   render() {
+    document.title = 'Account | WeirdLit';
     return (
       <div className="ui text container">
         <div className="ui segment">
@@ -155,6 +156,7 @@ class Account extends Component {
               type="submit"
               className={['ui button primary', this.state.hasChanged ? '' : 'disabled'].join(' ')}
               value={this.state.hasSaved ? 'Saved' : 'Save'}
+              disabled={!this.state.hasChanged}
             />
             <Link
               to="/account/delete"
