@@ -26,7 +26,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
         errors.noprofile = 'No profile found';
         return res.status(404).json(errors);
       }
-      let favoriteBookObj = '';
+      let favoriteBookObj = {};
       if (profile.favoriteBook) {
         await Book.findOne({ title: profile.favoriteBook })
           .populate('authors', 'name')
@@ -82,22 +82,30 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
 
 // @route     get /api/profile/user/:userId/reviews
 // @desc      get reviews for specific userId
+// @access    public
+router.get('/user/:userId/reviews', (req, res) => {
+  Review.find({ creator: req.params.userId })
+    .populate({ path: 'book', populate: { path: 'authors' } })
+    .populate('comments', 'user')
+    .populate('likes', 'user')
+    .then(reviews => {
+      if (reviews.length > 0) return res.json({ reviews });
+      res.json({ reviews: [] });
+    })
+    .catch(() => res.status(404).json({ reviews: [] }));
+});
+
+// @route     get /api/profile/user/reviews
+// @desc      get reviews for logged in user
 // @access    private
-router.get(
-  '/user/:userId/reviews',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    Review.find({ creator: req.params.userId })
-      .populate({ path: 'book', populate: { path: 'authors' } })
-      .populate('comments', 'user')
-      .populate('likes', 'user')
-      .then(reviews => {
-        if (reviews.length > 0) return res.json({ reviews });
-        res.json({ reviews: [] });
-      })
-      .catch(() => res.status(404).json({ reviews: [] }));
-  }
-);
+router.get('/user/reviews', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Review.find({ creator: req.user._id })
+    .then(reviews => {
+      if (reviews.length > 0) return res.json({ reviews });
+      res.json({ reviews: [] });
+    })
+    .catch(() => res.status(404).json({ reviews: [] }));
+});
 
 // @route     get /api/profile/handle/:handle
 // @desc      get specific profile from profile handle
@@ -112,7 +120,7 @@ router.get('/handle/:handle', passport.authenticate('jwt', { session: false }), 
         errors.noprofile = 'No profile found';
         return res.status(404).json(errors);
       }
-      let favoriteBookObj = '';
+      let favoriteBookObj = {};
       if (profile.favoriteBook) {
         await Book.findOne({ title: profile.favoriteBook })
           .populate('authors', 'name')
@@ -168,7 +176,7 @@ router.get('/user/:userId', passport.authenticate('jwt', { session: false }), (r
         errors.noprofile = 'No profile found';
         return res.status(404).json(errors);
       }
-      let favoriteBookObj = '';
+      let favoriteBookObj = {};
       if (profile.favoriteBook) {
         await Book.findOne({ title: profile.favoriteBook })
           .populate('authors', 'name')
@@ -244,6 +252,42 @@ router.put('/', passport.authenticate('jwt', { session: false }), (req, res) => 
     }
   });
   // .catch(err => res.status(400).json(err));
+});
+
+// @route     put /api/profile/booksRead
+// @desc      read or unread a book
+// @access    private
+router.put('/booksRead', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Profile.findOne({ user: req.user._id }).then(profile => {
+    if (!profile) return res.json({});
+    if (req.body.hasRead) {
+      let hasAlreadyRead;
+      profile.booksRead.forEach(bookRead => {
+        if (bookRead.toString() === req.body.bookId) {
+          hasAlreadyRead = true;
+        }
+      });
+      if (!hasAlreadyRead) {
+        profile.booksRead.push(req.body.bookId);
+        profile.save().then(() => {
+          res.json({ success: true });
+        });
+      }
+    } else if (!req.body.hasRead) {
+      let removeIndex = null;
+      profile.booksRead.forEach((bookRead, index) => {
+        if (bookRead.toString() === req.body.bookId) {
+          removeIndex = index;
+        }
+      });
+      if (removeIndex !== null) {
+        profile.booksRead.splice(removeIndex, 1);
+        profile.save().then(() => {
+          res.json({ success: true });
+        });
+      }
+    }
+  });
 });
 
 module.exports = router;

@@ -46,6 +46,7 @@ class Reviews extends Component {
         return (
           <Review
             key={review._id}
+            _id={review._id}
             book={review.book}
             headline={review.headline}
             rating={review.rating}

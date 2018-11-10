@@ -76,10 +76,10 @@ class App extends Component {
               <AdminRoute exact path="/books/pending" component={Pending} />
               <PrivateRoute exact path="/books/add" component={AddBook} />
               <Route exact path="/books/:bookId" component={Book} />
-              <Route exact path="/books/:bookId/reviews" component={BookReviews} />
-              <Route exact path="/books/:bookId/reviews/new" component={NewReview} />
-              <Route exact path="/books/:bookId/reviews/:reviewId" component={Review} />
-              <Route exact path="/books/:bookId/reviews/:reviewId/edit" component={EditReview} />
+              {/* <Route exact path="/books/:bookId/reviews" component={BookReviews} /> */}
+              {/* <Route exact path="/books/:bookId/reviews/new" component={NewReview} /> */}
+              {/* <Route exact path="/books/:bookId/reviews/:reviewId" component={Review} /> */}
+              {/* <Route exact path="/books/:bookId/reviews/:reviewId/edit" component={EditReview} /> */}
             </Switch>
             <Switch>
               <PrivateRoute exact path="/profile" component={Profile} />

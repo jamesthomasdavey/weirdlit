@@ -1,8 +1,11 @@
 // package
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import axios from 'axios';
 
 // component
+import Heading from './components/Heading/Heading';
 import Reviews from './components/Reviews/Reviews';
 
 class Book extends Component {
@@ -20,7 +23,8 @@ class Book extends Component {
         isbn13: ''
       }
     },
-    isLoading: true
+    isLoading: true,
+    errors: []
   };
   componentDidMount = () => {
     if (this.props.match.params.bookId) {
@@ -39,8 +43,13 @@ class Book extends Component {
       <Fragment>
         <div className="ui container">
           <div className="ui segment">
-            {this.state.book._id && (
-              <Reviews bookId={this.state.book._id} bookTitle={this.state.book.title} />
+            {!this.state.isLoading && <Heading book={this.state.book} />}
+            {!this.state.isLoading && (
+              <Reviews
+                bookId={this.state.book._id}
+                bookTitle={this.state.book.title}
+                history={this.props.history}
+              />
             )}
           </div>
         </div>
@@ -49,4 +58,12 @@ class Book extends Component {
   }
 }
 
-export default Book;
+Book.propTypes = {
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(Book);

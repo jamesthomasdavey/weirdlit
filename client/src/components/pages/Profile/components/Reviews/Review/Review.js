@@ -43,7 +43,11 @@ class Review extends Component {
           />
         </div>
         <div className="content">
-          <div className="header">{this.props.headline}</div>
+          <div className="header">
+            <Link to={`/books/${this.props.book._id}/reviews/${this.props._id}`}>
+              {this.props.headline}
+            </Link>
+          </div>
           <div className="meta">
             <span>
               <Link className="meta" to={`/books/${this.props.book._id}`}>
@@ -95,6 +99,7 @@ class Review extends Component {
 
 Review.propTypes = {
   book: PropTypes.object.isRequired,
+  _id: PropTypes.string.isRequired,
   history: PropTypes.object.isRequired,
   headline: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,

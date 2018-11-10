@@ -107,7 +107,6 @@ class Profile extends Component {
 
   render() {
     document.title = `${this.state.profile.user.name || 'Profile'} | WeirdLit`;
-
     let profileContent = (
       <div className={['ui segment', this.state.profile.isLoading ? 'loading' : ''].join(' ')}>
         {this.state.profile.isLoading && (

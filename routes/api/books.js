@@ -338,7 +338,8 @@ router.get('/:bookId', verifyBookId, (req, res) => {
         description: googleInfo.description,
         pageCount: book.pageCount,
         rating: book.rating,
-        identifiers: book.identifiers
+        identifiers: book.identifiers,
+        image: book.image
       });
     })
     .catch(err => res.status(400).json(err));
