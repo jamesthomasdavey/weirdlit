@@ -21,6 +21,7 @@ class EditProfile extends Component {
       location: '',
       bio: '',
       goodreads: '',
+      twitter: '',
       facebook: '',
       instagram: ''
     },
@@ -30,6 +31,7 @@ class EditProfile extends Component {
       location: '',
       bio: '',
       goodreads: '',
+      twitter: '',
       facebook: '',
       instagram: ''
     },
@@ -48,6 +50,7 @@ class EditProfile extends Component {
         location: res.data.location,
         bio: res.data.bio,
         goodreads: res.data.social.goodreads,
+        twitter: res.data.social.twitter,
         facebook: res.data.social.facebook,
         instagram: res.data.social.instagram,
         date: res.data.date
@@ -68,6 +71,7 @@ class EditProfile extends Component {
       currentState.form.location !== currentState.oldForm.location ||
       currentState.form.bio !== currentState.oldForm.bio ||
       currentState.form.goodreads !== currentState.oldForm.goodreads ||
+      currentState.form.twitter !== currentState.oldForm.twitter ||
       currentState.form.facebook !== currentState.oldForm.facebook ||
       currentState.form.instagram !== currentState.oldForm.instagram
     ) {
@@ -166,6 +170,14 @@ class EditProfile extends Component {
                     icon="goodreads"
                     onChange={this.changeInputHandler}
                     error={this.state.errors.goodreads}
+                  />
+                  <SocialInputField
+                    name="twitter"
+                    placeholder="Twitter"
+                    value={this.state.form.twitter}
+                    icon="twitter"
+                    onChange={this.changeInputHandler}
+                    error={this.state.errors.twitter}
                   />
                   <SocialInputField
                     name="facebook"

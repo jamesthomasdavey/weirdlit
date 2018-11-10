@@ -69,6 +69,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
         bio: profile.bio,
         social: {
           goodreads: profile.social.goodreads,
+          twitter: profile.social.twitter,
           facebook: profile.social.facebook,
           instagram: profile.social.instagram
         },
@@ -143,6 +144,7 @@ router.get('/handle/:handle', passport.authenticate('jwt', { session: false }), 
         bio: profile.bio,
         social: {
           goodreads: profile.social.goodreads,
+          twitter: profile.social.twitter,
           facebook: profile.social.facebook,
           instagram: profile.social.instagram
         },
@@ -198,6 +200,7 @@ router.get('/user/:userId', passport.authenticate('jwt', { session: false }), (r
         bio: profile.bio,
         social: {
           goodreads: profile.social.goodreads,
+          twitter: profile.social.twitter,
           facebook: profile.social.facebook,
           instagram: profile.social.instagram
         },
@@ -228,6 +231,7 @@ router.put('/', passport.authenticate('jwt', { session: false }), (req, res) => 
         bio: req.body.bio.replace(/\n\s*\n\s*\n/g, '\n\n'),
         social: {
           goodreads: req.body.goodreads ? prependHttp(req.body.goodreads) : '',
+          twitter: req.body.twitter ? prependHttp(req.body.twitter) : '',
           facebook: req.body.facebook ? prependHttp(req.body.facebook) : '',
           instagram: req.body.instagram ? prependHttp(req.body.instagram) : ''
         },

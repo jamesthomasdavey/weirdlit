@@ -9,6 +9,7 @@ module.exports = reqBody => {
   reqBody.location = !isEmpty(reqBody.location) ? reqBody.location : '';
   reqBody.bio = !isEmpty(reqBody.bio) ? reqBody.bio : '';
   reqBody.goodreads = !isEmpty(reqBody.goodreads) ? reqBody.goodreads : '';
+  reqBody.twitter = !isEmpty(reqBody.twitter) ? reqBody.twitter : '';
   reqBody.facebook = !isEmpty(reqBody.facebook) ? reqBody.facebook : '';
   reqBody.instagram = !isEmpty(reqBody.instagram) ? reqBody.instagram : '';
 
@@ -47,6 +48,9 @@ module.exports = reqBody => {
 
   if (!Validator.isEmpty(reqBody.goodreads) && !Validator.isURL(reqBody.goodreads)) {
     errors.goodreads = 'Not a valid URL';
+  }
+  if (!Validator.isEmpty(reqBody.twitter) && !Validator.isURL(reqBody.twitter)) {
+    errors.twitter = 'Not a valid URL';
   }
   if (!Validator.isEmpty(reqBody.facebook) && !Validator.isURL(reqBody.facebook)) {
     errors.facebook = 'Not a valid URL';

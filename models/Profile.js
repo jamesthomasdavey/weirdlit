@@ -29,6 +29,9 @@ const ProfileSchema = new Schema({
     goodreads: {
       type: String
     },
+    twitter: {
+      type: String
+    },
     facebook: {
       type: String
     },

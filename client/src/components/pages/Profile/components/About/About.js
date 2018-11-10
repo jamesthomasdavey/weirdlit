@@ -6,6 +6,7 @@ import arrayToSentence from 'array-to-sentence';
 
 // image
 import goodreadsIcon from './../../../../../img/icons/goodreads.svg';
+import twitterIcon from './../../../../../img/icons/twitter.svg';
 import facebookIcon from './../../../../../img/icons/facebook.svg';
 import instagramIcon from './../../../../../img/icons/instagram.svg';
 
@@ -92,6 +93,13 @@ const About = props => {
             <Fragment>
               <a href={props.social.goodreads} target="_blank" rel="noopener noreferrer">
                 <img className={classes.social__icon} alt="goodreads" src={goodreadsIcon} />
+              </a>
+            </Fragment>
+          )}
+          {props.social.twitter && (
+            <Fragment>
+              <a href={props.social.twitter} target="_blank" rel="noopener noreferrer">
+                <img className={classes.social__icon} alt="twitter" src={twitterIcon} />
               </a>
             </Fragment>
           )}

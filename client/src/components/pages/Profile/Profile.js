@@ -34,6 +34,7 @@ class Profile extends Component {
       booksRead: [],
       social: {
         goodreads: '',
+        twitter: '',
         facebook: '',
         instagram: ''
       },
