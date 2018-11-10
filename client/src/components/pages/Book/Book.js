@@ -38,9 +38,11 @@ class Book extends Component {
     return (
       <Fragment>
         <div className="ui container">
-          {this.state.book._id && (
-            <Reviews bookId={this.state.book._id} bookTitle={this.state.book.title} />
-          )}
+          <div className="ui segment">
+            {this.state.book._id && (
+              <Reviews bookId={this.state.book._id} bookTitle={this.state.book.title} />
+            )}
+          </div>
         </div>
       </Fragment>
     );

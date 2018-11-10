@@ -1,8 +1,9 @@
 .wrapper {
   display: block;
   position: relative;
-  width: 23%;
-  padding-top: 34.5%;
+  margin: 6px 0;
+  width: 30%;
+  padding-top: 45%;
   font-size: 1rem;
 }
 
@@ -10,10 +11,18 @@
   cursor: pointer;
 }
 
+@media (min-width: 562px) {
+  .wrapper {
+    margin: 8px 4%;
+    width: 120px;
+    height: 180px;
+    padding-top: 0;
+  }
+}
+
 @media (min-width: 992px) {
   .wrapper {
-    width: 11%;
-    padding-top: 16.5%;
+    margin: 0;
   }
 }
 
@@ -47,8 +56,6 @@
 
 .book__cover-title-text {
   position: relative;
-  /* font-family: serif; */
-  /* font-style: italic; */
   text-align: center;
   display: none;
   opacity: 0;

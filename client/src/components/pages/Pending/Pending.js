@@ -74,9 +74,18 @@ class Pending extends Component {
               <div className="meta">{book.publishedDate}</div>
               {book.authors && (
                 <div className="meta">
-                  {arrayToSentence(book.authors, { lastSeparator: ' & ' })}
+                  {arrayToSentence(
+                    book.authors.map(author => (
+                      <Link to={`/authors/${author._id}`}>{author.name}</Link>
+                    )),
+                    { lastSeparator: ' & ' }
+                  )}
                 </div>
               )}
+              <div className="meta">
+                Requested by{' '}
+                <Link to={`/profile/user/${book.creator._id}`}>{book.creator.name}</Link>
+              </div>
               <button
                 className="ui teal labeled tiny icon button"
                 onClick={() => this.approveBookHandler(book)}

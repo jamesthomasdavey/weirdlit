@@ -1,6 +1,6 @@
 // packages
 import React, { Fragment, Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logoutUser } from './../../../actions/authActions';
@@ -37,13 +37,22 @@ class Navbar extends Component {
     }
   };
 
+  logoutHandler = () => {
+    this.props.logoutUser(this.props.history);
+  };
+
   render() {
     const authLinks = (
       <div className="ui right simple dropdown item">
-        <i className="user circle icon large" />
+        <i
+          className={[
+            'icon large',
+            this.state.loggingOut ? 'circle notch loading' : 'user circle'
+          ].join(' ')}
+        />
         <i className="dropdown icon" />
         <div className="menu" style={{ zIndex: '999' }}>
-          <Link to={`/profile/user/${this.props.auth.user._id}`}>
+          <Link to='/profile/'>
             <div className="item profile__item-link">
               <span className="menu__item-link">
                 {this.props.auth.user.name ? this.props.auth.user.name : 'Profile'}
@@ -59,7 +68,7 @@ class Navbar extends Component {
             </div>
           </Link>
           {this.props.auth.user.isAdmin && (
-            <Link to="/books/pending">
+            <Link to="/pending-books">
               <div className="item profile__item-link">
                 <span className="menu__item-link">Pending Books</span>
               </div>
@@ -72,7 +81,7 @@ class Navbar extends Component {
               <span className="menu__item-link">Settings</span>
             </div>
           </Link>
-          <div className="item profile__item-link" onClick={this.props.logoutUser}>
+          <div className="item profile__item-link" onClick={this.logoutHandler}>
             <span className="menu__item-link">Sign Out</span>
           </div>
         </div>
@@ -134,4 +143,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { logoutUser }
-)(Navbar);
+)(withRouter(Navbar));

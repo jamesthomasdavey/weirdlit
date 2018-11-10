@@ -49,10 +49,15 @@ class Review extends Component {
               <Link className="meta" to={`/books/${this.props.book._id}`}>
                 <strong>{this.props.book.title}</strong>
               </Link>
-              {' by '}
-              {arrayToSentence(this.props.book.authors.map(author => author.name), {
-                lastSeparator: ' & '
-              })}
+              {'by '}
+              {arrayToSentence(
+                this.props.book.authors.map(author => (
+                  <Link to={`/authors/${author._id}`}>{author.name}</Link>
+                )),
+                {
+                  lastSeparator: ' & '
+                }
+              )}
             </span>
           </div>
           <div className="meta">

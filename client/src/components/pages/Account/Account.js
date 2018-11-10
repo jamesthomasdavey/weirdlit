@@ -1,5 +1,5 @@
 // package
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -94,80 +94,78 @@ class Account extends Component {
   };
   render() {
     return (
-      <Fragment>
-        <div className="ui container">
-          <div className="ui text container">
-            <form
-              noValidate
-              className={['ui form', this.state.isLoading ? 'loading' : ''].join(' ')}
-              onSubmit={this.formSubmitHandler}
+      <div className="ui text container">
+        <div className="ui segment">
+          <form
+            noValidate
+            className={['ui form', this.state.isLoading ? 'loading' : ''].join(' ')}
+            onSubmit={this.formSubmitHandler}
+          >
+            <div style={{ paddingBottom: '20px' }}>
+              <h2 style={this.state.form.name ? {} : { opacity: '0' }}>
+                {this.state.form.name || '__'}
+              </h2>
+            </div>
+            <TextInputField
+              label="Name"
+              name="name"
+              autoFocus
+              type="text"
+              maxLength="40"
+              error={this.state.errors.name}
+              value={this.state.form.name}
+              onChange={this.changeInputHandler}
+            />
+            <TextInputField
+              label="Email"
+              name="email"
+              type="email"
+              error={this.state.errors.email}
+              value={this.state.form.email}
+              onChange={this.changeInputHandler}
+            />
+            <TextInputField
+              label="New Password"
+              name="newPassword"
+              type="password"
+              maxLength="30"
+              error={this.state.errors.newPassword}
+              value={this.state.form.newPassword}
+              onChange={this.changeInputHandler}
+            />
+            <TextInputField
+              label="Confirm New Password"
+              name="newPassword2"
+              type="password"
+              maxLength="30"
+              error={this.state.errors.newPassword2}
+              value={this.state.form.newPassword2}
+              onChange={this.changeInputHandler}
+            />
+            <TextInputField
+              label="Current Password *"
+              name="oldPassword"
+              type="password"
+              placeholder="Please enter your previous password before confirming any changes."
+              error={this.state.errors.oldPassword}
+              value={this.state.form.oldPassword}
+              onChange={this.changeInputHandler}
+            />
+            <input
+              type="submit"
+              className={['ui button primary', this.state.hasChanged ? '' : 'disabled'].join(' ')}
+              value={this.state.hasSaved ? 'Saved' : 'Save'}
+            />
+            <Link
+              to="/account/delete"
+              style={{ marginLeft: '1rem' }}
+              className="ui negative button"
             >
-              <div style={{ paddingBottom: '20px' }}>
-                <h2 style={this.state.form.name ? {} : { opacity: '0' }}>
-                  {this.state.form.name || '__'}
-                </h2>
-              </div>
-              <TextInputField
-                label="Name"
-                name="name"
-                autoFocus
-                type="text"
-                maxLength="40"
-                error={this.state.errors.name}
-                value={this.state.form.name}
-                onChange={this.changeInputHandler}
-              />
-              <TextInputField
-                label="Email"
-                name="email"
-                type="email"
-                error={this.state.errors.email}
-                value={this.state.form.email}
-                onChange={this.changeInputHandler}
-              />
-              <TextInputField
-                label="New Password"
-                name="newPassword"
-                type="password"
-                maxLength="30"
-                error={this.state.errors.newPassword}
-                value={this.state.form.newPassword}
-                onChange={this.changeInputHandler}
-              />
-              <TextInputField
-                label="Confirm New Password"
-                name="newPassword2"
-                type="password"
-                maxLength="30"
-                error={this.state.errors.newPassword2}
-                value={this.state.form.newPassword2}
-                onChange={this.changeInputHandler}
-              />
-              <TextInputField
-                label="Current Password *"
-                name="oldPassword"
-                type="password"
-                placeholder="Please enter your previous password before confirming any changes."
-                error={this.state.errors.oldPassword}
-                value={this.state.form.oldPassword}
-                onChange={this.changeInputHandler}
-              />
-              <input
-                type="submit"
-                className={['ui button primary', this.state.hasChanged ? '' : 'disabled'].join(' ')}
-                value={this.state.hasSaved ? 'Saved' : 'Save'}
-              />
-              <Link
-                to="/account/delete"
-                style={{ marginLeft: '1rem' }}
-                className="ui negative button"
-              >
-                Delete Account
-              </Link>
-            </form>
-          </div>
+              Delete Account
+            </Link>
+          </form>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

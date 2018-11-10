@@ -75,7 +75,7 @@ router.get(
   (req, res) => {
     Book.find({ isApproved: false, isRejected: false })
       .populate('authors', 'name')
-      .populate('creator', ['name', '_id'])
+      .populate('creator', 'name')
       .then(books => {
         res.json(
           books.map(book => {
@@ -84,7 +84,7 @@ router.get(
               title: book.title,
               publishedDate: new Date(book.publishedDate).getFullYear(),
               creator: book.creator,
-              authors: book.authors.map(author => author.name),
+              authors: book.authors,
               image: book.image
             };
           })

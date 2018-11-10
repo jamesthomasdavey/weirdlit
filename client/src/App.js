@@ -25,7 +25,7 @@ import Profile from './components/pages/Profile/Profile';
 import EditProfile from './components/pages/EditProfile/EditProfile';
 import Pending from './components/pages/Pending/Pending';
 import Book from './components/pages/Book/Book';
-import NewBook from './components/pages/NewBook/NewBook';
+import AddBook from './components/pages/AddBook/AddBook';
 import Account from './components/pages/Account/Account';
 import Notifications from './components/pages/Notifications/Notifications';
 import DeleteAccount from './components/pages/DeleteAccount/DeleteAccount';
@@ -68,9 +68,9 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/authorized" component={Unauthorized} />
-            <Route exact path="/books/:bookId" component={Book} />
             <Route exact path="/profile/:handle" component={Profile} />
             <Route exact path="/profile/user/:userId" component={Profile} />
+            <Route exact path="/books/:bookId" component={Book} />
             <Switch>
               <PrivateRoute exact path="/profile" component={Profile} />
             </Switch>
@@ -87,10 +87,10 @@ class App extends Component {
               <PrivateRoute exact path="/account/delete" component={DeleteAccount} />
             </Switch>
             <Switch>
-              <PrivateRoute exact path="/books/new" component={NewBook} />
+              <PrivateRoute exact path="/books/add" component={AddBook} />
             </Switch>
             <Switch>
-              <AdminRoute exact path="/books/pending" component={Pending} />
+              <AdminRoute exact path="/pending-books" component={Pending} />
             </Switch>
             <Footer />
           </div>

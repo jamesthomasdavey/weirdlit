@@ -49,7 +49,7 @@ class Profile extends Component {
     } else if (this.props.match.params.handle) {
       this.updateFromProfileByHandle(this.props.match.params.handle);
     } else {
-      this.props.history.push(`/profile/user/${this.props.auth.user._id}`);
+      this.updateFromProfileByToken();
     }
   };
 
@@ -58,14 +58,13 @@ class Profile extends Component {
       .get(`/api/profile/user/${userId}`)
       .then(res => {
         if (res.data.handle) {
-          this.props.history.push(`/profile/${res.data.handle}`);
-        } else {
-          const profile = res.data;
-          const currentState = this.state;
-          currentState.profile = profile;
-          currentState.profile.isLoading = false;
-          this.setState(currentState);
+          window.history.pushState('', '', `/profile/${res.data.handle}`);
         }
+        const profile = res.data;
+        const currentState = this.state;
+        currentState.profile = profile;
+        currentState.profile.isLoading = false;
+        this.setState(currentState);
       })
       .catch(err => {
         this.setState({ errors: err });
@@ -76,6 +75,24 @@ class Profile extends Component {
     axios
       .get(`/api/profile/handle/${handle}`)
       .then(res => {
+        const profile = res.data;
+        const currentState = this.state;
+        currentState.profile = profile;
+        currentState.profile.isLoading = false;
+        this.setState(currentState);
+      })
+      .catch(err => {
+        this.setState({ errors: err });
+      });
+  };
+
+  updateFromProfileByToken = () => {
+    axios
+      .get('/api/profile')
+      .then(res => {
+        if (res.data.handle) {
+          window.history.pushState('', '', `/profile/${res.data.handle}`);
+        }
         const profile = res.data;
         const currentState = this.state;
         currentState.profile = profile;
@@ -132,13 +149,7 @@ class Profile extends Component {
 
     return (
       <Fragment>
-        <div
-          className={['ui container', this.state.profile.favoriteBookObj._id ? '' : 'text'].join(
-            ' '
-          )}
-        >
-          {profileContent}
-        </div>
+        <div className="ui container">{profileContent}</div>
       </Fragment>
     );
   }

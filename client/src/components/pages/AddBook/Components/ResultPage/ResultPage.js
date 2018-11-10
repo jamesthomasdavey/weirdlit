@@ -135,7 +135,7 @@ class ResultPage extends Component {
               </button>
             </div>
           </div>
-          <button onClick={this.props.setSearchPageHandler} className="ui button">
+          <button onClick={this.props.setSearchPageHandler} className="ui button grey">
             Back to Results
           </button>
         </div>

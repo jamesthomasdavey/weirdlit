@@ -96,13 +96,13 @@ class EditProfile extends Component {
 
     return (
       <Fragment>
-        <div className="ui container">
-          <div className="ui text container">
+        <div className="ui text container">
+          <div className="ui segment">
             <form
               onSubmit={this.formSubmitHandler}
               noValidate
               className={['ui form', this.state.isLoading ? 'loading' : ''].join(' ')}
-              style={{ marginTop: '2rem' }}
+              style={{ marginTop: '10px' }}
             >
               <TextInputField
                 name="handle"

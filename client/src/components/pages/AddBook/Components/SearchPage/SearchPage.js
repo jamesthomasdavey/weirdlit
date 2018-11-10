@@ -89,8 +89,8 @@ class SearchPage extends Component {
     }
 
     return (
-      <div className="ui container">
-        <div className="ui text container">
+      <div className="ui text container">
+        <div className="ui segment">
           <form onSubmit={this.searchSubmitHandler} className="ui form">
             <div
               className={[

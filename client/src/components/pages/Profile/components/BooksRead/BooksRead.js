@@ -11,7 +11,7 @@ import classes from './BooksRead.module.css';
 
 const BooksRead = props => {
   if (props.books.length > 0) {
-    const numberOfBooksToDisplay = 8;
+    const numberOfBooksToDisplay = 6;
     const randomizedBooks = [...props.books]
       .sort(() => Math.random() - 0.5)
       .splice(0, numberOfBooksToDisplay);
@@ -29,7 +29,11 @@ const BooksRead = props => {
           <div className={classes.books__wrapper}>{booksReadContent}</div>
           {props.books.length > numberOfBooksToDisplay && (
             <div style={{ textAlign: 'center' }}>
-              <Link to={`/profile/user/${props.userId}/books`} className="ui tiny button">
+              <Link
+                to={`/profile/user/${props.userId}/books`}
+                className="ui tiny button"
+                style={{ marginTop: '16px' }}
+              >
                 View All
               </Link>
             </div>
