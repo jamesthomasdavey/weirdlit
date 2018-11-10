@@ -79,28 +79,37 @@ class ReadButton extends Component {
     if (this.props.auth.isAuthenticated) {
       if (this.state.isLoading) {
         readButton = (
-          <button className="ui blue basic button loading" style={{ cursor: 'default' }}>
-            I have read this
+          <button
+            className="ui teal disabled labeled icon button loading small"
+            style={{ cursor: 'default' }}
+          >
+            <i className="check circle outline icon" />I have read this
           </button>
         );
       } else {
         if (!this.state.hasRead) {
           readButton = (
-            <button onClick={this.readBookHandler} className="ui blue button">
-              I haven't read this
+            <button onClick={this.readBookHandler} className="ui blue labeled icon button small">
+              <i className="circle outline icon" />I haven't read this
             </button>
           );
         } else if (this.state.hasRead) {
           if (this.state.canUnread) {
             readButton = (
-              <button onClick={this.unreadBookHandler} className="ui blue basic button">
-                I have read this
+              <button
+                onClick={this.unreadBookHandler}
+                className="ui teal labeled icon button small"
+              >
+                <i className="check circle outline icon" />I have read this
               </button>
             );
           } else if (!this.state.canUnread) {
             readButton = (
-              <button className="ui blue basic button" style={{ cursor: 'default' }}>
-                I have read this
+              <button
+                className="ui teal labeled icon button small disabled"
+                style={{ cursor: 'default' }}
+              >
+                <i className="check circle outline icon" />I have read this
               </button>
             );
           }

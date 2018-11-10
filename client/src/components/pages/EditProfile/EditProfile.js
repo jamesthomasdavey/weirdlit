@@ -199,6 +199,7 @@ class EditProfile extends Component {
               </div>
               <input
                 type="submit"
+                disabled={!this.state.hasChanged}
                 className={['ui primary button', this.state.hasChanged ? '' : 'disabled'].join(' ')}
                 value={this.state.hasSaved ? 'Saved' : 'Save'}
               />
