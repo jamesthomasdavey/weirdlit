@@ -263,7 +263,7 @@ router.put('/booksRead', passport.authenticate('jwt', { session: false }), (req,
     if (req.body.hasRead) {
       let hasAlreadyRead;
       profile.booksRead.forEach(bookRead => {
-        if (bookRead.toString() === req.body.bookId) {
+        if (bookRead && bookRead.toString() === req.body.bookId) {
           hasAlreadyRead = true;
         }
       });
@@ -276,7 +276,7 @@ router.put('/booksRead', passport.authenticate('jwt', { session: false }), (req,
     } else if (!req.body.hasRead) {
       let removeIndex = null;
       profile.booksRead.forEach((bookRead, index) => {
-        if (bookRead.toString() === req.body.bookId) {
+        if (bookRead && bookRead.toString() === req.body.bookId) {
           removeIndex = index;
         }
       });

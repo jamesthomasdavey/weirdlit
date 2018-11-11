@@ -41,9 +41,9 @@ class Book extends Component {
   render() {
     return (
       <Fragment>
+        {!this.state.isLoading && <Heading book={this.state.book} />}
         <div className="ui container">
           <div className="ui segment">
-            {!this.state.isLoading && <Heading book={this.state.book} />}
             {!this.state.isLoading && (
               <Reviews
                 bookId={this.state.book._id}

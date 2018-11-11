@@ -93,6 +93,8 @@ class Profile extends Component {
       .then(res => {
         if (res.data.handle) {
           window.history.pushState('', '', `/profile/${res.data.handle}`);
+        } else {
+          window.history.pushState('', '', `/profile/user/${this.props.auth.user._id}`);
         }
         const profile = res.data;
         const currentState = this.state;

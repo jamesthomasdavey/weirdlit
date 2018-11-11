@@ -57,6 +57,9 @@ class ReadButton extends Component {
           if (res.data.success) {
             this.setState({ hasRead: true, canUnread: true, isLoading: false });
           }
+        })
+        .catch(err => {
+          console.log('unable to read');
         });
     });
   };
@@ -70,7 +73,7 @@ class ReadButton extends Component {
           }
         })
         .catch(err => {
-          console.log('fuckin a');
+          console.log('unable to unread');
         });
     });
   };
@@ -89,7 +92,7 @@ class ReadButton extends Component {
       } else {
         if (!this.state.hasRead) {
           readButton = (
-            <button onClick={this.readBookHandler} className="ui blue labeled icon button small">
+            <button onClick={this.readBookHandler} className="ui grey labeled icon button small">
               <i className="circle outline icon" />I haven't read this
             </button>
           );
@@ -107,6 +110,7 @@ class ReadButton extends Component {
             readButton = (
               <button
                 className="ui teal labeled icon button small disabled"
+                disabled
                 style={{ cursor: 'default' }}
               >
                 <i className="check circle outline icon" />I have read this
