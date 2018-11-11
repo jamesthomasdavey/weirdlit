@@ -255,6 +255,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
           if (volumeInfo.subtitle) newBook.subtitle = volumeInfo.subtitle;
           if (volumeInfo.publishedDate) newBook.publishedDate = new Date(volumeInfo.publishedDate);
           if (volumeInfo.pageCount) newBook.pageCount = parseInt(volumeInfo.pageCount);
+          if (volumeInfo.description) newBook.description = volumeInfo.description;
           // add isbn numbers to book if they exist
           if (volumeInfo.industryIdentifiers) {
             volumeInfo.industryIdentifiers.forEach(industryIdentifier => {
@@ -316,18 +317,6 @@ router.get('/:bookId', verifyBookId, (req, res) => {
       }
       // get additional info from google
       const googleInfo = {};
-      await axios
-        .get(
-          `https://www.googleapis.com/books/v1/volumes/${
-            book.identifiers.googleId
-          }?key=${googleBooksApiKey}`
-        )
-        .then(googleBookData => {
-          // store description from google books into an object
-          const volumeInfo = flatted.parse(flatted.stringify(googleBookData)).data.volumeInfo;
-          googleInfo.description = volumeInfo.description ? volumeInfo.description : null;
-        })
-        .catch(err => res.status(400).json(err));
       // output data after fetching data from google
       res.json({
         _id: book._id,
@@ -335,10 +324,11 @@ router.get('/:bookId', verifyBookId, (req, res) => {
         subtitle: book.subtitle,
         authors: book.authors,
         publishedDate: book.publishedDate,
-        description: googleInfo.description,
+        description: book.description,
         pageCount: book.pageCount,
         rating: book.rating,
         identifiers: book.identifiers,
+        tags: book.tags,
         image: book.image
       });
     })

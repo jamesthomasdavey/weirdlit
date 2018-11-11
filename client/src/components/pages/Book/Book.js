@@ -21,7 +21,9 @@ class Book extends Component {
         googleId: '',
         isbn10: '',
         isbn13: ''
-      }
+      },
+      description: '',
+      tags: []
     },
     isLoading: true,
     errors: []
@@ -29,14 +31,17 @@ class Book extends Component {
   componentDidMount = () => {
     if (this.props.match.params.bookId) {
       this.updateFromBook(this.props.match.params.bookId);
-    } else {
-      console.log('unauthorized');
     }
   };
   updateFromBook = bookId => {
-    axios.get(`/api/books/${bookId}`).then(res => {
-      this.setState({ book: res.data, isLoading: false });
-    });
+    axios
+      .get(`/api/books/${bookId}`)
+      .then(res => {
+        this.setState({ book: res.data, isLoading: false });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
   render() {
     return (

@@ -56,6 +56,9 @@ const BookSchema = new Schema({
     type: Boolean,
     default: false
   },
+  description: {
+    tyle: String
+  },
   tags: [
     {
       type: String

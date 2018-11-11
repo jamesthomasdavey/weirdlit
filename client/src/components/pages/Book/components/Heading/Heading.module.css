@@ -62,3 +62,35 @@
   padding: 75px 24px;
   /* background-color: yellow; */
 }
+
+.info__heading {
+  margin-bottom: 1rem;
+}
+
+.info__book-title {
+  color: white;
+  display: inline-block;
+  font-size: 42px;
+  letter-spacing: 1px;
+  font-weight: 300;
+  /* font-family: Lora, serif; */
+  margin-bottom: 22px;
+}
+
+.info__book-subtitle {
+  font-size: 24px;
+  /* font-family: Lora, serif; */
+  color: #ccc;
+}
+
+.info__authors {
+  font-size: 18px;
+}
+
+.author__link {
+  color: white;
+}
+
+.author__link:hover {
+  color: #ccc;
+}

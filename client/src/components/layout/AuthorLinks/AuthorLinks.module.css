@@ -1,0 +1,11 @@
+span.inverted {
+  color: #fff;
+}
+
+a.inverted {
+  color: #fff;
+}
+
+a.inverted:hover {
+  color: #fff;
+}

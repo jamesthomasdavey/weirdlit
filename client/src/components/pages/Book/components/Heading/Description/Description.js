@@ -57,8 +57,8 @@ class Description extends Component {
         </div>
         <SmoothCollapse expanded={this.state.show}>
           <div className={['ui text container', classes.description__wrapper].join(' ')}>
-            <p className={classes.description__text}>{renderHTML(description)}</p>
-            {showFullButton}
+            <div className={classes.description__text}>{renderHTML(description)}</div>
+            {this.props.description.length > maxCharsToDisplay && showFullButton}
           </div>
         </SmoothCollapse>
         <div className={classes.description__backdrop} />
