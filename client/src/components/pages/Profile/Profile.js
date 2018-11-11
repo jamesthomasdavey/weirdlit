@@ -24,7 +24,7 @@ class Profile extends Component {
         _id: '',
         title: '',
         subtitle: '',
-        authors: '',
+        authors: [],
         publishedDate: '',
         image: {},
         description: ''

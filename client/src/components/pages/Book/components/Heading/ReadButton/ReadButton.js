@@ -8,45 +8,61 @@ class ReadButton extends Component {
   state = {
     hasRead: false,
     canUnread: true,
-    isLoading: true
+    isLoading: true,
+    errors: []
   };
   componentDidMount = () => {
-    this.updateFromProfile(this.props.bookId);
+    // update state if authenticated
+    if (this.props.auth.isAuthenticated) {
+      this.updateFromProfile(this.props.bookId);
+    }
   };
   updateFromProfile = bookId => {
-    if (this.props.auth.isAuthenticated) {
-      axios.get('/api/profile').then(res => {
-        let hasRead = false;
-        let canUnread = true;
-        res.data.booksRead.forEach(bookRead => {
-          if (bookRead._id === bookId) {
-            hasRead = true;
-          }
-        });
-        if (res.data.favoriteBookObj) {
-          if (res.data.favoriteBookObj._id === bookId) {
-            canUnread = false;
-          }
+    axios.get('/api/profile').then(res => {
+      let hasRead = false;
+      let canUnread = true;
+      // check if the user has read it
+      res.data.booksRead.forEach(bookRead => {
+        if (bookRead._id === bookId) {
+          hasRead = true;
         }
-        this.setState({ hasRead, canUnread }, () => {
-          if (this.state.hasRead && this.state.canUnread) {
-            this.updateFromReviews(bookId);
+      });
+      // if the user's favorite book is in the database,
+      if (res.data.favoriteBookObj) {
+        // and if it's selected as the user's favorite book,
+        if (res.data.favoriteBookObj._id === bookId) {
+          // then they can't unread it
+          canUnread = false;
+        }
+      }
+      // set the state with the current settings
+      this.setState({ hasRead, canUnread }, () => {
+        // if the user has read it and can unread it,
+        if (this.state.hasRead && this.state.canUnread) {
+          // then check if they have written any reviews
+          this.updateFromReviews(bookId);
+        } else {
+          // otherwise, just set loading to false
+          this.setState({ isLoading: false });
+        }
+      });
+    });
+  };
+  updateFromReviews = bookId => {
+    axios.get('/api/profile/user/reviews').then(res => {
+      // if the user has any reviews,
+      if (res.data.reviews.length > 0) {
+        // check each review
+        res.data.reviews.forEach(review => {
+          if (review.book === bookId) {
+            this.setState({ canUnread: false, isLoading: false });
           } else {
             this.setState({ isLoading: false });
           }
         });
-      });
-    }
-  };
-  updateFromReviews = bookId => {
-    axios.get('/api/profile/user/reviews').then(res => {
-      res.data.reviews.forEach(review => {
-        if (review.book === bookId) {
-          this.setState({ canUnread: false, isLoading: false });
-        } else {
-          this.setState({ isLoading: false });
-        }
-      });
+      } else {
+        this.setState({ isLoading: false });
+      }
     });
   };
   readBookHandler = () => {

@@ -2,10 +2,10 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import arrayToSentence from 'array-to-sentence';
 
 // component
 import Spinner from './../../layout/Spinner/Spinner';
+import AuthorLinks from './../../layout/AuthorLinks/AuthorLinks';
 
 class Pending extends Component {
   state = {
@@ -74,12 +74,7 @@ class Pending extends Component {
               <div className="meta">{book.publishedDate}</div>
               {book.authors && (
                 <div className="meta">
-                  {arrayToSentence(
-                    book.authors.map(author => (
-                      <Link to={`/authors/${author._id}`}>{author.name}</Link>
-                    )),
-                    { lastSeparator: ' & ' }
-                  )}
+                  <AuthorLinks authors={book.authors} />
                 </div>
               )}
               <div className="meta">

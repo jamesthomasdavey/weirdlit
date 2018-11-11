@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import arrayToSentence from 'array-to-sentence';
 
+// component
+import AuthorLinks from './../../../../layout/AuthorLinks/AuthorLinks';
+
 // image
 import goodreadsIcon from './../../../../../img/icons/goodreads.svg';
 import twitterIcon from './../../../../../img/icons/twitter.svg';
@@ -32,14 +35,11 @@ const About = props => {
             <div className="content">
               <div className="header">{props.favoriteBookObj.title}</div>
               <div className="meta">{props.favoriteBookObj.publishedDate}</div>
-              {props.favoriteBookObj.authors.length > 0 && (
-                <div className="meta">
-                  {arrayToSentence(props.favoriteBookObj.authors, { lastSeparator: ' & ' })}
-                </div>
-              )}
-              {props.favoriteBookObj.description && (
-                <div className="description">{props.favoriteBookObj.description}</div>
-              )}
+              <div>
+                {props.favoriteBookObj.authors.length > 0 && (
+                  <AuthorLinks authors={props.favoriteBookObj.authors} />
+                )}
+              </div>
               <Link to={`/books/${props.favoriteBookObj._id}`} className="button ui">
                 View
               </Link>

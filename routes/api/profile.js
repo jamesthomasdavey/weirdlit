@@ -37,7 +37,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
                 _id: book._id,
                 title: book.title,
                 subtitle: book.subtitle,
-                authors: book.authors.map(author => author.name),
+                authors: book.authors,
                 publishedDate: new Date(book.publishedDate).getFullYear(),
                 description: book.description,
                 image: book.image
@@ -131,7 +131,7 @@ router.get('/handle/:handle', passport.authenticate('jwt', { session: false }), 
                 _id: book._id,
                 title: book.title,
                 subtitle: book.subtitle,
-                authors: book.authors.map(author => author.name),
+                authors: book.authors,
                 publishedDate: new Date(book.publishedDate).getFullYear(),
                 description: book.description,
                 image: book.image
@@ -187,7 +187,7 @@ router.get('/user/:userId', passport.authenticate('jwt', { session: false }), (r
                 _id: book._id,
                 title: book.title,
                 subtitle: book.subtitle,
-                authors: book.authors.map(author => author.name),
+                authors: book.authors,
                 publishedDate: new Date(book.publishedDate).getFullYear(),
                 description: book.description,
                 image: book.image
