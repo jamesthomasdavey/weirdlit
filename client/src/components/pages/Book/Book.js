@@ -2,6 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 // component
@@ -44,6 +45,7 @@ class Book extends Component {
       });
   };
   render() {
+    document.title = `${this.state.book.title} | WeirdLit`;
     return (
       <Fragment>
         {!this.state.isLoading && <Heading book={this.state.book} />}
@@ -71,4 +73,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(Book);
+export default withRouter(connect(mapStateToProps)(Book));

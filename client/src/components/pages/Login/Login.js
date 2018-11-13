@@ -52,40 +52,43 @@ class Login extends Component {
     const { errors } = this.state;
     return (
       <Fragment>
-        <div className="ui container">
-          <div className="ui one column stackable center aligned page grid">
-            <div className="column nine wide">
-              <form
-                noValidate
-                onSubmit={this.submitFormHandler}
-                className={['login__form ui fluid form', this.state.loading ? 'loading' : ''].join(
-                  ' '
-                )}
-              >
-                <TextInputField
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  autoFocus={true}
-                  value={this.state.email}
-                  onChange={this.changeInputHandler}
-                  error={errors.email}
-                />
-                <TextInputField
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  value={this.state.password}
-                  onChange={this.changeInputHandler}
-                  error={errors.password}
-                />
-                <input type="submit" className="ui grey button" value="Sign In" />
-              </form>
-              <div className="ui message">
-                <p>Don't have an account?</p>
-                <p>
-                  <Link to="/register">Create one now!</Link>
-                </p>
+        <div className="ui text container">
+          <div className="ui segment">
+            <div className="ui one column stackable center aligned page grid">
+              <div className="column nine wide">
+                <form
+                  noValidate
+                  onSubmit={this.submitFormHandler}
+                  className={[
+                    'login__form ui fluid form',
+                    this.state.loading ? 'loading' : ''
+                  ].join(' ')}
+                >
+                  <TextInputField
+                    name="email"
+                    type="email"
+                    placeholder="Email"
+                    autoFocus={true}
+                    value={this.state.email}
+                    onChange={this.changeInputHandler}
+                    error={errors.email}
+                  />
+                  <TextInputField
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    value={this.state.password}
+                    onChange={this.changeInputHandler}
+                    error={errors.password}
+                  />
+                  <input type="submit" className="ui grey button" value="Sign In" />
+                </form>
+                <div className="ui message">
+                  <p>Don't have an account?</p>
+                  <p>
+                    <Link to="/register">Create one now!</Link>
+                  </p>
+                </div>
               </div>
             </div>
           </div>

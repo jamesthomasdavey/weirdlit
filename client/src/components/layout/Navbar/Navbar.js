@@ -122,7 +122,7 @@ class Navbar extends Component {
                 </div>
               </div>
             </Link>
-            <Search />
+            <Search navBar history={this.props.history} />
             {userLinks}
           </div>
         </div>

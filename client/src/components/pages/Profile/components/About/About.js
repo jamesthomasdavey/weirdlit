@@ -2,7 +2,6 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import arrayToSentence from 'array-to-sentence';
 
 // component
 import AuthorLinks from './../../../../layout/AuthorLinks/AuthorLinks';

@@ -10,6 +10,7 @@ const books = require('./routes/api/books');
 const profile = require('./routes/api/profile');
 const reviews = require('./routes/api/reviews');
 const users = require('./routes/api/users');
+const search = require('./routes/api/search');
 
 // run express as app
 const app = express();
@@ -46,6 +47,7 @@ app.use('/api/books', books);
 app.use('/api/profile', profile);
 app.use('/api/books/:bookId/reviews', reviews);
 app.use('/api/users', users);
+app.use('/api/search', search);
 
 const port = process.env.PORT || 5000;
 

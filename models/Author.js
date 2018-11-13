@@ -12,4 +12,6 @@ const AuthorSchema = new Schema({
   }
 });
 
+AuthorSchema.index({ name: 'text' });
+
 module.exports = Author = mongoose.model('authors', AuthorSchema);

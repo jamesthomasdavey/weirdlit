@@ -1,6 +1,6 @@
 // package
 import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -15,9 +15,8 @@ import classes from './Landing.module.css';
 class Landing extends Component {
   render() {
     document.title = 'WeirdLit | The Database for Strange Writings';
-    const { isAuthenticated } = this.props.auth;
     let authButtons;
-    if (!isAuthenticated) {
+    if (!this.props.auth.isAuthenticated) {
       authButtons = (
         <div className="ui internally celled grid">
           <div className="row">
@@ -43,7 +42,7 @@ class Landing extends Component {
               <div className={classes.content__inner}>
                 <Logo />
                 <div className={classes.content__search}>
-                  <Search autoFocus />
+                  <Search autoFocus history={this.props.history} />
                 </div>
                 {authButtons}
               </div>
@@ -64,4 +63,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(Landing);
+export default connect(mapStateToProps)(withRouter(Landing));
