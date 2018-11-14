@@ -1,9 +1,8 @@
 .wrapper {
+  position: relative;
   margin-top: -15px;
   margin-bottom: 12px;
-  position: relative;
   width: 100%;
-  /* height: 400px; */
   overflow: hidden;
 }
 
@@ -33,35 +32,79 @@
 }
 
 .container {
-  width: 100%;
-  height: 400px;
-  /* display: flex; */
-  /* flex-direction: row; */
+  min-height: 400px;
 }
 
 .content__wrapper {
+  display: block;
   position: relative;
   width: 100%;
-  height: 400px;
-  /* background: blue; */
-  display: flex;
-  justify-content: space-around;
+  min-height: 400px;
+}
+
+@media (min-width: 468px) {
+  .content__wrapper {
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
+.edit__button {
+  position: absolute;
+  right: 16px;
+  top: 16px;
 }
 
 .image {
-  width: 200px;
-  height: 400px;
+  width: 100%;
+  height: 300px;
+  margin-top: 2rem;
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
   filter: drop-shadow(0 0 24px rgba(1, 1, 1, 0.75));
 }
 
+@media (min-width: 468px) {
+  .image {
+    width: 200px;
+    min-height: 400px;
+    height: auto;
+    margin-top: 0;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    filter: drop-shadow(0 0 24px rgba(1, 1, 1, 0.75));
+  }
+}
+
 .info__wrapper {
-  width: 70%;
-  height: 400px;
-  padding: 75px 24px;
-  /* background-color: yellow; */
+  width: 100%;
+  /* min-height: 400px; */
+  padding: 24px 12px;
+  display: block;
+}
+
+@media (min-width: 468px) {
+  .info__wrapper {
+    width: 70%;
+    min-height: 400px;
+    padding: 75px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+.info {
+  text-shadow: 0 0 16px rgba(0, 0, 0, 0.67);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .info {
+    text-align: left;
+  }
 }
 
 .info__heading {
@@ -69,35 +112,27 @@
 }
 
 .info__book-title {
-  color: white;
-  display: inline-block;
   font-size: 42px;
-  letter-spacing: 1px;
-  font-weight: 300;
-  /* font-family: Lora, serif; */
-  margin-bottom: 22px;
+  line-height: 44px;
+  margin-bottom: 16px;
+  color: white;
 }
 
 .info__book-subtitle {
   font-size: 24px;
-  /* font-family: Lora, serif; */
-  color: #ccc;
+  line-height: 26px;
+  color: #bbb;
 }
 
 .info__authors {
   font-size: 18px;
+  line-height: 20px;
+  margin-bottom: 12px;
 }
 
-.author__link {
-  color: white;
-}
-
-.author__link:hover {
-  color: #ccc;
-}
-
-.edit__button {
-  position: absolute;
-  right: 16px;
-  top: 16px;
+.info__published-date {
+  font-size: 18px;
+  line-height: 18px;
+  color: #bbb;
+  margin-bottom: 12px;
 }

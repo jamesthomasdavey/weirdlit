@@ -39,10 +39,10 @@ class Book extends Component {
       .then(res => {
         this.setState({ book: res.data, isLoading: false });
       })
-      .catch(() => {
-        this.props.history.push('/404');
-        window.location.reload();
-      });
+      // .catch(() => {
+      //   this.props.history.push('/404');
+      //   window.location.reload();
+      // });
   };
   render() {
     document.title = this.state.book.title

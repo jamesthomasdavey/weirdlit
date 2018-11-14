@@ -22,6 +22,14 @@ const Heading = props => {
           style={{ backgroundImage: `url(${props.book.image.original})` }}
         />
         <div className={['ui container', classes.container].join(' ')}>
+          {props.auth.user.isAdmin && (
+            <Link
+              to={`/books/${props.book._id}/edit`}
+              className={['ui tiny button', classes.edit__button].join(' ')}
+            >
+              Edit
+            </Link>
+          )}
           <div className={classes.content__wrapper}>
             <div
               className={classes.image}
@@ -31,28 +39,21 @@ const Heading = props => {
               <div className={classes.info}>
                 <div className={classes.info__heading}>
                   {props.book.title && (
-                    <div>
-                      <span className={classes['info__book-title']}>{props.book.title}</span>
-                    </div>
+                    <div className={classes['info__book-title']}>{props.book.title}</div>
                   )}
                   {props.book.subtitle && (
-                    <div>
-                      <span className={classes['info__book-subtitle']}>{props.book.subtitle}</span>
-                    </div>
+                    <div className={classes['info__book-subtitle']}>{props.book.subtitle}</div>
                   )}
                 </div>
-                <AuthorLinks authors={props.book.authors} inverted />
+                <div className={classes.info__authors}>
+                  <AuthorLinks authors={props.book.authors} inverted />
+                </div>
+                <div className={classes['info__published-date']}>
+                  {new Date(props.book.publishedDate).getFullYear()}
+                </div>
+                <ReadButton bookId={props.book._id} />
               </div>
-              <ReadButton bookId={props.book._id} />
             </div>
-            {props.auth.user.isAdmin && (
-              <Link
-                to={`/books/${props.book._id}/edit`}
-                className={['ui tiny button', classes.edit__button].join(' ')}
-              >
-                Edit
-              </Link>
-            )}
           </div>
         </div>
         <Description description={props.book.description} />
