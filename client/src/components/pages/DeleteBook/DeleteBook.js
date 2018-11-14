@@ -17,9 +17,14 @@ class DeleteBook extends Component {
     errors: {}
   };
   componentDidMount = () => {
-    axios.get(`/api/books/${this.props.match.params.bookId}`).then(res => {
-      this.setState({ bookTitle: res.data.title, isLoading: false, errors: {} });
-    });
+    axios
+      .get(`/api/books/${this.props.match.params.bookId}`)
+      .then(res => {
+        this.setState({ bookTitle: res.data.title, isLoading: false, errors: {} });
+      })
+      .catch(() => {
+        this.props.history.push('/404');
+      });
   };
   changeInputHandler = e => {
     const value = e.target.value;
@@ -38,39 +43,40 @@ class DeleteBook extends Component {
   render() {
     return (
       <Fragment>
-        {!this.state.isLoading && (
-          <div className="ui container">
-            <div className="ui text container">
-              <h1>Delete {this.state.bookTitle ? this.state.bookTitle : 'Book'}</h1>
-              <h3>Are you sure? This cannot be undone.</h3>
-              <form onSubmit={this.formSubmitHandler} className="ui form">
-                <TextInputField
-                  label="Please type the name of the book to delete:"
-                  value={this.state.title}
-                  onChange={this.changeInputHandler}
-                  type="text"
-                  name="title"
-                />
-                <input
-                  type="submit"
-                  className={[
-                    'button negative ui',
-                    this.state.title === this.state.bookTitle ? '' : 'disabled'
-                  ].join(' ')}
-                  value={`Delete ${this.state.bookTitle}`}
-                  disabled={this.state.title !== this.state.bookTitle}
-                />
-                <Link
-                  to={`/books/${this.props.match.params.bookId}/edit`}
-                  className="button ui"
-                  style={{ marginLeft: '1rem' }}
-                >
-                  Cancel
-                </Link>
-              </form>
-            </div>
+        <div className="ui container">
+          <div className="ui text container">
+            <h1>Delete {this.state.bookTitle || 'Book'}</h1>
+            <h3>Are you sure? This cannot be undone.</h3>
+            <form
+              onSubmit={this.formSubmitHandler}
+              className={['ui form', this.state.isLoading && 'loading'].join(' ')}
+            >
+              <TextInputField
+                label="Please type the name of the book to delete:"
+                value={this.state.title || ''}
+                onChange={this.changeInputHandler}
+                type="text"
+                name="title"
+              />
+              <input
+                type="submit"
+                className={[
+                  'button negative ui',
+                  this.state.title === this.state.bookTitle ? '' : 'disabled'
+                ].join(' ')}
+                value={`Delete ${this.state.bookTitle || 'Book'}`}
+                disabled={this.state.title !== this.state.bookTitle}
+              />
+              <Link
+                to={`/books/${this.props.match.params.bookId}/edit`}
+                className="button ui"
+                style={{ marginLeft: '1rem' }}
+              >
+                Cancel
+              </Link>
+            </form>
           </div>
-        )}
+        </div>
       </Fragment>
     );
   }

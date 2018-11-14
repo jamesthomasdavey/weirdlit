@@ -1,6 +1,6 @@
 // package
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import imageCheck from 'image-check';
 import moment from 'moment';
@@ -56,33 +56,40 @@ class EditBook extends Component {
   componentDidMount = () => {
     if (this.props.match.params.bookId) {
       this.updateFromBook(this.props.match.params.bookId);
+    } else {
+      this.props.history.push('/404');
     }
   };
   updateFromBook = bookId => {
-    axios.get(`/api/books/${bookId}/edit`).then(res => {
-      const form = this.state.form;
-      form.title = res.data.title;
-      form.subtitle = res.data.subtitle ? res.data.subtitle : '';
-      form.authors = res.data.authors.map(author => author.name).join(', ');
-      form.publishedDate = moment.utc(res.data.publishedDate).format('YYYY-MM-DD');
-      form.pageCount = res.data.pageCount;
-      form.googleId = res.data.identifiers.googleId ? res.data.identifiers.googleId : '';
-      form.isbn10 = res.data.identifiers.isbn10 ? res.data.identifiers.isbn10 : '';
-      form.isbn13 = res.data.identifiers.isbn13 ? res.data.identifiers.isbn13 : '';
-      form.tags = res.data.tags.length > 0 ? res.data.tags.join(', ') : '';
-      form.description = res.data.description;
-      form.image = { status: false, imageUrl: '', loading: false };
-      const oldForm = { ...form };
-      oldForm.image = res.data.image.original;
-      this.setState({
-        form,
-        oldForm,
-        imageInput: '',
-        isLoading: false,
-        hasChanged: false,
-        errors: {}
+    axios
+      .get(`/api/books/${bookId}/edit`)
+      .then(res => {
+        const form = this.state.form;
+        form.title = res.data.title;
+        form.subtitle = res.data.subtitle ? res.data.subtitle : '';
+        form.authors = res.data.authors.map(author => author.name).join(', ');
+        form.publishedDate = moment.utc(res.data.publishedDate).format('YYYY-MM-DD');
+        form.pageCount = res.data.pageCount;
+        form.googleId = res.data.identifiers.googleId ? res.data.identifiers.googleId : '';
+        form.isbn10 = res.data.identifiers.isbn10 ? res.data.identifiers.isbn10 : '';
+        form.isbn13 = res.data.identifiers.isbn13 ? res.data.identifiers.isbn13 : '';
+        form.tags = res.data.tags.length > 0 ? res.data.tags.join(', ') : '';
+        form.description = res.data.description;
+        form.image = { status: false, imageUrl: '', loading: false };
+        const oldForm = { ...form };
+        oldForm.image = res.data.image.original;
+        this.setState({
+          form,
+          oldForm,
+          imageInput: '',
+          isLoading: false,
+          hasChanged: false,
+          errors: {}
+        });
+      })
+      .catch(() => {
+        this.props.history.push('/404');
       });
-    });
   };
   changeInputHandler = e => {
     const currentState = this.state;
@@ -348,4 +355,4 @@ class EditBook extends Component {
   }
 }
 
-export default EditBook;
+export default withRouter(EditBook);

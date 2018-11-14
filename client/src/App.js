@@ -17,6 +17,7 @@ import Footer from './components/layout/Footer/Footer';
 
 // components
 // pages
+import NotFound from './components/pages/NotFound/NotFound';
 import Root from './components/pages/Root/Root';
 import Landing from './components/pages/Landing/Landing';
 import Register from './components/pages/Register/Register';
@@ -76,6 +77,7 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/unauthorized" component={Unauthorized} />
+            <Route exact path="/404" component={NotFound} />
             <Switch>
               <AdminRoute exact path="/books/pending" component={Pending} />
               <PrivateRoute exact path="/books/add" component={AddBook} />

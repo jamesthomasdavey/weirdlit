@@ -26,8 +26,7 @@ class Book extends Component {
       description: '',
       tags: []
     },
-    isLoading: true,
-    errors: []
+    isLoading: true
   };
   componentDidMount = () => {
     if (this.props.match.params.bookId) {
@@ -38,14 +37,11 @@ class Book extends Component {
     axios
       .get(`/api/books/${bookId}`)
       .then(res => {
-        if (res.data.errors && res.data.errors.length > 0) {
-          this.setState({ errors: res.data.errors });
-        } else {
-          this.setState({ book: res.data, isLoading: false });
-        }
+        this.setState({ book: res.data, isLoading: false });
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        this.props.history.push('/404');
+        window.location.reload();
       });
   };
   render() {

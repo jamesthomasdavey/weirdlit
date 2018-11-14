@@ -2,6 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 
 // component
@@ -40,8 +41,7 @@ class Profile extends Component {
       },
       date: '',
       isLoading: true
-    },
-    errors: {}
+    }
   };
 
   componentDidMount = () => {
@@ -67,8 +67,8 @@ class Profile extends Component {
         currentState.profile.isLoading = false;
         this.setState(currentState);
       })
-      .catch(err => {
-        this.setState({ errors: err });
+      .catch(() => {
+        this.props.history.push('/404');
       });
   };
 
@@ -82,8 +82,8 @@ class Profile extends Component {
         currentState.profile.isLoading = false;
         this.setState(currentState);
       })
-      .catch(err => {
-        this.setState({ errors: err });
+      .catch(() => {
+        this.props.history.push('/404');
       });
   };
 
@@ -102,8 +102,8 @@ class Profile extends Component {
         currentState.profile.isLoading = false;
         this.setState(currentState);
       })
-      .catch(err => {
-        this.setState({ errors: err });
+      .catch(() => {
+        this.props.history.push('/404');
       });
   };
 
@@ -165,4 +165,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps)(withRouter(Profile));

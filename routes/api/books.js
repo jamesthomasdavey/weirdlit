@@ -427,6 +427,9 @@ router.get(
           tags: book.tags,
           image: book.image
         });
+      })
+      .catch(err => {
+        return res.status(404).json(err);
       });
   }
 );
