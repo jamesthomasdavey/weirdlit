@@ -1,7 +1,8 @@
 // package
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 // component
 import ReadButton from './ReadButton/ReadButton';
@@ -44,6 +45,14 @@ const Heading = props => {
               </div>
               <ReadButton bookId={props.book._id} />
             </div>
+            {props.auth.user.isAdmin && (
+              <Link
+                to={`/books/${props.book._id}/edit`}
+                className={['ui tiny button', classes.edit__button].join(' ')}
+              >
+                Edit
+              </Link>
+            )}
           </div>
         </div>
         <Description description={props.book.description} />
@@ -53,7 +62,15 @@ const Heading = props => {
 };
 
 Heading.propTypes = {
-  book: PropTypes.object.isRequired
+  book: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
-export default Heading;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  {}
+)(Heading);

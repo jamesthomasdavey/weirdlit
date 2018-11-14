@@ -11,8 +11,7 @@ const BookSchema = new Schema({
   },
   identifiers: {
     googleId: {
-      type: String,
-      required: true
+      type: String
     },
     isbn10: {
       type: String

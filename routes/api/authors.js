@@ -12,7 +12,7 @@ router.get('/:authorId', (req, res) => {
   Author.findById(req.params.authorId)
     .then(author => {
       if (!author) return res.status(404).json({ author: 'Author not found' });
-      Book.find({ authors: req.params.authorId, isApproved: true })
+      Book.find({ authors: req.params.authorId, isApproved: true, isRejected: false })
         .then(books => {
           res.json({
             _id: author._id,

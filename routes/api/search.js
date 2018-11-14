@@ -4,8 +4,16 @@ const arrayToSentence = require('array-to-sentence');
 
 const isEmpty = require('./../../validation/is-empty');
 
+//models
 const Author = require('./../../models/Author');
 const Book = require('./../../models/Book');
+
+// functions
+const asyncForEach = async (arr, callback) => {
+  for (let i = 0; i < arr.length; i++) {
+    await callback(arr[i]);
+  }
+};
 
 // @route     /api/search/suggest
 // @desc      search suggestions
@@ -22,15 +30,25 @@ router.post('/suggest', (req, res) => {
         }),
         link: `/books/${book._id}`
       }));
-      Author.find({ $text: { $search: req.body.searchQuery } })
-        .limit(5)
-        .then(authors => {
-          const authorsResults = authors.map(author => ({
+      Author.find({ $text: { $search: req.body.searchQuery } }).then(async authors => {
+        let authorList = [];
+        await asyncForEach(authors, async author => {
+          await Book.find({ authors: author._id, isApproved: true, isRejected: false }).then(
+            books => {
+              if (books.length > 0) {
+                authorList.push(author);
+              }
+            }
+          );
+        });
+        const authorsResults = authorList
+          .map(author => ({
             title: author.name,
             link: `/authors/${author._id}`
-          }));
-          res.json({ books: booksResults, authors: authorsResults });
-        });
+          }))
+          .splice(0, 5);
+        res.json({ books: booksResults, authors: authorsResults });
+      });
     });
 });
 

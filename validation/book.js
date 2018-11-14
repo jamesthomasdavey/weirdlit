@@ -25,7 +25,7 @@ module.exports = reqBody => {
   }
 
   if (Validator.isEmpty(reqBody.authors)) {
-    errors.authors = 'Authors is required';
+    errors.authors = 'Authors field is required';
   }
 
   if (Validator.isEmpty(reqBody.pageCount.toString())) {

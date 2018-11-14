@@ -28,6 +28,8 @@ import Pending from './components/pages/Pending/Pending';
 import Book from './components/pages/Book/Book';
 import AddBook from './components/pages/AddBook/AddBook';
 import EditBook from './components/pages/EditBook/EditBook';
+import DeleteBook from './components/pages/DeleteBook/DeleteBook';
+import AddCustomBook from './components/pages/AddCustomBook/AddCustomBook';
 // import BookReviews from './components/pages/BookReviews/BookReviews';
 // import Review from './components/pages/Review/Review';
 // import NewReview from './components/pages/NewReview/NewReview';
@@ -77,8 +79,10 @@ class App extends Component {
             <Switch>
               <AdminRoute exact path="/books/pending" component={Pending} />
               <PrivateRoute exact path="/books/add" component={AddBook} />
+              <PrivateRoute exact path="/books/add/custom" component={AddCustomBook} />
               <Route exact path="/books/:bookId" component={Book} />
               <AdminRoute exact path="/books/:bookId/edit" component={EditBook} />
+              <AdminRoute exact path="/books/:bookId/delete" component={DeleteBook} />
               {/* <Route exact path="/books/:bookId/reviews" component={BookReviews} /> */}
               {/* <Route exact path="/books/:bookId/reviews/new" component={NewReview} /> */}
               {/* <Route exact path="/books/:bookId/reviews/:reviewId" component={Review} /> */}

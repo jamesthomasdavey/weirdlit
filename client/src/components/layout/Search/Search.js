@@ -56,7 +56,7 @@ class Search extends Component {
           <SemanticSearch
             category
             fluid
-            selectFirstResult
+            // selectFirstResult
             input={{ fluid: true }}
             autoFocus={this.props.autoFocus}
             loading={this.state.isSearching}

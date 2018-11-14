@@ -40,15 +40,6 @@ const getImageLinks = imageUrl => {
 };
 
 // middleware
-const verifyBookId = (req, res, next) => {
-  Book.findOne({ _id: req.params.bookId, isApproved: true })
-    .then(book => {
-      if (!book) return res.status(404).json({ msg: 'Book not found' });
-      next();
-    })
-    .catch(err => res.status(400).json(err));
-};
-
 const checkAuthLevel = (req, res, next) => {
   if (!req.user.isAdmin)
     return res.status(400).json({ unauthorized: 'You are not authorized to do that' });
@@ -305,10 +296,84 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
   });
 });
 
+// @route     post /api/books/custom
+// @desc      new book route for custom books. upload image and store in data.
+// @access    private
+router.post('/custom', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const errors = validateBookInput(req.body);
+  if (!req.body.image) {
+    errors.image = 'Image cover is required';
+  }
+  if (!req.body.publishedDate) {
+    errors.publishedDate = 'Publication date is required';
+  }
+  if (!isEmpty(errors)) return res.json({ errors });
+  console.log('1');
+  authors = [];
+  await asyncForEach(req.body.authors.split(', '), async authorName => {
+    await Author.findOne({ name: authorName }).then(async foundAuthor => {
+      if (!foundAuthor) {
+        await Author.create({ name: authorName })
+          .then(createdAuthor => {
+            authors.push(createdAuthor._id);
+          })
+          .catch(() => {
+            errors.authors = 'Unable to create author.';
+          });
+      } else {
+        authors.push(foundAuthor._id);
+      }
+    });
+  });
+  console.log('2');
+  const tags = [];
+  if (req.body.tags) {
+    await asyncForEach(req.body.tags.split(', '), async tagName => {
+      await Tag.findOne({ name: tagName }).then(async foundTag => {
+        if (!foundTag) {
+          await Tag.create({ name: tagName })
+            .then(createdTag => {
+              tags.push(createdTag._id);
+            })
+            .catch(() => {
+              errors.tags = 'Unable to create tag.';
+            });
+        } else {
+          tags.push(foundTag._id);
+        }
+      });
+    });
+  }
+  console.log('3');
+  imgur.upload(req.body.image, (err, imgurImage) => {
+    if (err) errors.image = 'Unable to upload image. Please try again using a different image URL.';
+    if (!isEmpty(errors)) return res.json({ errors });
+    const imageLinks = getImageLinks(imgurImage.data.link);
+    const newBook = {
+      title: req.body.title,
+      subtitle: req.body.subtitle,
+      authors,
+      publishedDate: new Date(req.body.publishedDate),
+      pageCount: req.body.pageCount,
+      identifiers: {
+        isbn10: req.body.isbn10,
+        isbn13: req.body.isbn13
+      },
+      tags,
+      description: req.body.description,
+      image: imageLinks,
+      creator: req.user._id
+    };
+    Book.create(newBook).then(book => {
+      return res.json({ success: 'true' });
+    });
+  });
+});
+
 // @route     /api/books/:bookId
 // @desc      book show route
 // @access    public
-router.get('/:bookId', verifyBookId, (req, res) => {
+router.get('/:bookId', (req, res) => {
   const errors = [];
   Book.findById(req.params.bookId)
     .populate('authors', 'name')
@@ -318,20 +383,21 @@ router.get('/:bookId', verifyBookId, (req, res) => {
         errors.push('Unable to find book.');
         return res.json(errors);
       }
-      // output data after fetching data from google
-      res.json({
-        _id: book._id,
-        title: book.title,
-        subtitle: book.subtitle,
-        authors: book.authors,
-        publishedDate: book.publishedDate,
-        description: book.description,
-        pageCount: book.pageCount,
-        rating: book.rating,
-        identifiers: book.identifiers,
-        // tags: book.tags,
-        image: book.image
-      });
+      if (book.isApproved || !book.isRejected || req.user.isAdmin) {
+        return res.json({
+          _id: book._id,
+          title: book.title,
+          subtitle: book.subtitle,
+          authors: book.authors,
+          publishedDate: book.publishedDate,
+          description: book.description,
+          pageCount: book.pageCount,
+          rating: book.rating,
+          identifiers: book.identifiers,
+          tags: book.tags,
+          image: book.image
+        });
+      }
     })
     .catch(err => res.status(400).json(err));
 });
@@ -375,7 +441,6 @@ router.put(
   (req, res) => {
     const errors = validateBookInput(req.body);
     if (!isEmpty(errors)) return res.json({ errors });
-    console.log('I have reaced the next stage');
     Book.findById(req.params.bookId).then(async book => {
       if (!book) return res.json({ success: 'false' });
       book.title = req.body.title;
@@ -389,44 +454,36 @@ router.put(
 
       book.authors = [];
       await asyncForEach(req.body.authors.split(', '), async authorName => {
-        await Author.findOne({ name: authorName })
-          .then(async foundAuthor => {
-            if (!foundAuthor) {
-              await Author.create({ name: authorName })
-                .then(createdAuthor => {
-                  book.authors.push(createdAuthor._id);
-                })
-                .catch(() => {
-                  errors.authors = 'Unable to create author.';
-                });
-            } else {
-              book.authors.push(foundAuthor._id);
-            }
-          })
-          .catch(() => {
-            errors.push('Unable to find author.');
-          });
+        await Author.findOne({ name: authorName }).then(async foundAuthor => {
+          if (!foundAuthor) {
+            await Author.create({ name: authorName })
+              .then(createdAuthor => {
+                book.authors.push(createdAuthor._id);
+              })
+              .catch(() => {
+                errors.authors = 'Unable to create author.';
+              });
+          } else {
+            book.authors.push(foundAuthor._id);
+          }
+        });
       });
 
       if (req.body.tags) {
         await asyncForEach(req.body.tags.split(', '), async tagName => {
-          await Tag.findOne({ name: tagName })
-            .then(async foundTag => {
-              if (!foundTag) {
-                await Tag.create({ name: tagName })
-                  .then(createdTag => {
-                    book.tags.push(createdTag._id);
-                  })
-                  .catch(() => {
-                    errors.tags = 'Unable to create tag.';
-                  });
-              } else {
-                book.tags.push(foundTag._id);
-              }
-            })
-            .catch(() => {
-              errors.tag = 'Unable to find tag.';
-            });
+          await Tag.findOne({ name: tagName }).then(async foundTag => {
+            if (!foundTag) {
+              await Tag.create({ name: tagName })
+                .then(createdTag => {
+                  book.tags.push(createdTag._id);
+                })
+                .catch(() => {
+                  errors.tags = 'Unable to create tag.';
+                });
+            } else {
+              book.tags.push(foundTag._id);
+            }
+          });
         });
       }
 
@@ -447,6 +504,43 @@ router.put(
           res.json({ success: 'true' });
         });
       }
+    });
+  }
+);
+
+// @route     delete /api/books/:bookId
+// @desc      delete book route
+// @access    admin
+router.delete(
+  '/:bookId',
+  passport.authenticate('jwt', { session: false }),
+  checkAuthLevel,
+  (req, res) => {
+    Book.findByIdAndRemove(req.params.bookId).then(() => {
+      Review.find({ book: req.params.bookId }).then(async reviews => {
+        if (reviews.length > 0) {
+          await asyncForEach(reviews, async review => {
+            await Review.findByIdAndRemove(review._id);
+          });
+        }
+        Profile.find({ booksRead: req.params.bookId }).then(async profiles => {
+          if (profiles.length > 0) {
+            await asyncForEach(profiles, async profile => {
+              let deleteIndex;
+              const booksRead = [...profile.booksRead];
+              booksRead.forEach((bookRead, index) => {
+                if (bookRead.toString() === req.params.bookId) {
+                  deleteIndex = index;
+                }
+              });
+              booksRead.splice(deleteIndex);
+              profile.booksRead = booksRead;
+              await profile.save();
+            });
+          }
+          res.json({ success: true });
+        });
+      });
     });
   }
 );

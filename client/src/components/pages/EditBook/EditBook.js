@@ -50,6 +50,7 @@ class EditBook extends Component {
     imageInput: '',
     isLoading: true,
     hasChanged: false,
+    hasSaved: false,
     errors: {}
   };
   componentDidMount = () => {
@@ -63,7 +64,7 @@ class EditBook extends Component {
       form.title = res.data.title;
       form.subtitle = res.data.subtitle ? res.data.subtitle : '';
       form.authors = res.data.authors.map(author => author.name).join(', ');
-      form.publishedDate = moment(res.data.publishedDate).format('YYYY-MM-DD');
+      form.publishedDate = moment.utc(res.data.publishedDate).format('YYYY-MM-DD');
       form.pageCount = res.data.pageCount;
       form.googleId = res.data.identifiers.googleId ? res.data.identifiers.googleId : '';
       form.isbn10 = res.data.identifiers.isbn10 ? res.data.identifiers.isbn10 : '';
@@ -103,7 +104,7 @@ class EditBook extends Component {
       form.tags !== oldForm.tags ||
       form.description !== oldForm.description
     ) {
-      this.setState({ hasChanged: true });
+      this.setState({ hasChanged: true, hasSaved: false });
     } else if (!this.state.form.image.status) {
       this.setState({ hasChanged: false, errors: {} });
     }
@@ -175,7 +176,7 @@ class EditBook extends Component {
         if (res.data.errors && !isEmpty(res.data.errors)) {
           this.setState({ errors: res.data.errors, isLoading: false });
         } else {
-          this.setState({ hasChanged: false }, () => {
+          this.setState({ hasChanged: false, hasSaved: true }, () => {
             this.updateFromBook(this.props.match.params.bookId);
           });
         }

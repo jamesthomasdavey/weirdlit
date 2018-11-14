@@ -60,6 +60,7 @@ class Account extends Component {
       currentState.hasSaved = false;
     } else {
       currentState.hasChanged = false;
+      currentState.errors = {};
     }
     this.setState(currentState);
   };
