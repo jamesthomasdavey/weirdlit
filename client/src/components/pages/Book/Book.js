@@ -38,27 +38,33 @@ class Book extends Component {
     axios
       .get(`/api/books/${bookId}`)
       .then(res => {
-        this.setState({ book: res.data, isLoading: false });
+        if (res.data.errors && res.data.errors.length > 0) {
+          this.setState({ errors: res.data.errors });
+        } else {
+          this.setState({ book: res.data, isLoading: false });
+        }
       })
       .catch(err => {
         console.log(err);
       });
   };
   render() {
-    document.title = `${this.state.book.title} | WeirdLit`;
+    document.title = this.state.book.title
+      ? `${this.state.book.title} | WeirdLit`
+      : 'WeirdLit | The Database for Strange Writings';
     return (
       <Fragment>
         {!this.state.isLoading && <Heading book={this.state.book} />}
         <div className="ui container">
-          <div className="ui segment">
-            {!this.state.isLoading && (
+          {!this.state.isLoading && (
+            <div className="ui segment">
               <Reviews
                 bookId={this.state.book._id}
                 bookTitle={this.state.book.title}
                 history={this.props.history}
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </Fragment>
     );

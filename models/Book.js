@@ -61,7 +61,8 @@ const BookSchema = new Schema({
   },
   tags: [
     {
-      type: String
+      type: Schema.Types.ObjectId,
+      ref: 'tags'
     }
   ],
   image: {

@@ -27,6 +27,7 @@ import EditProfile from './components/pages/EditProfile/EditProfile';
 import Pending from './components/pages/Pending/Pending';
 import Book from './components/pages/Book/Book';
 import AddBook from './components/pages/AddBook/AddBook';
+import EditBook from './components/pages/EditBook/EditBook';
 // import BookReviews from './components/pages/BookReviews/BookReviews';
 // import Review from './components/pages/Review/Review';
 // import NewReview from './components/pages/NewReview/NewReview';
@@ -77,6 +78,7 @@ class App extends Component {
               <AdminRoute exact path="/books/pending" component={Pending} />
               <PrivateRoute exact path="/books/add" component={AddBook} />
               <Route exact path="/books/:bookId" component={Book} />
+              <AdminRoute exact path="/books/:bookId/edit" component={EditBook} />
               {/* <Route exact path="/books/:bookId/reviews" component={BookReviews} /> */}
               {/* <Route exact path="/books/:bookId/reviews/new" component={NewReview} /> */}
               {/* <Route exact path="/books/:bookId/reviews/:reviewId" component={Review} /> */}

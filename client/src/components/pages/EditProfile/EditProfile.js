@@ -11,7 +11,7 @@ import isEmpty from '../../../validation/is-empty';
 // component
 import TextInputField from '../../layout/TextInputField/TextInputField';
 import TextAreaInputField from '../../layout/TextAreaInputField/TextAreaInputField';
-import SocialInputField from '../../layout/SocialInputField/SocialInputField';
+import SocialInputField from './components/SocialInputField/SocialInputField';
 
 class EditProfile extends Component {
   state = {
@@ -79,6 +79,7 @@ class EditProfile extends Component {
       currentState.hasSaved = false;
     } else {
       currentState.hasChanged = false;
+      currentState.errors = {};
     }
     this.setState(currentState);
   };

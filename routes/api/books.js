@@ -8,12 +8,14 @@ const imgur = require('imgur-node-api');
 
 // load input validation
 const isEmpty = require('./../../validation/is-empty');
+const validateBookInput = require('./../../validation/book');
 
 // load mongoose models
 const Author = require('./../../models/Author');
 const Book = require('./../../models/Book');
 const Review = require('./../../models/Review');
 const User = require('./../../models/User');
+const Tag = require('./../../models/Tag');
 
 // functions
 const asyncForEach = async (arr, callback) => {
@@ -307,16 +309,15 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 // @desc      book show route
 // @access    public
 router.get('/:bookId', verifyBookId, (req, res) => {
-  const errors = {};
+  const errors = [];
   Book.findById(req.params.bookId)
     .populate('authors', 'name')
-    .then(async book => {
+    // .populate('tags', 'name')
+    .then(book => {
       if (!book) {
-        errors._id = 'Book not found';
-        return res.status(404).json(errors);
+        errors.push('Unable to find book.');
+        return res.json(errors);
       }
-      // get additional info from google
-      const googleInfo = {};
       // output data after fetching data from google
       res.json({
         _id: book._id,
@@ -328,11 +329,126 @@ router.get('/:bookId', verifyBookId, (req, res) => {
         pageCount: book.pageCount,
         rating: book.rating,
         identifiers: book.identifiers,
-        tags: book.tags,
+        // tags: book.tags,
         image: book.image
       });
     })
     .catch(err => res.status(400).json(err));
 });
+
+// @route     /api/books/:bookId/edit
+// @desc      book edit route
+// @access    admin
+router.get(
+  '/:bookId/edit',
+  passport.authenticate('jwt', { session: false }),
+  checkAuthLevel,
+  (req, res) => {
+    Book.findById(req.params.bookId)
+      .populate('authors', 'name')
+      .populate('tags', 'name')
+      .then(book => {
+        res.json({
+          _id: book._id,
+          title: book.title,
+          subtitle: book.subtitle,
+          authors: book.authors,
+          publishedDate: book.publishedDate,
+          description: book.description,
+          pageCount: book.pageCount,
+          rating: book.rating,
+          identifiers: book.identifiers,
+          tags: book.tags,
+          image: book.image
+        });
+      });
+  }
+);
+
+// @route     put /api/books/:bookId
+// @desc      update book route
+// @access    admin
+router.put(
+  '/:bookId',
+  passport.authenticate('jwt', { session: false }),
+  checkAuthLevel,
+  (req, res) => {
+    const errors = validateBookInput(req.body);
+    if (!isEmpty(errors)) return res.json({ errors });
+    console.log('I have reaced the next stage');
+    Book.findById(req.params.bookId).then(async book => {
+      if (!book) return res.json({ success: 'false' });
+      book.title = req.body.title;
+      book.subtitle = req.body.subtitle;
+      book.publishedDate = new Date(req.body.publishedDate);
+      book.pageCount = req.body.pageCount;
+      book.googleId = req.body.googleId;
+      book.isbn10 = req.body.isbn10;
+      book.isbn13 = req.body.isbn13;
+      book.description = req.body.description;
+
+      book.authors = [];
+      await asyncForEach(req.body.authors.split(', '), async authorName => {
+        await Author.findOne({ name: authorName })
+          .then(async foundAuthor => {
+            if (!foundAuthor) {
+              await Author.create({ name: authorName })
+                .then(createdAuthor => {
+                  book.authors.push(createdAuthor._id);
+                })
+                .catch(() => {
+                  errors.authors = 'Unable to create author.';
+                });
+            } else {
+              book.authors.push(foundAuthor._id);
+            }
+          })
+          .catch(() => {
+            errors.push('Unable to find author.');
+          });
+      });
+
+      if (req.body.tags) {
+        await asyncForEach(req.body.tags.split(', '), async tagName => {
+          await Tag.findOne({ name: tagName })
+            .then(async foundTag => {
+              if (!foundTag) {
+                await Tag.create({ name: tagName })
+                  .then(createdTag => {
+                    book.tags.push(createdTag._id);
+                  })
+                  .catch(() => {
+                    errors.tags = 'Unable to create tag.';
+                  });
+              } else {
+                book.tags.push(foundTag._id);
+              }
+            })
+            .catch(() => {
+              errors.tag = 'Unable to find tag.';
+            });
+        });
+      }
+
+      if (!isEmpty(errors)) return res.json(errors);
+      if (req.body.image) {
+        imgur.upload(req.body.image, (err, imgurImage) => {
+          if (err)
+            errors.image = 'Unable to upload image. Please try again using a different image URL.';
+          if (!isEmpty(errors)) return res.json({ errors });
+          const imageLinks = getImageLinks(imgurImage.data.link);
+          book.image = imageLinks;
+          book.save().then(book => {
+            res.json({ success: 'true' });
+          });
+        });
+      } else {
+        book.save().then(book => {
+          res.json({ success: 'true' });
+        });
+      }
+    });
+  }
+);
 
 module.exports = router;

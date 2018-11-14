@@ -21,9 +21,8 @@ module.exports = reqBody => {
   }
 
   if (
-    reqBody.handle.toLowerCase() === 'edit' ||
-    reqBody.handle.toLowerCase() === 'user' ||
-    reqBody.handle.toLowerCase() === 'users'
+    reqBody.handle.toLowerCase().substring(0, 4) === 'edit' ||
+    reqBody.handle.toLowerCase().substring(0, 4) === 'user'
   ) {
     errors.handle = 'Invalid handle';
   }

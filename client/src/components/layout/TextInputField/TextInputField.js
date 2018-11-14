@@ -36,7 +36,6 @@ const TextInputField = ({
 TextInputField.propTypes = {
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  value: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   autoFocus: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
