@@ -8,6 +8,7 @@ import moment from 'moment';
 // component
 import TextInputField from './../../layout/TextInputField/TextInputField';
 import IdentifierInputField from './components/IdentifierInputField/IdentifierInputField';
+import Tags from './components/Tags/Tags';
 
 // validation
 import isEmpty from './../../../validation/is-empty';
@@ -26,7 +27,7 @@ class EditBook extends Component {
       googleId: '',
       isbn10: '',
       isbn13: '',
-      tags: '',
+      tags: [],
       description: '',
       image: {
         status: false,
@@ -43,7 +44,7 @@ class EditBook extends Component {
       googleId: '',
       isbn10: '',
       isbn13: '',
-      tags: '',
+      tags: [],
       description: '',
       image: ''
     },
@@ -61,35 +62,34 @@ class EditBook extends Component {
     }
   };
   updateFromBook = bookId => {
-    axios
-      .get(`/api/books/${bookId}/edit`)
-      .then(res => {
-        const form = this.state.form;
-        form.title = res.data.title;
-        form.subtitle = res.data.subtitle ? res.data.subtitle : '';
-        form.authors = res.data.authors.map(author => author.name).join(', ');
-        form.publishedDate = moment.utc(res.data.publishedDate).format('YYYY-MM-DD');
-        form.pageCount = res.data.pageCount;
-        form.googleId = res.data.identifiers.googleId ? res.data.identifiers.googleId : '';
-        form.isbn10 = res.data.identifiers.isbn10 ? res.data.identifiers.isbn10 : '';
-        form.isbn13 = res.data.identifiers.isbn13 ? res.data.identifiers.isbn13 : '';
-        form.tags = res.data.tags.length > 0 ? res.data.tags.join(', ') : '';
-        form.description = res.data.description;
-        form.image = { status: false, imageUrl: '', loading: false };
-        const oldForm = { ...form };
-        oldForm.image = res.data.image.original;
-        this.setState({
-          form,
-          oldForm,
-          imageInput: '',
-          isLoading: false,
-          hasChanged: false,
-          errors: {}
-        });
-      })
-      .catch(() => {
-        this.props.history.push('/404');
+    axios.get(`/api/books/${bookId}/edit`).then(res => {
+      const form = this.state.form;
+      form.title = res.data.title;
+      form.subtitle = res.data.subtitle ? res.data.subtitle : '';
+      form.authors = res.data.authors.map(author => author.name).join(', ');
+      form.publishedDate = moment.utc(res.data.publishedDate).format('YYYY-MM-DD');
+      form.pageCount = res.data.pageCount;
+      form.googleId = res.data.identifiers.googleId ? res.data.identifiers.googleId : '';
+      form.isbn10 = res.data.identifiers.isbn10 ? res.data.identifiers.isbn10 : '';
+      form.isbn13 = res.data.identifiers.isbn13 ? res.data.identifiers.isbn13 : '';
+      form.tags = res.data.tags.length > 0 ? res.data.tags.map(tag => tag._id).sort() : [];
+      form.description = res.data.description;
+      form.image = { status: false, imageUrl: '', loading: false };
+      const oldForm = { ...form };
+      oldForm.image = res.data.image.original;
+      oldForm.tags = [...form.tags];
+      this.setState({
+        form,
+        oldForm,
+        imageInput: '',
+        isLoading: false,
+        hasChanged: false,
+        errors: {}
       });
+    });
+    // .catch(() => {
+    //   this.props.history.push('/404');
+    // });
   };
   changeInputHandler = e => {
     const currentState = this.state;
@@ -108,13 +108,24 @@ class EditBook extends Component {
       form.googleId !== oldForm.googleId ||
       form.isbn10 !== oldForm.isbn10 ||
       form.isbn13 !== oldForm.isbn13 ||
-      form.tags !== oldForm.tags ||
+      form.tags.join('') !== oldForm.tags.join('') ||
       form.description !== oldForm.description
     ) {
       this.setState({ hasChanged: true, hasSaved: false });
     } else if (!this.state.form.image.status) {
       this.setState({ hasChanged: false, errors: {} });
     }
+  };
+  toggleSelectTagHandler = tagId => {
+    let currentState = this.state;
+    if (currentState.form.tags.includes(tagId)) {
+      const deleteIndex = currentState.form.tags.indexOf(tagId);
+      currentState.form.tags.splice(deleteIndex, 1);
+    } else {
+      currentState.form.tags.push(tagId);
+    }
+    currentState.form.tags = currentState.form.tags.sort();
+    this.setState(currentState, this.checkIfChanged);
   };
   validateImageUrlHandler = e => {
     const imageUrl = e.target.value;
@@ -283,14 +294,23 @@ class EditBook extends Component {
                 />
               </div>
             </div>
-            <TextInputField
+            <div className="ui field">
+              <label>Tags</label>
+              <div className="ui segment">
+                <Tags
+                  selectedTags={this.state.form.tags}
+                  toggleSelectTagHandler={this.toggleSelectTagHandler}
+                />
+              </div>
+            </div>
+            {/* <TextInputField
               name="tags"
               label="Tags"
               maxLength="200"
               value={this.state.form.tags}
               onChange={this.changeInputHandler}
               error={this.state.errors.tags}
-            />
+            /> */}
             <div className={['ui field', this.state.errors.description ? 'error' : ''].join(' ')}>
               <label htmlFor="description">* Description</label>
               <textarea

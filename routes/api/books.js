@@ -453,6 +453,7 @@ router.put(
       book.googleId = req.body.googleId;
       book.isbn10 = req.body.isbn10;
       book.isbn13 = req.body.isbn13;
+      book.tags = req.body.tags;
       book.description = req.body.description;
 
       book.authors = [];
@@ -471,24 +472,6 @@ router.put(
           }
         });
       });
-
-      if (req.body.tags) {
-        await asyncForEach(req.body.tags.split(', '), async tagName => {
-          await Tag.findOne({ name: tagName }).then(async foundTag => {
-            if (!foundTag) {
-              await Tag.create({ name: tagName })
-                .then(createdTag => {
-                  book.tags.push(createdTag._id);
-                })
-                .catch(() => {
-                  errors.tags = 'Unable to create tag.';
-                });
-            } else {
-              book.tags.push(foundTag._id);
-            }
-          });
-        });
-      }
 
       if (!isEmpty(errors)) return res.json(errors);
       if (req.body.image) {

@@ -9,8 +9,9 @@ const authors = require('./routes/api/authors');
 const books = require('./routes/api/books');
 const profile = require('./routes/api/profile');
 const reviews = require('./routes/api/reviews');
-const users = require('./routes/api/users');
 const search = require('./routes/api/search');
+const tags = require('./routes/api/tags');
+const users = require('./routes/api/users');
 
 // run express as app
 const app = express();
@@ -46,8 +47,9 @@ app.use('/api/authors', authors);
 app.use('/api/books', books);
 app.use('/api/profile', profile);
 app.use('/api/books/:bookId/reviews', reviews);
-app.use('/api/users', users);
 app.use('/api/search', search);
+app.use('/api/tags', tags);
+app.use('/api/users', users);
 
 const port = process.env.PORT || 5000;
 

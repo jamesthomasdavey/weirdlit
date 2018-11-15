@@ -1,5 +1,6 @@
 // package
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -32,6 +33,16 @@ class Reviews extends Component {
         return new Date(a.date) - new Date(b.date);
       })
       .reverse();
+
+    let hasReviewed;
+
+    if (this.props.auth.isAuthenticated && this.state.reviews.length > 0) {
+      this.state.reviews.forEach(review => {
+        if (review.creator._id === this.props.auth.user._id) {
+          hasReviewed = true;
+        }
+      });
+    }
 
     const numberOfReviewsToDisplay = 5;
 
@@ -85,12 +96,17 @@ class Reviews extends Component {
           {!this.state.isLoading && this.state.reviews.length > 0 && (
             <div className="ui divided items">{reviewsContent}</div>
           )}
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          {!this.state.isLoading && !hasReviewed && this.state.reviews.length > 0 && (
+            <Link to={`/books/${this.props.bookId}/reviews/new`} className="ui tiny primary button">
+              Write a Review
+            </Link>
+          )}
           {this.state.reviews.length > numberOfReviewsToDisplay && (
-            <div style={{ textAlign: 'center' }}>
-              <Link to={`/books/${this.props.bookId}/reviews`} className="ui tiny button">
-                View All
-              </Link>
-            </div>
+            <Link to={`/books/${this.props.bookId}/reviews`} className="ui tiny button">
+              View All
+            </Link>
           )}
         </div>
       </Fragment>
@@ -100,7 +116,15 @@ class Reviews extends Component {
 
 Reviews.propTypes = {
   bookId: PropTypes.string.isRequired,
-  bookTitle: PropTypes.string.isRequired
+  bookTitle: PropTypes.string.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
-export default Reviews;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  {}
+)(Reviews);
