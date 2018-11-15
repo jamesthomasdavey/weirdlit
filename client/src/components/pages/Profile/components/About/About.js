@@ -23,14 +23,16 @@ const About = props => {
         <h5>Favorite Book</h5>
         <div className="ui items">
           <div className="ui item">
-            <div className="ui small image">
+            <Link
+              to={`/books/${props.favoriteBookObj._id}`}
+              className={['ui small image', classes.book__image].join(' ')}
+            >
               <img
                 src={props.favoriteBookObj.image.largeThumbnail}
                 className="book__image"
                 alt={props.favoriteBookObj.title}
-                onClick={() => props.history.push(`/books/${props.favoriteBookObj._id}`)}
               />
-            </div>
+            </Link>
             <div className="content">
               <div className="header">{props.favoriteBookObj.title}</div>
               <div className="meta">{props.favoriteBookObj.publishedDate}</div>

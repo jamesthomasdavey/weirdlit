@@ -1,0 +1,9 @@
+.tag {
+  display: inline-block;
+  margin: 4px !important;
+  user-select: none;
+}
+
+.tag:hover {
+  cursor: pointer;
+}

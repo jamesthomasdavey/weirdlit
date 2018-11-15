@@ -3,10 +3,8 @@
   background: blue;
 }
 
-.image__container {
-  width: 150px;
-  height: 150px;
-  background: yellow;
+.book__image {
+  display: block;
 }
 
 .social__icon {
