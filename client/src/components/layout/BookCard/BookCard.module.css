@@ -60,6 +60,7 @@
   display: none;
   opacity: 0;
   animation: fadeTitleText 0.5s ease;
+  color: #373737;
 }
 
 .book__cover-title-text-hover {

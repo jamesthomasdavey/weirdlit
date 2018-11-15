@@ -39,7 +39,7 @@ const About = props => {
                   <AuthorLinks authors={props.favoriteBookObj.authors} />
                 )}
               </div>
-              <Link to={`/books/${props.favoriteBookObj._id}`} className="button ui">
+              <Link to={`/books/${props.favoriteBookObj._id}`} className="tiny primary button ui">
                 View
               </Link>
             </div>

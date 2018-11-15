@@ -77,9 +77,17 @@ router.post('/', verifyBookId, passport.authenticate('jwt', { session: false }),
         });
         await book.save();
       });
-      await Profile.findOne({ user: req.user._id }).then(async user => {
-        user.booksRead.push(req.params.bookId);
-        await user.save();
+      await Profile.findOne({ user: req.user._id }).then(async profile => {
+        let hasRead;
+        profile.booksRead.forEach(bookRead => {
+          if (bookRead.toString() === req.params.bookId) {
+            hasRead = true;
+          }
+        });
+        if (!hasRead) {
+          profile.booksRead.push(req.params.bookId);
+          await profile.save();
+        }
       });
       // send new review data
       res.json(newReview);

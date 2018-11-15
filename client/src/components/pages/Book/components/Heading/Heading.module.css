@@ -80,7 +80,6 @@
 
 .info__wrapper {
   width: 100%;
-  /* min-height: 400px; */
   padding: 24px 12px;
   display: block;
 }
@@ -114,14 +113,16 @@
 .info__book-title {
   font-size: 42px;
   line-height: 44px;
-  margin-bottom: 16px;
-  color: white;
+  margin-bottom: 8px;
+  color: #fff;
 }
 
 .info__book-subtitle {
-  font-size: 24px;
-  line-height: 26px;
-  color: #bbb;
+  font-size: 18px;
+  line-height: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #fff;
 }
 
 .info__authors {
