@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 // component
 import Tag from './Tag/Tag';
+import Spinner from './../../../../layout/Spinner/Spinner';
 
 // css
 import classes from './Tags.module.css';
@@ -12,11 +13,7 @@ import classes from './Tags.module.css';
 class Tags extends Component {
   state = {
     allTags: [],
-    propsLoaded: false,
     allTagsLoaded: false
-  };
-  componentWillReceiveProps = () => {
-    this.setState({ propsLoaded: true });
   };
   componentDidMount = () => {
     axios.get('/api/tags').then(res => {
@@ -27,7 +24,7 @@ class Tags extends Component {
     });
   };
   render() {
-    if (this.state.propsLoaded && this.state.allTagsLoaded) {
+    if (this.state.allTagsLoaded) {
       const tags = this.state.allTags.map(tag => {
         return (
           <Tag
@@ -41,7 +38,7 @@ class Tags extends Component {
       });
       return <div className={classes.tags}>{tags}</div>;
     } else {
-      return <div />;
+      return <Spinner />;
     }
   }
 }

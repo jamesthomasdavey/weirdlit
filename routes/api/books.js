@@ -377,7 +377,7 @@ router.get('/:bookId', (req, res) => {
   const errors = [];
   Book.findById(req.params.bookId)
     .populate('authors', 'name')
-    // .populate('tags', 'name')
+    .populate('tags', 'name')
     .then(book => {
       if (!book) {
         errors.push('Unable to find book.');

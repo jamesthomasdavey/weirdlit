@@ -34,14 +34,12 @@ class Review extends Component {
 
     return (
       <div className="ui item">
-        <div className="ui tiny image">
-          <img
-            alt="cover"
-            className="book__image"
-            src={this.props.book.image.mediumThumbnail}
-            onClick={() => this.props.history.push(`/books/${this.props.book._id}`)}
-          />
-        </div>
+        <Link
+          to={`/books/${this.props.book._id}`}
+          className={['ui tiny image', classes.review__image].join(' ')}
+        >
+          <img alt="cover" className="book__image" src={this.props.book.image.mediumThumbnail} />
+        </Link>
         <div className="content">
           <div className="header">
             <Link to={`/books/${this.props.book._id}/reviews/${this.props._id}`}>

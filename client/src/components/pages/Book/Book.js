@@ -16,15 +16,15 @@ class Book extends Component {
       title: '',
       subtitle: '',
       authors: [],
-      pageCount: '',
       publishedDate: '',
+      pageCount: '',
       identifiers: {
         googleId: '',
         isbn10: '',
         isbn13: ''
       },
-      description: '',
-      tags: []
+      tags: [],
+      description: ''
     },
     isLoading: true
   };

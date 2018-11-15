@@ -10,6 +10,7 @@ import TextInputField from './../../layout/TextInputField/TextInputField';
 import TextAreaInputField from './../../layout/TextAreaInputField/TextAreaInputField';
 import IdentifierInputField from './components/IdentifierInputField/IdentifierInputField';
 import SuccessCard from './components/SuccessCard/SuccessCard';
+import Tags from './components/Tags/Tags';
 
 // validation
 import isEmpty from './../../../validation/is-empty';
@@ -27,7 +28,7 @@ class AddCustomBook extends Component {
       pageCount: '',
       isbn10: '',
       isbn13: '',
-      tags: '',
+      tags: [],
       description: '',
       image: {
         status: false,
@@ -40,15 +41,21 @@ class AddCustomBook extends Component {
     hasSubmitted: false,
     errors: {}
   };
-  componentDidMount = () => {
-    if (this.props.match.params.bookId) {
-      this.updateFromBook(this.props.match.params.bookId);
-    }
-  };
   changeInputHandler = e => {
     const currentState = this.state;
     currentState.form[e.target.name] = e.target.value;
-    this.setState(currentState, this.checkIfChanged);
+    this.setState(currentState);
+  };
+  toggleSelectTagHandler = tagId => {
+    let currentState = this.state;
+    if (currentState.form.tags.includes(tagId)) {
+      const deleteIndex = currentState.form.tags.indexOf(tagId);
+      currentState.form.tags.splice(deleteIndex, 1);
+    } else {
+      currentState.form.tags.push(tagId);
+    }
+    currentState.form.tags = currentState.form.tags.sort();
+    this.setState(currentState);
   };
   validateImageUrlHandler = e => {
     const imageUrl = e.target.value;
@@ -208,14 +215,15 @@ class AddCustomBook extends Component {
                   />
                 </div>
               </div>
-              <TextInputField
-                name="tags"
-                label="Tags"
-                maxLength="200"
-                value={this.state.form.tags}
-                onChange={this.changeInputHandler}
-                error={this.state.errors.tags}
-              />
+              <div className="ui field">
+                <label>Tags</label>
+                <div className="ui segment">
+                  <Tags
+                    selectedTags={this.state.form.tags}
+                    toggleSelectTagHandler={this.toggleSelectTagHandler}
+                  />
+                </div>
+              </div>
               <TextAreaInputField
                 name="description"
                 placeholder={`Write a description for ${

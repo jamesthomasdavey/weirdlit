@@ -1,3 +1,7 @@
+.review__image {
+  display: block;
+}
+
 .last__updated {
   color: #ccc;
   float: left;

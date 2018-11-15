@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import ReadButton from './ReadButton/ReadButton';
 import Description from './Description/Description';
 import AuthorLinks from './../../../../layout/AuthorLinks/AuthorLinks';
+import Tags from './Tags/Tags';
 
 // css
 import classes from './Heading.module.css';
@@ -50,6 +51,9 @@ const Heading = props => {
                 </div>
                 <div className={classes['info__published-date']}>
                   {new Date(props.book.publishedDate).getFullYear()}
+                </div>
+                <div className={classes.info__tags}>
+                  <Tags tags={props.book.tags} />
                 </div>
                 <ReadButton bookId={props.book._id} />
               </div>
