@@ -265,6 +265,9 @@ class EditBook extends Component {
                   addAuthorHandler={this.addAuthorHandler}
                   alreadyAddedAuthors={this.state.form.authors}
                 />
+                {this.state.errors.authors && (
+                  <div className="ui pointing basic label">{this.state.errors.authors}</div>
+                )}
               </div>
             </div>
             <TextInputField

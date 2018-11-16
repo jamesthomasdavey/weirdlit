@@ -11,7 +11,8 @@ const ProfileSchema = new Schema({
     max: 40
   },
   favoriteBook: {
-    type: String
+    type: Schema.Types.ObjectId,
+    ref: 'books'
   },
   location: {
     type: String

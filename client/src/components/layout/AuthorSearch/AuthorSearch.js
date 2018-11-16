@@ -17,7 +17,7 @@ class AuthorSearch extends Component {
     this.setState({ searchQuery }, () => {
       if (searchQuery) {
         this.setState({ isSearching: true }, () => {
-          axios.post('/api/search/authors', { searchQuery: this.state.searchQuery }).then(res => {
+          axios.post('/api/search/addAuthor', { searchQuery: this.state.searchQuery }).then(res => {
             let searchResults = [];
             if (res.data.length > 0) {
               const alreadyAddedNames = this.props.alreadyAddedAuthors.map(author => author.name);

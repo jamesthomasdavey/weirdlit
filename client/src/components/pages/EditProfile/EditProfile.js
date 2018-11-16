@@ -12,12 +12,14 @@ import isEmpty from '../../../validation/is-empty';
 import TextInputField from '../../layout/TextInputField/TextInputField';
 import TextAreaInputField from '../../layout/TextAreaInputField/TextAreaInputField';
 import SocialInputField from './components/SocialInputField/SocialInputField';
+import FavoriteBook from './components/FavoriteBook/FavoriteBook';
+import FavoriteBookSearch from './components/FavoriteBookSearch/FavoriteBookSearch';
 
 class EditProfile extends Component {
   state = {
     form: {
       handle: '',
-      favoriteBook: '',
+      favoriteBook: {},
       location: '',
       bio: '',
       goodreads: '',
@@ -27,7 +29,7 @@ class EditProfile extends Component {
     },
     oldForm: {
       handle: '',
-      favoriteBook: '',
+      favoriteBook: {},
       location: '',
       bio: '',
       goodreads: '',
@@ -35,6 +37,7 @@ class EditProfile extends Component {
       facebook: '',
       instagram: ''
     },
+    favoriteBookInput: '',
     isLoading: true,
     hasChanged: false,
     errors: {}
@@ -65,23 +68,33 @@ class EditProfile extends Component {
   changeInputHandler = e => {
     const currentState = this.state;
     currentState.form[e.target.name] = e.target.value;
+    this.setState(currentState, this.checkIfChanged);
+  };
+  checkIfChanged = () => {
     if (
-      currentState.form.handle !== currentState.oldForm.handle ||
-      currentState.form.favoriteBook !== currentState.oldForm.favoriteBook ||
-      currentState.form.location !== currentState.oldForm.location ||
-      currentState.form.bio !== currentState.oldForm.bio ||
-      currentState.form.goodreads !== currentState.oldForm.goodreads ||
-      currentState.form.twitter !== currentState.oldForm.twitter ||
-      currentState.form.facebook !== currentState.oldForm.facebook ||
-      currentState.form.instagram !== currentState.oldForm.instagram
+      this.state.form.handle !== this.state.oldForm.handle ||
+      this.state.form.favoriteBook !== this.state.oldForm.favoriteBook ||
+      this.state.form.location !== this.state.oldForm.location ||
+      this.state.form.bio !== this.state.oldForm.bio ||
+      this.state.form.goodreads !== this.state.oldForm.goodreads ||
+      this.state.form.twitter !== this.state.oldForm.twitter ||
+      this.state.form.facebook !== this.state.oldForm.facebook ||
+      this.state.form.instagram !== this.state.oldForm.instagram
     ) {
-      currentState.hasChanged = true;
-      currentState.hasSaved = false;
+      this.setState({ hasChanged: true, hasSaved: false });
     } else {
-      currentState.hasChanged = false;
-      currentState.errors = {};
+      this.setState({ hasChanged: false, errors: {} });
     }
-    this.setState(currentState);
+  };
+  addFavoriteBookHandler = bookObj => {
+    const currentState = this.state;
+    currentState.form.favoriteBook = bookObj;
+    this.setState(currentState, this.checkIfChanged);
+  };
+  removeFavoriteBookHandler = () => {
+    const currentState = this.state;
+    currentState.form.favoriteBook = {};
+    this.setState(currentState, this.checkIfChanged);
   };
   formSubmitHandler = e => {
     e.preventDefault();
@@ -126,14 +139,24 @@ class EditProfile extends Component {
                     : 'A unique handle for your profile URL.'
                 }
               />
-              <TextInputField
-                name="favoriteBook"
-                label="Favorite Book"
-                maxLength="200"
-                value={this.state.form.favoriteBook}
-                onChange={this.changeInputHandler}
-                error={this.state.errors.favoriteBook}
-              />
+              <div className="ui field">
+                <label>Favorite Book</label>
+                {!isEmpty(this.state.form.favoriteBook) ? (
+                  <FavoriteBook
+                    removeFavoriteBookHandler={this.removeFavoriteBookHandler}
+                    title={this.state.form.favoriteBook.title}
+                  />
+                ) : (
+                  <Fragment>
+                    <FavoriteBookSearch addFavoriteBookHandler={this.addFavoriteBookHandler} />
+                    {this.state.errors.favoriteBook && (
+                      <div className="ui pointing basic label">
+                        {this.state.errors.favoriteBook}
+                      </div>
+                    )}
+                  </Fragment>
+                )}
+              </div>
               <TextInputField
                 name="location"
                 label="Location"

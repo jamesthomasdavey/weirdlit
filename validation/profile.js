@@ -5,7 +5,6 @@ module.exports = reqBody => {
   let errors = {};
 
   reqBody.handle = !isEmpty(reqBody.handle) ? reqBody.handle : '';
-  reqBody.favoriteBook = !isEmpty(reqBody.favoriteBook) ? reqBody.favoriteBook : '';
   reqBody.location = !isEmpty(reqBody.location) ? reqBody.location : '';
   reqBody.bio = !isEmpty(reqBody.bio) ? reqBody.bio : '';
   reqBody.goodreads = !isEmpty(reqBody.goodreads) ? reqBody.goodreads : '';
@@ -29,7 +28,7 @@ module.exports = reqBody => {
 
   if (
     !Validator.isEmpty(reqBody.favoriteBook) &&
-    !Validator.isLength(reqBody.favoriteBook, { max: 200 })
+    !Validator.isLength(reqBody.favoriteBook.title, { max: 200 })
   ) {
     errors.favoriteBook = 'Favorite Book must be 200 characters or less';
   }

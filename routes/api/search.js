@@ -55,7 +55,7 @@ router.post('/suggest', (req, res) => {
 // @route     /api/search/authors
 // @desc      author suggestions
 // @access    public
-router.post('/authors', (req, res) => {
+router.post('/addAuthor', (req, res) => {
   Author.find({ $text: { $search: req.body.searchQuery } }).then(async authors => {
     let authorList = [];
     await asyncForEach(authors, async author => {
@@ -71,6 +71,25 @@ router.post('/authors', (req, res) => {
     }));
     res.json(authorsResults);
   });
+});
+
+// @route     /api/search/books
+// @desc      book suggestions
+// @access    public
+router.post('/favoriteBook', (req, res) => {
+  Book.find({ $text: { $search: req.body.searchQuery }, isApproved: true, isRejected: false })
+    .limit(5)
+    .populate('authors')
+    .then(books => {
+      const booksResults = books.map(book => ({
+        title: book.title,
+        description: arrayToSentence(book.authors.map(author => author.name), {
+          lastSeparator: ' & '
+        }),
+        link: `/books/${book._id}`
+      }));
+      res.json(booksResults);
+    });
 });
 
 module.exports = router;
