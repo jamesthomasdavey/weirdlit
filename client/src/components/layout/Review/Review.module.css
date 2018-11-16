@@ -1,0 +1,20 @@
+.book-image {
+  display: block;
+}
+
+.last-updated {
+  color: #ccc;
+  float: left;
+}
+
+.show__toggle {
+  color: #5f95cd;
+  float: right;
+  border: none;
+  background: transparent;
+}
+
+.show__toggle:hover {
+  color: #4585c8;
+  cursor: pointer;
+}

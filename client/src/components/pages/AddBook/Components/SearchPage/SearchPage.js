@@ -1,5 +1,5 @@
 // package
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -59,7 +59,7 @@ class SearchPage extends Component {
         </h5>
       );
     } else if (this.state.searchResults.loaded && this.state.searchResults.results.length > 0) {
-      searchResults = this.state.searchResults.results.map(book => {
+      const searchResultsList = this.state.searchResults.results.map(book => {
         return (
           <div className="item book__item" key={book.googleId}>
             <div className="ui small image">
@@ -88,6 +88,16 @@ class SearchPage extends Component {
           </div>
         );
       });
+
+      searchResults = (
+        <Fragment>
+          {searchResultsList}
+          <h5 style={{ textAlign: 'center', padding: '2rem' }}>
+            Can't find what you're looking for?{' '}
+            <Link to="/books/add/custom">Add a custom book here.</Link>
+          </h5>
+        </Fragment>
+      );
     } else if (!this.state.searchResults.loaded) {
       searchResults = (
         <h5 style={{ textAlign: 'center', padding: '2rem' }}>

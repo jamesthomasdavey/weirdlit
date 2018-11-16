@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 
 // component
-import Review from './Review/Review';
+import Review from './../../../../layout/Review/Review';
 
 class Reviews extends Component {
   state = {
@@ -46,15 +46,24 @@ class Reviews extends Component {
         return (
           <Review
             key={review._id}
-            _id={review._id}
+            review={review}
             book={review.book}
-            headline={review.headline}
-            rating={review.rating}
-            text={review.text}
-            date={review.date}
-            lastUpdated={review.lastUpdated}
-            history={this.props.history}
+            showBookAuthors
+            showBookInfo
+            showReviewHeadlineAsLink
+            showReviewSocial
           />
+          // <Review
+          //   key={review._id}
+          //   _id={review._id}
+          //   book={review.book}
+          //   headline={review.headline}
+          //   rating={review.rating}
+          //   text={review.text}
+          //   date={review.date}
+          //   lastUpdated={review.lastUpdated}
+          //   history={this.props.history}
+          // />
         );
       });
     }

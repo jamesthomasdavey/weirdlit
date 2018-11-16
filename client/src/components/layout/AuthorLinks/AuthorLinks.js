@@ -42,7 +42,11 @@ const AuthorLinks = props => {
 
 AuthorLinks.propTypes = {
   authors: PropTypes.array.isRequired,
-  inverted: PropTypes.bool
+  inverted: PropTypes.bool.isRequired
+};
+
+AuthorLinks.defaultProps = {
+  inverted: false
 };
 
 export default AuthorLinks;
