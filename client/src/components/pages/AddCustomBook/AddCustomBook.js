@@ -178,8 +178,8 @@ class AddCustomBook extends Component {
                 onChange={this.changeInputHandler}
                 error={this.state.errors.subtitle}
               />
-              <div className="ui field">
-                <label>Authors</label>
+              <div className={['ui field', this.state.errors.authors && 'error'].join(' ')}>
+                <label>* Authors</label>
                 <div className="ui segment">
                   <Authors
                     names={this.state.form.authors.map(author => author.name)}
@@ -189,16 +189,11 @@ class AddCustomBook extends Component {
                     addAuthorHandler={this.addAuthorHandler}
                     alreadyAddedAuthors={this.state.form.authors}
                   />
+                  {this.state.errors.authors && (
+                    <div className="ui pointing basic label">{this.state.errors.authors}</div>
+                  )}
                 </div>
               </div>
-              {/* <TextInputField
-                name="authors"
-                label="* Authors"
-                value={this.state.form.authors}
-                onChange={this.changeInputHandler}
-                error={this.state.errors.authors}
-                info="Please list all authors, separated by commas."
-              /> */}
               <TextInputField
                 name="publishedDate"
                 type="date"

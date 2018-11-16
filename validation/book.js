@@ -6,7 +6,6 @@ module.exports = reqBody => {
 
   reqBody.title = !isEmpty(reqBody.title) ? reqBody.title : '';
   reqBody.subtitle = !isEmpty(reqBody.subtitle) ? reqBody.subtitle : '';
-  reqBody.authors = !isEmpty(reqBody.authors) ? reqBody.authors : '';
   reqBody.pageCount = !isEmpty(reqBody.pageCount) ? reqBody.pageCount : '';
   reqBody.googleId = !isEmpty(reqBody.googleId) ? reqBody.googleId : '';
   reqBody.isbn10 = !isEmpty(reqBody.isbn10) ? reqBody.isbn10 : '';
@@ -24,7 +23,7 @@ module.exports = reqBody => {
     errors.subtitle = 'Subtitle must be under 75 characters';
   }
 
-  if (Validator.isEmpty(reqBody.authors)) {
+  if (reqBody.authors.length === 0 || typeof authors === 'string') {
     errors.authors = 'Authors field is required';
   }
 

@@ -65,11 +65,10 @@ router.post('/authors', (req, res) => {
         }
       });
     });
-    const authorsResults = authorList
-      .map(author => ({
-        title: author.name,
-        _id: author._id
-      }))
+    const authorsResults = authorList.map(author => ({
+      title: author.name,
+      _id: author._id
+    }));
     res.json(authorsResults);
   });
 });

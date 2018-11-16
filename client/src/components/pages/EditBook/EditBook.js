@@ -255,7 +255,7 @@ class EditBook extends Component {
               error={this.state.errors.subtitle}
             />
             <div className="ui field">
-              <label>Authors</label>
+              <label>* Authors</label>
               <div className="ui segment">
                 <Authors
                   names={this.state.form.authors.map(author => author.name)}

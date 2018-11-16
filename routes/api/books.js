@@ -308,43 +308,24 @@ router.post('/custom', passport.authenticate('jwt', { session: false }), async (
     errors.publishedDate = 'Publication date is required';
   }
   if (!isEmpty(errors)) return res.json({ errors });
-  console.log('1');
+
   authors = [];
-  await asyncForEach(req.body.authors.split(', '), async authorName => {
-    await Author.findOne({ name: authorName }).then(async foundAuthor => {
-      if (!foundAuthor) {
-        await Author.create({ name: authorName })
-          .then(createdAuthor => {
+  await asyncForEach(req.body.authors, async author => {
+    if (author._id) {
+      authors.push(author._id);
+    } else {
+      await Author.findOne({ name: author.name }).then(async foundAuthor => {
+        if (!foundAuthor) {
+          await Author.create({ name: author.name }).then(createdAuthor => {
             authors.push(createdAuthor._id);
-          })
-          .catch(() => {
-            errors.authors = 'Unable to create author.';
           });
-      } else {
-        authors.push(foundAuthor._id);
-      }
-    });
-  });
-  console.log('2');
-  const tags = [];
-  if (req.body.tags) {
-    await asyncForEach(req.body.tags.split(', '), async tagName => {
-      await Tag.findOne({ name: tagName }).then(async foundTag => {
-        if (!foundTag) {
-          await Tag.create({ name: tagName })
-            .then(createdTag => {
-              tags.push(createdTag._id);
-            })
-            .catch(() => {
-              errors.tags = 'Unable to create tag.';
-            });
         } else {
-          tags.push(foundTag._id);
+          authors.push(foundAuthor._id);
         }
       });
-    });
-  }
-  console.log('3');
+    }
+  });
+
   imgur.upload(req.body.image, (err, imgurImage) => {
     if (err) errors.image = 'Unable to upload image. Please try again using a different image URL.';
     if (!isEmpty(errors)) return res.json({ errors });
@@ -359,7 +340,7 @@ router.post('/custom', passport.authenticate('jwt', { session: false }), async (
         isbn10: req.body.isbn10,
         isbn13: req.body.isbn13
       },
-      tags,
+      tags: req.body.tags,
       description: req.body.description,
       image: imageLinks,
       creator: req.user._id
@@ -457,20 +438,20 @@ router.put(
       book.description = req.body.description;
 
       book.authors = [];
-      await asyncForEach(req.body.authors.split(', '), async authorName => {
-        await Author.findOne({ name: authorName }).then(async foundAuthor => {
-          if (!foundAuthor) {
-            await Author.create({ name: authorName })
-              .then(createdAuthor => {
+      await asyncForEach(req.body.authors, async author => {
+        if (author._id) {
+          book.authors.push(author._id);
+        } else {
+          await Author.findOne({ name: author.name }).then(async foundAuthor => {
+            if (!foundAuthor) {
+              await Author.create({ name: author.name }).then(createdAuthor => {
                 book.authors.push(createdAuthor._id);
-              })
-              .catch(() => {
-                errors.authors = 'Unable to create author.';
               });
-          } else {
-            book.authors.push(foundAuthor._id);
-          }
-        });
+            } else {
+              book.authors.push(foundAuthor._id);
+            }
+          });
+        }
       });
 
       if (!isEmpty(errors)) return res.json(errors);
