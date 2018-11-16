@@ -20,7 +20,7 @@ const About = props => {
     favoriteBook = (
       <Fragment>
         <h5>Favorite Book</h5>
-        <span>{props.favoriteBook}</span>
+        <span>{props.favoriteBook.title}</span>
       </Fragment>
     );
   }

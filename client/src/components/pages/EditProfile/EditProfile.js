@@ -112,7 +112,6 @@ class EditProfile extends Component {
   };
   render() {
     document.title = 'Edit Profile | WeirdLit';
-
     return (
       <Fragment>
         <div className="ui text container">
