@@ -63,13 +63,13 @@ class LikeButton extends Component {
               'ui tiny button',
               classes.uiButton,
               this.state.isLoading && 'loading',
-              this.state.hasLiked ? 'active grey' : ''
+              this.state.hasLiked ? 'active' : ''
             ].join(' ')}
             onClick={this.toggleLikeReviewHandler}
           >
             <i className={['thumbs up icon', classes.icon].join(' ')} />
           </div>
-          <span className="ui basic label">{this.state.likes}</span>
+          <span className="ui label">{this.state.likes}</span>
         </div>
       );
     } else {

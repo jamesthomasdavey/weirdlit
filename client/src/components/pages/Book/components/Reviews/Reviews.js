@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 
 // component
-import Review from './Review/Review';
+import Review from './../../../../layout/Review/Review';
 
 class Reviews extends Component {
   state = {
@@ -16,7 +16,7 @@ class Reviews extends Component {
   };
   componentDidMount = () => {
     axios
-      .get(`/api/books/${this.props.bookId}/reviews`)
+      .get(`/api/books/${this.props.book._id}/reviews`)
       .then(res => {
         this.setState({ reviews: res.data, isLoading: false, errors: {} });
       })
@@ -57,13 +57,11 @@ class Reviews extends Component {
         return (
           <Review
             key={review._id}
-            headline={review.headline}
-            rating={review.rating}
-            text={review.text}
-            date={review.date}
-            lastUpdated={review.lastUpdated}
-            creator={review.creator}
-            history={this.props.history}
+            review={review}
+            book={this.props.book}
+            showReviewHeadlineAsLink
+            showReviewCreator
+            showReviewSocial
           />
         );
       });
@@ -73,7 +71,7 @@ class Reviews extends Component {
       <Fragment>
         <h5 className="ui horizontal divider header">
           <i className="align left icon" />
-          Reviews for {this.props.bookTitle}
+          Reviews for {this.props.book.title}
         </h5>
         <div
           className={['ui raised segment', this.state.isLoading ? 'loading' : ''].join(' ')}
@@ -89,8 +87,8 @@ class Reviews extends Component {
           )}
           {!this.state.isLoading && this.state.reviews.length === 0 && (
             <h5 style={{ textAlign: 'center' }}>
-              Nobody has written any reviews for {this.props.bookTitle}.{' '}
-              <Link to={`/books/${this.props.bookId}/reviews/new`}>Be the first!</Link>
+              Nobody has written any reviews for {this.props.book.title}.{' '}
+              <Link to={`/books/${this.props.book._id}/reviews/new`}>Be the first!</Link>
             </h5>
           )}
           {!this.state.isLoading && this.state.reviews.length > 0 && (
@@ -99,12 +97,15 @@ class Reviews extends Component {
         </div>
         <div style={{ textAlign: 'center' }}>
           {!this.state.isLoading && !hasReviewed && this.state.reviews.length > 0 && (
-            <Link to={`/books/${this.props.bookId}/reviews/new`} className="ui tiny primary button">
+            <Link
+              to={`/books/${this.props.book._id}/reviews/new`}
+              className="ui tiny primary button"
+            >
               Write a Review
             </Link>
           )}
           {this.state.reviews.length > numberOfReviewsToDisplay && (
-            <Link to={`/books/${this.props.bookId}/reviews`} className="ui tiny button">
+            <Link to={`/books/${this.props.book._id}/reviews`} className="ui tiny button">
               View All
             </Link>
           )}
@@ -115,8 +116,7 @@ class Reviews extends Component {
 }
 
 Reviews.propTypes = {
-  bookId: PropTypes.string.isRequired,
-  bookTitle: PropTypes.string.isRequired,
+  book: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired
 };
 

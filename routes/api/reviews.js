@@ -27,6 +27,7 @@ const verifyBookId = (req, res, next) => {
 router.get('/', verifyBookId, (req, res) => {
   Review.find({ book: req.params.bookId })
     .populate('creator', 'name')
+    .populate('book', '_id')
     .then(reviews => {
       if (!reviews || reviews.length === 0) return res.json([]);
       res.json(reviews);

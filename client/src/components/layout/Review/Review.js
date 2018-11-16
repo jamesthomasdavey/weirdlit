@@ -125,10 +125,12 @@ class Review extends Component {
         {bookImage}
         <div className="content">
           <div className="header">{reviewHeadline}</div>
-          <div className="meta">
-            <span>{bookTitle}</span>
-            <span>{bookAuthors}</span>
-          </div>
+          {(this.props.showBookInfo || this.props.showBookAuthors) && (
+            <div className="meta">
+              <span>{bookTitle}</span>
+              <span>{bookAuthors}</span>
+            </div>
+          )}
           <div className="meta">
             <span>
               Posted {timeAgo.ago(this.props.review.date)}

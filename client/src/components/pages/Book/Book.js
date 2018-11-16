@@ -55,8 +55,7 @@ class Book extends Component {
           {!this.state.isLoading && (
             <div className="ui segment">
               <Reviews
-                bookId={this.state.book._id}
-                bookTitle={this.state.book.title}
+                book={this.state.book}
                 history={this.props.history}
               />
             </div>

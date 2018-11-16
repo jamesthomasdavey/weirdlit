@@ -53,17 +53,6 @@ class Reviews extends Component {
             showReviewHeadlineAsLink
             showReviewSocial
           />
-          // <Review
-          //   key={review._id}
-          //   _id={review._id}
-          //   book={review.book}
-          //   headline={review.headline}
-          //   rating={review.rating}
-          //   text={review.text}
-          //   date={review.date}
-          //   lastUpdated={review.lastUpdated}
-          //   history={this.props.history}
-          // />
         );
       });
     }
