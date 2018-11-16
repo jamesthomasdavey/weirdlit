@@ -6,9 +6,6 @@ import PropTypes from 'prop-types';
 // component
 import Tag from './Tag/Tag';
 
-// css
-import classes from './Tags.module.css';
-
 class Tags extends Component {
   state = {
     allTags: [],
@@ -39,7 +36,7 @@ class Tags extends Component {
           />
         );
       });
-      return <div className={classes.tags}>{tags}</div>;
+      return <div>{tags}</div>;
     } else {
       return <div />;
     }

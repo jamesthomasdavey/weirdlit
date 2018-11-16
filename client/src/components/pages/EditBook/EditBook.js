@@ -9,6 +9,8 @@ import moment from 'moment';
 import TextInputField from './../../layout/TextInputField/TextInputField';
 import IdentifierInputField from './components/IdentifierInputField/IdentifierInputField';
 import Tags from './components/Tags/Tags';
+import Authors from './../../layout/Authors/Authors';
+import AuthorSearch from './../../layout/AuthorSearch/AuthorSearch';
 
 // validation
 import isEmpty from './../../../validation/is-empty';
@@ -21,7 +23,7 @@ class EditBook extends Component {
     form: {
       title: '',
       subtitle: '',
-      authors: '',
+      authors: [],
       publishedDate: '',
       pageCount: '',
       googleId: '',
@@ -62,38 +64,56 @@ class EditBook extends Component {
     }
   };
   updateFromBook = bookId => {
-    axios.get(`/api/books/${bookId}/edit`).then(res => {
-      const form = this.state.form;
-      form.title = res.data.title;
-      form.subtitle = res.data.subtitle ? res.data.subtitle : '';
-      form.authors = res.data.authors.map(author => author.name).join(', ');
-      form.publishedDate = moment.utc(res.data.publishedDate).format('YYYY-MM-DD');
-      form.pageCount = res.data.pageCount;
-      form.googleId = res.data.identifiers.googleId ? res.data.identifiers.googleId : '';
-      form.isbn10 = res.data.identifiers.isbn10 ? res.data.identifiers.isbn10 : '';
-      form.isbn13 = res.data.identifiers.isbn13 ? res.data.identifiers.isbn13 : '';
-      form.tags = res.data.tags.length > 0 ? res.data.tags.map(tag => tag._id).sort() : [];
-      form.description = res.data.description;
-      form.image = { status: false, imageUrl: '', loading: false };
-      const oldForm = { ...form };
-      oldForm.image = res.data.image.original;
-      oldForm.tags = [...form.tags];
-      this.setState({
-        form,
-        oldForm,
-        imageInput: '',
-        isLoading: false,
-        hasChanged: false,
-        errors: {}
+    axios
+      .get(`/api/books/${bookId}/edit`)
+      .then(res => {
+        const form = this.state.form;
+        form.title = res.data.title;
+        form.subtitle = res.data.subtitle ? res.data.subtitle : '';
+        form.authors = res.data.authors;
+        form.publishedDate = moment.utc(res.data.publishedDate).format('YYYY-MM-DD');
+        form.pageCount = res.data.pageCount;
+        form.googleId = res.data.identifiers.googleId ? res.data.identifiers.googleId : '';
+        form.isbn10 = res.data.identifiers.isbn10 ? res.data.identifiers.isbn10 : '';
+        form.isbn13 = res.data.identifiers.isbn13 ? res.data.identifiers.isbn13 : '';
+        form.tags = res.data.tags.length > 0 ? res.data.tags.map(tag => tag._id).sort() : [];
+        form.description = res.data.description;
+        form.image = { status: false, imageUrl: '', loading: false };
+        const oldForm = { ...form };
+        oldForm.image = res.data.image.original;
+        oldForm.authors = [...form.authors];
+        oldForm.tags = [...form.tags];
+        this.setState({
+          form,
+          oldForm,
+          imageInput: '',
+          isLoading: false,
+          hasChanged: false,
+          errors: {}
+        });
+      })
+      .catch(() => {
+        this.props.history.push('/404');
       });
-    });
-    // .catch(() => {
-    //   this.props.history.push('/404');
-    // });
   };
   changeInputHandler = e => {
     const currentState = this.state;
     currentState.form[e.target.name] = e.target.value;
+    this.setState(currentState, this.checkIfChanged);
+  };
+  addAuthorHandler = author => {
+    const currentState = this.state;
+    const alreadyAddedNames = currentState.form.authors.map(author => author.name);
+    if (!alreadyAddedNames.includes(author)) {
+      currentState.form.authors.push(author);
+      this.setState(currentState, this.checkIfChanged);
+    }
+  };
+  removeAuthorHandler = authorName => {
+    const currentState = this.state;
+    const authorNamesList = currentState.form.authors.map(author => author.name);
+    const removeIndex = authorNamesList.indexOf(authorName);
+    currentState.form.authors.splice(removeIndex, 1);
     this.setState(currentState, this.checkIfChanged);
   };
   checkIfChanged = () => {
@@ -102,7 +122,7 @@ class EditBook extends Component {
     if (
       form.title !== oldForm.title ||
       form.subtitle !== oldForm.subtitle ||
-      form.authors !== oldForm.authors ||
+      form.authors.join('') !== oldForm.authors.join('') ||
       form.publishedDate !== oldForm.publishedDate ||
       parseInt(form.pageCount) !== parseInt(oldForm.pageCount) ||
       form.googleId !== oldForm.googleId ||
@@ -234,13 +254,19 @@ class EditBook extends Component {
               onChange={this.changeInputHandler}
               error={this.state.errors.subtitle}
             />
-            <TextInputField
-              name="authors"
-              label="* Authors"
-              value={this.state.form.authors}
-              onChange={this.changeInputHandler}
-              error={this.state.errors.authors}
-            />
+            <div className="ui field">
+              <label>Authors</label>
+              <div className="ui segment">
+                <Authors
+                  names={this.state.form.authors.map(author => author.name)}
+                  removeAuthorHandler={this.removeAuthorHandler}
+                />
+                <AuthorSearch
+                  addAuthorHandler={this.addAuthorHandler}
+                  alreadyAddedAuthors={this.state.form.authors}
+                />
+              </div>
+            </div>
             <TextInputField
               name="publishedDate"
               type="date"
@@ -303,14 +329,6 @@ class EditBook extends Component {
                 />
               </div>
             </div>
-            {/* <TextInputField
-              name="tags"
-              label="Tags"
-              maxLength="200"
-              value={this.state.form.tags}
-              onChange={this.changeInputHandler}
-              error={this.state.errors.tags}
-            /> */}
             <div className={['ui field', this.state.errors.description ? 'error' : ''].join(' ')}>
               <label htmlFor="description">* Description</label>
               <textarea

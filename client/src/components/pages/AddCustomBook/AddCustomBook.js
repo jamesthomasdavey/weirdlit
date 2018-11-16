@@ -11,6 +11,8 @@ import TextAreaInputField from './../../layout/TextAreaInputField/TextAreaInputF
 import IdentifierInputField from './components/IdentifierInputField/IdentifierInputField';
 import SuccessCard from './components/SuccessCard/SuccessCard';
 import Tags from './components/Tags/Tags';
+import Authors from './../../layout/Authors/Authors';
+import AuthorSearch from './../../layout/AuthorSearch/AuthorSearch';
 
 // validation
 import isEmpty from './../../../validation/is-empty';
@@ -23,7 +25,7 @@ class AddCustomBook extends Component {
     form: {
       title: '',
       subtitle: '',
-      authors: '',
+      authors: [],
       publishedDate: '',
       pageCount: '',
       isbn10: '',
@@ -45,6 +47,21 @@ class AddCustomBook extends Component {
     const currentState = this.state;
     currentState.form[e.target.name] = e.target.value;
     this.setState(currentState);
+  };
+  addAuthorHandler = author => {
+    const currentState = this.state;
+    const alreadyAddedNames = currentState.form.authors.map(author => author.name);
+    if (!alreadyAddedNames.includes(author)) {
+      currentState.form.authors.push(author);
+      this.setState(currentState, this.checkIfChanged);
+    }
+  };
+  removeAuthorHandler = authorName => {
+    const currentState = this.state;
+    const authorNamesList = currentState.form.authors.map(author => author.name);
+    const removeIndex = authorNamesList.indexOf(authorName);
+    currentState.form.authors.splice(removeIndex, 1);
+    this.setState(currentState, this.checkIfChanged);
   };
   toggleSelectTagHandler = tagId => {
     let currentState = this.state;
@@ -161,14 +178,27 @@ class AddCustomBook extends Component {
                 onChange={this.changeInputHandler}
                 error={this.state.errors.subtitle}
               />
-              <TextInputField
+              <div className="ui field">
+                <label>Authors</label>
+                <div className="ui segment">
+                  <Authors
+                    names={this.state.form.authors.map(author => author.name)}
+                    removeAuthorHandler={this.removeAuthorHandler}
+                  />
+                  <AuthorSearch
+                    addAuthorHandler={this.addAuthorHandler}
+                    alreadyAddedAuthors={this.state.form.authors}
+                  />
+                </div>
+              </div>
+              {/* <TextInputField
                 name="authors"
                 label="* Authors"
                 value={this.state.form.authors}
                 onChange={this.changeInputHandler}
                 error={this.state.errors.authors}
                 info="Please list all authors, separated by commas."
-              />
+              /> */}
               <TextInputField
                 name="publishedDate"
                 type="date"

@@ -52,4 +52,26 @@ router.post('/suggest', (req, res) => {
     });
 });
 
+// @route     /api/search/authors
+// @desc      author suggestions
+// @access    public
+router.post('/authors', (req, res) => {
+  Author.find({ $text: { $search: req.body.searchQuery } }).then(async authors => {
+    let authorList = [];
+    await asyncForEach(authors, async author => {
+      await Book.find({ authors: author._id, isApproved: true, isRejected: false }).then(books => {
+        if (books.length > 0) {
+          authorList.push(author);
+        }
+      });
+    });
+    const authorsResults = authorList
+      .map(author => ({
+        title: author.name,
+        _id: author._id
+      }))
+    res.json(authorsResults);
+  });
+});
+
 module.exports = router;

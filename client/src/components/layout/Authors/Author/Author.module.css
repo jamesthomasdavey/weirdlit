@@ -1,9 +1,5 @@
-.tag {
+.author {
   display: inline-block;
   margin: 0 6px 6px 0 !important;
   user-select: none;
-}
-
-.tag:hover {
-  cursor: pointer;
 }
