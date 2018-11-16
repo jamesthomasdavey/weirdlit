@@ -389,6 +389,13 @@ class EditBook extends Component {
             >
               {this.state.hasSaved ? 'Back to Book' : 'Cancel'}
             </Link>
+            <Link
+              to={`/books/${this.props.match.params.bookId}/delete`}
+              style={{ marginLeft: '1rem' }}
+              className="ui negative button"
+            >
+              Delete {this.state.form.title}
+            </Link>
           </form>
         </div>
       </div>

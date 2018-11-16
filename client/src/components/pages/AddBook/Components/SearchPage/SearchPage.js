@@ -1,5 +1,6 @@
 // package
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import arrayToSentence from 'array-to-sentence';
@@ -53,7 +54,8 @@ class SearchPage extends Component {
     if (this.state.searchResults.loaded && this.state.searchResults.results.length === 0) {
       searchResults = (
         <h5 style={{ textAlign: 'center', padding: '2rem' }}>
-          No results found. Please try adding more author or title details.
+          No results found. Please try adding more author or title details, or{' '}
+          <Link to="/books/add/custom">add a custom book here.</Link>
         </h5>
       );
     } else if (this.state.searchResults.loaded && this.state.searchResults.results.length > 0) {
@@ -86,6 +88,12 @@ class SearchPage extends Component {
           </div>
         );
       });
+    } else if (!this.state.searchResults.loaded) {
+      searchResults = (
+        <h5 style={{ textAlign: 'center', padding: '2rem' }}>
+          Search for a book above, or <Link to="/books/add/custom">add a custom book here.</Link>
+        </h5>
+      );
     }
 
     return (
