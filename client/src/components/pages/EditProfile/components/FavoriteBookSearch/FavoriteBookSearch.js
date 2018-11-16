@@ -6,6 +6,9 @@ import axios from 'axios';
 // component
 import { Search as SemanticSearch } from 'semantic-ui-react';
 
+// css
+import classes from './FavoriteBookSearch.module.css';
+
 class FavoriteBookSearch extends Component {
   state = {
     searchQuery: '',
@@ -21,7 +24,10 @@ class FavoriteBookSearch extends Component {
             .post('/api/search/favoriteBook', { searchQuery: this.state.searchQuery })
             .then(res => {
               let searchResults = res.data;
-              searchResults.push({ title: `"${this.state.searchQuery}"`, _id: '' });
+              searchResults.push({
+                title: `"${this.state.searchQuery}"`,
+                _id: ''
+              });
               this.setState({ searchResults, isSearching: false });
             });
         });
@@ -31,7 +37,7 @@ class FavoriteBookSearch extends Component {
   handleResultSelect = (e, { result }) => {
     const selectedBook = {
       title: result.title.split('"').join(''),
-      _id: result._id
+      id: result._id
     };
     this.setState({ searchQuery: '' }, () => {
       this.props.addFavoriteBookHandler(selectedBook);
@@ -39,7 +45,7 @@ class FavoriteBookSearch extends Component {
   };
   render() {
     return (
-      <div style={{ width: '100%' }}>
+      <div className={this.props.isVisible ? '' : classes.invisible}>
         <SemanticSearch
           loading={this.state.isSearching}
           fluid
@@ -57,7 +63,8 @@ class FavoriteBookSearch extends Component {
 }
 
 FavoriteBookSearch.propTypes = {
-  addFavoriteBookHandler: PropTypes.func.isRequired
+  addFavoriteBookHandler: PropTypes.func.isRequired,
+  isVisible: PropTypes.bool.isRequired
 };
 
 export default FavoriteBookSearch;

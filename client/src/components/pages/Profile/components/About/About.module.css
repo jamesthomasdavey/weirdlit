@@ -3,10 +3,6 @@
   background: blue;
 }
 
-.book__image {
-  display: block;
-}
-
 .social__icon {
   display: inline-block;
   margin: 0 8px;

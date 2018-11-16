@@ -86,7 +86,7 @@ router.post('/favoriteBook', (req, res) => {
         description: arrayToSentence(book.authors.map(author => author.name), {
           lastSeparator: ' & '
         }),
-        link: `/books/${book._id}`
+        _id: book._id
       }));
       res.json(booksResults);
     });

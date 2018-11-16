@@ -37,7 +37,6 @@ class EditProfile extends Component {
       facebook: '',
       instagram: ''
     },
-    favoriteBookInput: '',
     isLoading: true,
     hasChanged: false,
     errors: {}
@@ -71,15 +70,17 @@ class EditProfile extends Component {
     this.setState(currentState, this.checkIfChanged);
   };
   checkIfChanged = () => {
+    const form = this.state.form;
+    const oldForm = this.state.oldForm;
     if (
-      this.state.form.handle !== this.state.oldForm.handle ||
-      this.state.form.favoriteBook !== this.state.oldForm.favoriteBook ||
-      this.state.form.location !== this.state.oldForm.location ||
-      this.state.form.bio !== this.state.oldForm.bio ||
-      this.state.form.goodreads !== this.state.oldForm.goodreads ||
-      this.state.form.twitter !== this.state.oldForm.twitter ||
-      this.state.form.facebook !== this.state.oldForm.facebook ||
-      this.state.form.instagram !== this.state.oldForm.instagram
+      form.handle !== oldForm.handle ||
+      form.favoriteBook !== oldForm.favoriteBook ||
+      form.location !== oldForm.location ||
+      form.bio !== oldForm.bio ||
+      form.goodreads !== oldForm.goodreads ||
+      form.twitter !== oldForm.twitter ||
+      form.facebook !== oldForm.facebook ||
+      form.instagram !== oldForm.instagram
     ) {
       this.setState({ hasChanged: true, hasSaved: false });
     } else {
@@ -139,22 +140,21 @@ class EditProfile extends Component {
                     : 'A unique handle for your profile URL.'
                 }
               />
-              <div className="ui field">
+              <div className={['ui field', this.state.errors.favoriteBook && 'error'].join(' ')}>
                 <label>Favorite Book</label>
-                {!isEmpty(this.state.form.favoriteBook) ? (
+                {!isEmpty(this.state.form.favoriteBook) && (
                   <FavoriteBook
                     removeFavoriteBookHandler={this.removeFavoriteBookHandler}
                     title={this.state.form.favoriteBook.title}
+                    isVisible={!isEmpty(this.state.form.favoriteBook)}
                   />
-                ) : (
-                  <Fragment>
-                    <FavoriteBookSearch addFavoriteBookHandler={this.addFavoriteBookHandler} />
-                    {this.state.errors.favoriteBook && (
-                      <div className="ui pointing basic label">
-                        {this.state.errors.favoriteBook}
-                      </div>
-                    )}
-                  </Fragment>
+                )}
+                <FavoriteBookSearch
+                  addFavoriteBookHandler={this.addFavoriteBookHandler}
+                  isVisible={isEmpty(this.state.form.favoriteBook)}
+                />
+                {this.state.errors.favoriteBook && (
+                  <div className="ui pointing basic label">{this.state.errors.favoriteBook}</div>
                 )}
               </div>
               <TextInputField

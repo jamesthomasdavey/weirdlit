@@ -341,7 +341,7 @@ router.post('/custom', passport.authenticate('jwt', { session: false }), async (
         isbn13: req.body.isbn13
       },
       tags: req.body.tags,
-      description: req.body.description,
+      description: req.body.description.replace(/\n\s*\n\s*\n/g, '\n\n'),
       image: imageLinks,
       creator: req.user._id
     };
@@ -502,6 +502,9 @@ router.delete(
               });
               booksRead.splice(deleteIndex);
               profile.booksRead = booksRead;
+              if (profile.favoriteBook.id.toString() === req.params.bookId) {
+                profile.favoriteBook = {};
+              }
               await profile.save();
             });
           }

@@ -1,10 +1,9 @@
 // package
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // component
-import AuthorLinks from './../../../../layout/AuthorLinks/AuthorLinks';
+import FavoriteBookObj from './FavoriteBookObj/FavoriteBookObj';
 
 // image
 import goodreadsIcon from './../../../../../img/icons/goodreads.svg';
@@ -16,41 +15,8 @@ import instagramIcon from './../../../../../img/icons/instagram.svg';
 import classes from './About.module.css';
 
 const About = props => {
-  let favoriteBook, favoriteBookObj, location, bio, social;
-  if (props.favoriteBookObj._id) {
-    favoriteBookObj = (
-      <div className="column">
-        <h5>Favorite Book</h5>
-        <div className="ui items">
-          <div className="ui item">
-            <Link
-              to={`/books/${props.favoriteBookObj._id}`}
-              className={['ui small image', classes.book__image].join(' ')}
-            >
-              <img
-                src={props.favoriteBookObj.image.largeThumbnail}
-                className="book__image"
-                alt={props.favoriteBookObj.title}
-              />
-            </Link>
-            <div className="content">
-              <div className="header">{props.favoriteBookObj.title}</div>
-              <div className="meta">{props.favoriteBookObj.publishedDate}</div>
-              <div>
-                {props.favoriteBookObj.authors.length > 0 && (
-                  <AuthorLinks authors={props.favoriteBookObj.authors} />
-                )}
-              </div>
-              <Link to={`/books/${props.favoriteBookObj._id}`} className="tiny primary button ui">
-                View
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-  if (props.favoriteBook) {
+  let favoriteBook, location, bio, social;
+  if (props.favoriteBook.title) {
     favoriteBook = (
       <Fragment>
         <h5>Favorite Book</h5>
@@ -66,7 +32,6 @@ const About = props => {
       </Fragment>
     );
   }
-
   if (props.bio) {
     bio = (
       <Fragment>
@@ -84,7 +49,6 @@ const About = props => {
       </Fragment>
     );
   }
-
   if (props.social.goodreads || props.social.facebook || props.social.instagram) {
     social = (
       <Fragment>
@@ -120,7 +84,6 @@ const About = props => {
       </Fragment>
     );
   }
-
   if (favoriteBook || location || bio || social) {
     return (
       <Fragment>
@@ -130,11 +93,13 @@ const About = props => {
         </h5>
         <div className="ui raised segment" style={{ padding: '22px' }}>
           <div
-            className={['ui stackable', favoriteBookObj ? 'two' : 'one', 'column grid'].join(' ')}
+            className={['ui stackable', props.favoriteBook.id ? 'two' : 'one', 'column grid'].join(
+              ' '
+            )}
           >
-            {favoriteBookObj}
+            {props.favoriteBook.id && <FavoriteBookObj bookId={props.favoriteBook.id} />}
             <div className="column">
-              {!favoriteBookObj && favoriteBook}
+              {!props.favoriteBook.id && favoriteBook}
               {location}
               {bio}
               {social}
@@ -149,8 +114,7 @@ const About = props => {
 };
 
 About.propTypes = {
-  favoriteBook: PropTypes.string,
-  favoriteBookObj: PropTypes.object,
+  favoriteBook: PropTypes.object.isRequired,
   location: PropTypes.string,
   bio: PropTypes.string,
   social: PropTypes.object

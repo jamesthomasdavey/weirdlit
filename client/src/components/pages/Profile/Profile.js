@@ -20,16 +20,7 @@ class Profile extends Component {
         name: ''
       },
       handle: '',
-      favoriteBook: '',
-      favoriteBookObj: {
-        _id: '',
-        title: '',
-        subtitle: '',
-        authors: [],
-        publishedDate: '',
-        image: {},
-        description: ''
-      },
+      favoriteBook: {},
       location: '',
       bio: '',
       booksRead: [],
@@ -128,7 +119,6 @@ class Profile extends Component {
             />
             <About
               favoriteBook={this.state.profile.favoriteBook}
-              favoriteBookObj={this.state.profile.favoriteBookObj}
               location={this.state.profile.location}
               bio={this.state.profile.bio}
               social={this.state.profile.social}
