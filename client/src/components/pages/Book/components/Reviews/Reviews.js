@@ -61,7 +61,8 @@ class Reviews extends Component {
             book={this.props.book}
             showReviewHeadlineAsLink
             showReviewCreator
-            showReviewSocial
+            showLikeButton
+            showCommentButton
           />
         );
       });

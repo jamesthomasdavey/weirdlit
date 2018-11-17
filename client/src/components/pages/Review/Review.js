@@ -6,6 +6,7 @@ import axios from 'axios';
 import { default as ReviewComponent } from './../../layout/Review/Review';
 import Spinner from './../../layout/Spinner/Spinner';
 import Comments from './components/Comments/Comments';
+import ReviewBookCard from './../../layout/ReviewBookCard/ReviewBookCard';
 
 class Review extends Component {
   state = {
@@ -29,7 +30,14 @@ class Review extends Component {
     if (this.state.isLoading) {
       review = <Spinner />;
     } else {
-      review = <ReviewComponent review={this.state.review} showReviewCreator showReviewFullText />;
+      review = (
+        <ReviewComponent
+          review={this.state.review}
+          showReviewCreator
+          showReviewFullText
+          showLikeButton
+        />
+      );
     }
 
     if (!this.state.isLoading) {
@@ -39,6 +47,7 @@ class Review extends Component {
     return (
       <div className="ui text container">
         <div className="ui segment">
+          <ReviewBookCard bookId={this.props.match.params.bookId} />
           <div className="ui raised segment" style={{ padding: '22px' }}>
             <div className="ui items">{review}</div>
           </div>

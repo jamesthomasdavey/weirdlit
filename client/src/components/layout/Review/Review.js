@@ -115,8 +115,11 @@ class Review extends Component {
       }
     }
 
-    if (this.props.showReviewSocial) {
+    if (this.props.showLikeButton) {
       likeButton = <LikeButton review={this.props.review} />;
+    }
+
+    if (this.props.showCommentButton) {
       commentButton = <CommentButton review={this.props.review} />;
     }
 
@@ -172,7 +175,8 @@ Review.propTypes = {
   showReviewHeadlineAsLink: PropTypes.bool.isRequired,
   showReviewCreator: PropTypes.bool.isRequired,
   showReviewFullText: PropTypes.bool.isRequired,
-  showReviewSocial: PropTypes.bool.isRequired,
+  showLikeButton: PropTypes.bool.isRequired,
+  showCommentButton: PropTypes.bool.isRequired,
   maxReviewChars: PropTypes.number.isRequired
 };
 
@@ -182,7 +186,8 @@ Review.defaultProps = {
   showReviewHeadlineAsLink: false,
   showReviewCreator: false,
   showReviewFullText: false,
-  showReviewSocial: false,
+  showLikeButton: false,
+  showCommentButton: false,
   maxReviewChars: 600
 };
 

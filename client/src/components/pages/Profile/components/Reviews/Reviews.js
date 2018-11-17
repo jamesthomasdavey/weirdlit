@@ -51,7 +51,8 @@ class Reviews extends Component {
             showBookAuthors
             showBookInfo
             showReviewHeadlineAsLink
-            showReviewSocial
+            showLikeButton
+            showCommentButton
           />
         );
       });

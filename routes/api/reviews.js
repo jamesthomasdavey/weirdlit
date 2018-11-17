@@ -128,6 +128,7 @@ router.get(
 router.get('/:reviewId', verifyBookId, (req, res) => {
   Review.findById(req.params.reviewId)
     .populate('creator', ['name', '_id'])
+    .populate('book', '_id')
     .populate({ path: 'comments', populate: { path: 'creator' } })
     .then(review => {
       res.json(review);

@@ -30,9 +30,12 @@ class Comments extends Component {
     e.preventDefault();
     this.setState({ isSubmitting: true }, () => {
       axios
-        .post(`/api/books/${this.props.review.book}/reviews/${this.props.review._id}/comments`, {
-          text: this.state.newComment
-        })
+        .post(
+          `/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}/comments`,
+          {
+            text: this.state.newComment
+          }
+        )
         .then(() => {
           this.setState({ isSubmitting: false }, this.updateFromReview);
         });
@@ -41,7 +44,7 @@ class Comments extends Component {
   updateFromReview = () => {
     this.setState({ isLoading: true }, () => {
       axios
-        .get(`/api/books/${this.props.review.book}/reviews/${this.props.review._id}`)
+        .get(`/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}`)
         .then(res => {
           this.setState({ comments: res.data.comments, isLoading: false, newComment: '' });
         });
