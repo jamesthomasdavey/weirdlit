@@ -49,13 +49,23 @@ class Comment extends Component {
           <span className="date">{timeAgo.ago(this.props.comment.date)}</span>
         </div>
         <div className={['text', this.state.isLoading && classes.loading].join(' ')}>
-          {this.props.comment.text}
+          {this.props.comment.text.split('\n').map((item, key) => {
+            return (
+              <span key={key}>
+                {item}
+                <br />
+              </span>
+            );
+          })}
         </div>
         {this.state.isCurrentUser && (
           <div className="actions">
-            <a onClick={() => this.deleteCommentHandler(this.props.comment._id)} className="reply">
+            <span
+              onClick={() => this.deleteCommentHandler(this.props.comment._id)}
+              className={[classes.deleteButton, this.state.isLoading && classes.loading].join(' ')}
+            >
               Delete
-            </a>
+            </span>
           </div>
         )}
       </div>

@@ -1,8 +1,17 @@
-.loading {
-  color: #999 !important;
-}
-
 .deleted {
   transition: 0.4s opacity ease !important;
   opacity: 0;
+}
+
+.deleteButton {
+  color: #999;
+}
+
+.deleteButton:hover {
+  color: #373737;
+  cursor: pointer;
+}
+
+.loading {
+  color: #999 !important;
 }

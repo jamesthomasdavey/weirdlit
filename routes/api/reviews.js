@@ -291,7 +291,7 @@ router.post(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Comment.create({
-      text: req.body.text,
+      text: req.body.text.replace(/\n\s*\n\s*\n/g, '\n\n'),
       creator: req.user._id
     }).then(comment => {
       Review.findById(req.params.reviewId).then(review => {
@@ -318,11 +318,10 @@ router.delete(
       .populate('comments', ['creator'])
       .then(review => {
         const commentIds = review.comments.map(comment => comment._id.toString());
-        let commentIdIndex = commentIds.indexOf(req.params.commentId);
-        const userIds = review.comments.map(comment => comment.creator._id.toString());
-        let userIdIndex = userIds.indexOf(req.user._id.toString());
-        if (commentIdIndex !== userIdIndex) return res.status(400).json({ authorized: false });
-        review.comments.splice(commentIdIndex, 1);
+        const commentIndex = commentIds.indexOf(req.params.commentId);
+        if (review.comments[commentIndex].creator._id.toString() !== req.user._id.toString())
+          return res.status(400).json({ authorized: false });
+        review.comments.splice(commentIndex, 1);
         review
           .save()
           .then(() => {
