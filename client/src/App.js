@@ -32,7 +32,7 @@ import EditBook from './components/pages/EditBook/EditBook';
 import DeleteBook from './components/pages/DeleteBook/DeleteBook';
 import AddCustomBook from './components/pages/AddCustomBook/AddCustomBook';
 // import BookReviews from './components/pages/BookReviews/BookReviews';
-// import Review from './components/pages/Review/Review';
+import Review from './components/pages/Review/Review';
 // import NewReview from './components/pages/NewReview/NewReview';
 // import EditReview from './components/pages/EditReview/EditReview';
 import Account from './components/pages/Account/Account';
@@ -87,7 +87,8 @@ class App extends Component {
               <AdminRoute exact path="/books/:bookId/delete" component={DeleteBook} />
               {/* <Route exact path="/books/:bookId/reviews" component={BookReviews} /> */}
               {/* <Route exact path="/books/:bookId/reviews/new" component={NewReview} /> */}
-              {/* <Route exact path="/books/:bookId/reviews/:reviewId" component={Review} /> */}
+              <Route exact path="/books/:bookId/reviews/:reviewId" component={Review} />
+              <Route exact path="/books/:bookId/reviews/:reviewId/:comment" component={Review} />
               {/* <Route exact path="/books/:bookId/reviews/:reviewId/edit" component={EditReview} /> */}
             </Switch>
             <Switch>

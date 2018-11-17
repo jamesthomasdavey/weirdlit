@@ -121,6 +121,17 @@ router.get(
   }
 );
 
+// @route     get /api/books/:bookId/reviews/:reviewId/edit
+// @desc      edit review to book
+// @access    private
+router.get('/:reviewId', verifyBookId, (req, res) => {
+  Review.findById(req.params.reviewId)
+    .populate('creator', ['name', '_id'])
+    .then(review => {
+      res.json(review);
+    });
+});
+
 // @route     put /api/books/:bookId/reviews/:reviewId
 // @desc      update review to book
 // @access    private
@@ -285,10 +296,10 @@ router.post(
         }
         const newComment = {
           text: req.body.text,
-          name: req.body.name,
-          user: req.body.user
+          name: req.user.name,
+          user: req.user
         };
-        review.comments.unshift(newComment);
+        review.comments.push(newComment);
         review
           .save()
           .then(review => res.json(review))

@@ -51,7 +51,7 @@ class Review extends Component {
         </Link>
       );
     } else {
-      reviewHeadline = this.props.review.headline;
+      reviewHeadline = <h3>{this.props.review.headline}</h3>;
     }
 
     if (this.props.showBookInfo) {
@@ -166,7 +166,7 @@ class Review extends Component {
 
 Review.propTypes = {
   review: PropTypes.object.isRequired,
-  book: PropTypes.object.isRequired,
+  book: PropTypes.object,
   showBookAuthors: PropTypes.bool.isRequired,
   showBookInfo: PropTypes.bool.isRequired,
   showReviewHeadlineAsLink: PropTypes.bool.isRequired,
