@@ -315,31 +315,14 @@ router.delete(
   (req, res) => {
     const errors = {};
     Review.findById(req.params.reviewId)
+      .populate('comments', ['creator'])
       .then(review => {
-        if (!review) {
-          errors.noreview = 'Review not found';
-          return res.status(404).json(errors);
-        }
-        if (
-          review.comments.length === 0 ||
-          !review.comments.filter(comment => comment.equals(req.params.commentId))
-        ) {
-          errors.nocomments = 'Comment not found';
-          return res.status(404).json(errors);
-        }
-        if (
-          !review.comments
-            .filter(comment => comment.equals(req.params.commentId))[0]
-            .user.equals(req.params.user._id)
-        ) {
-          errors.unauthorized = 'You are not allowed to do that';
-          return res.status(400).json(errors);
-        }
-        const removeIndex = review.comments
-          .map(comment => comment.toString())
-          .indexOf(req.params.commentId);
-
-        review.comments.splice(removeIndex, 1);
+        const commentIds = review.comments.map(comment => comment._id.toString());
+        let commentIdIndex = commentIds.indexOf(req.params.commentId);
+        const userIds = review.comments.map(comment => comment.creator._id.toString());
+        let userIdIndex = userIds.indexOf(req.user._id.toString());
+        if (commentIdIndex !== userIdIndex) return res.status(400).json({ authorized: false });
+        review.comments.splice(commentIdIndex, 1);
         review
           .save()
           .then(() => {

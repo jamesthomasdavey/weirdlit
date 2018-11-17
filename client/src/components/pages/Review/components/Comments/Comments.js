@@ -37,18 +37,21 @@ class Comments extends Component {
           }
         )
         .then(() => {
-          this.setState({ isSubmitting: false }, this.updateFromReview);
+          this.setState({ isSubmitting: false, isLoading: true }, this.updateFromReview);
         });
     });
   };
   updateFromReview = () => {
-    this.setState({ isLoading: true }, () => {
-      axios
-        .get(`/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}`)
-        .then(res => {
-          this.setState({ comments: res.data.comments, isLoading: false, newComment: '' });
-        });
-    });
+    axios
+      .get(`/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}`)
+      .then(res => {
+        this.setState({ comments: res.data.comments, isLoading: false, newComment: '' });
+      });
+  };
+  deleteCommentHandler = () => {
+    setTimeout(() => {
+      this.updateFromReview();
+    }, 400);
   };
   render() {
     let comments;
@@ -56,7 +59,12 @@ class Comments extends Component {
       comments = <h5 style={{ textAlign: 'center' }}>Nobody has commented on this review.</h5>;
     } else {
       const commentsContent = this.state.comments.map(comment => (
-        <Comment key={comment._id} comment={comment} />
+        <Comment
+          key={comment._id}
+          comment={comment}
+          review={this.props.review}
+          deleteCommentHandler={this.deleteCommentHandler}
+        />
       ));
       comments = <div className="ui comments">{commentsContent}</div>;
     }
