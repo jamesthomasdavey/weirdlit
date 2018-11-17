@@ -10,7 +10,6 @@ import Comments from './components/Comments/Comments';
 class Review extends Component {
   state = {
     review: {},
-    autoComment: false,
     isLoading: true
   };
   componentDidMount = () => {
@@ -20,8 +19,7 @@ class Review extends Component {
   };
   updateFromReview = (bookId, reviewId) => {
     axios.get(`/api/books/${bookId}/reviews/${reviewId}`).then(res => {
-      let autoComment = this.props.match.params.comment ? true : false;
-      this.setState({ review: res.data, isLoading: false, autoComment });
+      this.setState({ review: res.data, isLoading: false });
     });
   };
   render() {
@@ -35,7 +33,7 @@ class Review extends Component {
     }
 
     if (!this.state.isLoading) {
-      comments = <Comments review={this.state.review} autoComment={this.state.autoComment} />;
+      comments = <Comments review={this.state.review} />;
     }
 
     return (

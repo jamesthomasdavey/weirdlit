@@ -13,14 +13,13 @@ class Comments extends Component {
     newComment: '',
     isLoading: false,
     isSubmitting: false,
-    autoComment: false,
     errors: {}
   };
   componentDidMount = () => {
     this.updateFromProps();
   };
   updateFromProps = () => {
-    this.setState({ comments: this.props.review.comments, autoComment: this.props.autoComment });
+    this.setState({ comments: this.props.review.comments });
   };
   changeInputHandler = e => {
     const currentState = this.state;
@@ -44,7 +43,7 @@ class Comments extends Component {
       axios
         .get(`/api/books/${this.props.review.book}/reviews/${this.props.review._id}`)
         .then(res => {
-          this.setState({ comments: res.data.comments, isLoading: false });
+          this.setState({ comments: res.data.comments, isLoading: false, newComment: '' });
         });
     });
   };
@@ -61,7 +60,7 @@ class Comments extends Component {
 
     return (
       <div>
-        <h5 className="ui horizontal divider header">
+        <h5 className="ui horizontal divider header" id="comments">
           <i className="comment outline icon" />
           Comments
         </h5>
@@ -71,12 +70,11 @@ class Comments extends Component {
         >
           {comments}
           <div className="ui dividing header" />
-          <form className="ui form" onSubmit={this.formSubmitHandler} id="comment">
+          <form className="ui form" onSubmit={this.formSubmitHandler}>
             <TextAreaInputField
               name="newComment"
               minHeight="100px"
               rows="1"
-              autoFocus={this.state.autoComment}
               placeholder="Add a new comment..."
               value={this.state.newComment}
               maxLength="600"
@@ -100,8 +98,7 @@ class Comments extends Component {
 }
 
 Comments.propTypes = {
-  review: PropTypes.object.isRequired,
-  autoComment: PropTypes.bool.isRequired
+  review: PropTypes.object.isRequired
 };
 
 export default Comments;

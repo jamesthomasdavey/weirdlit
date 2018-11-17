@@ -88,7 +88,6 @@ class App extends Component {
               {/* <Route exact path="/books/:bookId/reviews" component={BookReviews} /> */}
               {/* <Route exact path="/books/:bookId/reviews/new" component={NewReview} /> */}
               <Route exact path="/books/:bookId/reviews/:reviewId" component={Review} />
-              <Route exact path="/books/:bookId/reviews/:reviewId/:comment" component={Review} />
               {/* <Route exact path="/books/:bookId/reviews/:reviewId/edit" component={EditReview} /> */}
             </Switch>
             <Switch>

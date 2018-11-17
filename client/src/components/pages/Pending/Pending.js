@@ -95,8 +95,9 @@ class Pending extends Component {
                 Reject
                 <i className="x icon" />
               </button>
-              <Link to={`/books/${book._id}`} className="ui primary tiny button">
-                View
+              <Link to={`/books/${book._id}/edit`} className="ui labeled tiny icon button">
+                Edit
+                <i className="edit icon" />
               </Link>
             </div>
           </div>

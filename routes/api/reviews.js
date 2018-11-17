@@ -10,6 +10,7 @@ const validateReviewInput = require('./../../validation/review');
 const Book = require('./../../models/Book');
 const Review = require('./../../models/Review');
 const User = require('./../../models/User');
+const Comment = require('../../models/Comment');
 
 // middleware
 const verifyBookId = (req, res, next) => {
@@ -121,12 +122,13 @@ router.get(
   }
 );
 
-// @route     get /api/books/:bookId/reviews/:reviewId/edit
-// @desc      edit review to book
-// @access    private
+// @route     get /api/books/:bookId/reviews/:reviewId
+// @desc      get review to book
+// @access    public
 router.get('/:reviewId', verifyBookId, (req, res) => {
   Review.findById(req.params.reviewId)
     .populate('creator', ['name', '_id'])
+    .populate({ path: 'comments', populate: { path: 'creator' } })
     .then(review => {
       res.json(review);
     });
@@ -287,25 +289,17 @@ router.post(
   verifyBookId,
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    const errors = {};
-    Review.findById(req.params.reviewId)
-      .then(review => {
-        if (!review) {
-          errors.noreview = 'Review not found';
-          return res.status(404).json(errors);
-        }
-        const newComment = {
-          text: req.body.text,
-          name: req.user.name,
-          user: req.user
-        };
-        review.comments.push(newComment);
-        review
-          .save()
-          .then(review => res.json(review))
-          .catch(err => res.status(400).json(err));
-      })
-      .catch(err => res.status(400).json(err));
+    Comment.create({
+      text: req.body.text,
+      creator: req.user._id
+    }).then(comment => {
+      Review.findById(req.params.reviewId).then(review => {
+        review.comments.push(comment._id);
+        review.save().then(() => {
+          res.json({ success: true });
+        });
+      });
+    });
   }
 );
 
@@ -327,27 +321,29 @@ router.delete(
         }
         if (
           review.comments.length === 0 ||
-          !review.comments.filter(comment => comment._id.equals(req.params.commentId))
+          !review.comments.filter(comment => comment.equals(req.params.commentId))
         ) {
           errors.nocomments = 'Comment not found';
           return res.status(404).json(errors);
         }
         if (
           !review.comments
-            .filter(comment => comment._id.equals(req.params.commentId))[0]
+            .filter(comment => comment.equals(req.params.commentId))[0]
             .user.equals(req.params.user._id)
         ) {
           errors.unauthorized = 'You are not allowed to do that';
           return res.status(400).json(errors);
         }
         const removeIndex = review.comments
-          .map(comment => comment._id.toString())
+          .map(comment => comment.toString())
           .indexOf(req.params.commentId);
 
         review.comments.splice(removeIndex, 1);
         review
           .save()
-          .then(review => res.json(review))
+          .then(() => {
+            Comment.findByIdAndRemove(req.params.commentId).then(() => res.json({ success: true }));
+          })
           .catch(err => res.status(400).json(err));
       })
       .catch(err => res.status(400).json(err));

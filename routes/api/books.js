@@ -406,7 +406,8 @@ router.get(
           rating: book.rating,
           identifiers: book.identifiers,
           tags: book.tags,
-          image: book.image
+          image: book.image,
+          isApproved: book.isApproved
         });
       })
       .catch(err => {

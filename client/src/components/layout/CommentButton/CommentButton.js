@@ -6,10 +6,10 @@ import { Link } from 'react-router-dom';
 const CommentButton = props => {
   return (
     <Link
-      to={`/books/${props.review.book._id}/reviews/${props.review._id}/comment/#comment`}
+      to={`/books/${props.review.book._id}/reviews/${props.review._id}/#comments`}
       className="ui tiny button"
     >
-      Comment{props.review.comments.length > 0 && ` (${props.review.comments.length})`}
+      Comments{props.review.comments.length > 0 && ` (${props.review.comments.length})`}
     </Link>
   );
 };

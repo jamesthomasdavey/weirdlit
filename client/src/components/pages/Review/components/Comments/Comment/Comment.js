@@ -8,8 +8,8 @@ class Comment extends Component {
   render() {
     return (
       <div className="comment">
-        <Link to={`/profile/user/${this.props.comment.user}`} className="author">
-          {this.props.comment.name}
+        <Link to={`/profile/user/${this.props.comment.creator._id}`} className="author">
+          {this.props.comment.creator.name}
         </Link>
         <div className="metadata">
           <span className="date">{timeAgo.ago(this.props.comment.date)}</span>

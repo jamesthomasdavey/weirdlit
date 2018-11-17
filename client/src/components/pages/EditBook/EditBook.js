@@ -52,6 +52,7 @@ class EditBook extends Component {
     },
     imageInput: '',
     isLoading: true,
+    isApproved: false,
     hasChanged: false,
     hasSaved: false,
     errors: {}
@@ -89,6 +90,7 @@ class EditBook extends Component {
           imageInput: '',
           isLoading: false,
           hasChanged: false,
+          isApproved: res.data.isApproved,
           errors: {}
         });
       })
@@ -223,6 +225,26 @@ class EditBook extends Component {
   };
   render() {
     document.title = `Edit ${this.state.form.title ? this.state.form.title : 'Book'} | WeirdLit`;
+
+    let backButton;
+
+    if (!this.state.isApproved) {
+      backButton = (
+        <Link to={'/books/pending'} style={{ marginLeft: '1rem' }} className="ui button">
+          {this.state.hasSaved ? 'Back to Pending Books' : 'Cancel'}
+        </Link>
+      );
+    } else {
+      backButton = (
+        <Link
+          to={`/books/${this.props.match.params.bookId}`}
+          style={{ marginLeft: '1rem' }}
+          className="ui button"
+        >
+          {this.state.hasSaved ? 'Back to Book' : 'Cancel'}
+        </Link>
+      );
+    }
 
     return (
       <div className="ui text container">
@@ -382,13 +404,7 @@ class EditBook extends Component {
               className={['ui primary button', this.state.hasChanged ? '' : 'disabled'].join(' ')}
               value={this.state.hasSaved ? 'Saved' : 'Save'}
             />
-            <Link
-              to={`/books/${this.props.match.params.bookId}`}
-              style={{ marginLeft: '1rem' }}
-              className="ui button"
-            >
-              {this.state.hasSaved ? 'Back to Book' : 'Cancel'}
-            </Link>
+            {backButton}
             <Link
               to={`/books/${this.props.match.params.bookId}/delete`}
               style={{ marginLeft: '1rem' }}
