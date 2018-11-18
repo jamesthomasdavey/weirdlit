@@ -19,9 +19,14 @@ class Review extends Component {
     }
   };
   updateFromReview = (bookId, reviewId) => {
-    axios.get(`/api/books/${bookId}/reviews/${reviewId}`).then(res => {
-      this.setState({ review: res.data, isLoading: false });
-    });
+    axios
+      .get(`/api/books/${bookId}/reviews/${reviewId}`)
+      .then(res => {
+        this.setState({ review: res.data, isLoading: false });
+      })
+      .catch(() => {
+        this.props.history.push('/404');
+      });
   };
   render() {
     document.title = this.state.isLoading

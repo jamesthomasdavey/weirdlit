@@ -132,6 +132,8 @@ router.get('/:reviewId', verifyBookId, (req, res) => {
     .populate('book', ['title', '_id'])
     .populate({ path: 'comments', populate: { path: 'creator' } })
     .then(review => {
+      if (!review.book._id.equals(req.params.bookId))
+        return res.status(404).json({ success: false });
       res.json(review);
     });
 });

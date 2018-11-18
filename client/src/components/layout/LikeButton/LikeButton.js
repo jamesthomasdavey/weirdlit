@@ -35,7 +35,10 @@ class LikeButton extends Component {
           axios
             .post(`/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}/like`)
             .then(res => {
-              this.setState({ likes: res.data.likes.length, hasLiked: true, isLoading: false });
+              this.setState(
+                { likes: res.data.likes.length, hasLiked: true, isLoading: false },
+                this.notifyReviewCreator
+              );
             });
         } else if (this.state.hasLiked) {
           axios
@@ -51,7 +54,16 @@ class LikeButton extends Component {
       /// MODAL
     }
   };
-  updateFromReview = () => {};
+  notifyReviewCreator = () => {
+    if (this.props.auth.user._id !== this.props.review.creator._id) {
+      axios.post(`/api/users/${this.props.review.creator._id}/notifications`, {
+        content: `<strong>${this.props.auth.user.name}</strong> liked your review for <em>${
+          this.props.review.book.title
+        }</em>.`,
+        link: `/books/${this.props.review.book._id}/reviews/${this.props.review._id}`
+      });
+    }
+  };
   render() {
     let likeButton;
 
