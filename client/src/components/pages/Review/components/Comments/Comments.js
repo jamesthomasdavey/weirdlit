@@ -47,23 +47,27 @@ class Comments extends Component {
             this.setState({ errors: res.data.errors, isSubmitting: false });
           } else {
             this.setState({ isSubmitting: false, isLoading: true }, () => {
-              this.notifyReviewerHandler(res.data);
+              this.notifyReviewerHandler(res.data.comment);
             });
           }
         });
     });
   };
-  notifyReviewerHandler = commentInfo => {
-    axios
-      .post(`/api/users/${this.props.review.creator._id}/notifications`, {
-        content: `<strong>${commentInfo.user.name}</strong> commented on your review for <em>${
-          this.props.review.book.title
-        }</em>.`,
-        link: `/books/${this.props.review.book._id}/reviews/${this.props.review._id}/#${
-          commentInfo.comment._id
-        }`
-      })
-      .then(this.updateFromReview);
+  notifyReviewerHandler = comment => {
+    if (this.props.auth.user._id !== this.props.review.creator._id) {
+      axios
+        .post(`/api/users/${this.props.review.creator._id}/notifications`, {
+          content: `<strong>${
+            this.props.auth.user.name
+          }</strong> commented on your review for <em>${this.props.review.book.title}</em>.`,
+          link: `/books/${this.props.review.book._id}/reviews/${this.props.review._id}/#${
+            comment._id
+          }`
+        })
+        .then(this.updateFromReview);
+    } else {
+      this.updateFromReview();
+    }
   };
   updateFromReview = () => {
     axios

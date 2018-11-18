@@ -302,7 +302,7 @@ router.post(
       Review.findById(req.params.reviewId).then(review => {
         review.comments.push(comment._id);
         review.save().then(() => {
-          res.json({ comment, user: req.user });
+          res.json({ comment });
         });
       });
     });
