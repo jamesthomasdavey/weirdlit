@@ -6,7 +6,7 @@ import axios from 'axios';
 import { default as ReviewComponent } from './../../layout/Review/Review';
 import Spinner from './../../layout/Spinner/Spinner';
 import Comments from './components/Comments/Comments';
-import ReviewBookCard from './../../layout/ReviewBookCard/ReviewBookCard';
+import BookObj from './../../layout/BookObj/BookObj';
 
 class Review extends Component {
   state = {
@@ -24,6 +24,12 @@ class Review extends Component {
     });
   };
   render() {
+    document.title = this.state.isLoading
+      ? `Review | WeirdLit`
+      : `${this.state.review.creator.name.split(' ')[0]}'s Review for ${
+          this.state.review.book.title
+        } | WeirdLit`;
+
     let review;
     let comments;
 
@@ -47,7 +53,7 @@ class Review extends Component {
     return (
       <div className="ui text container">
         <div className="ui segment">
-          <ReviewBookCard bookId={this.props.match.params.bookId} />
+          <BookObj bookId={this.props.match.params.bookId} />
           <div className="ui raised segment" style={{ padding: '22px' }}>
             <div className="ui items">{review}</div>
           </div>

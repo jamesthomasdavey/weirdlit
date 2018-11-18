@@ -1,16 +1,16 @@
 // package
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 const CommentButton = props => {
   return (
-    <Link
+    <HashLink
       to={`/books/${props.review.book._id}/reviews/${props.review._id}/#comments`}
       className="ui tiny button"
     >
       Comments{props.review.comments.length > 0 && ` (${props.review.comments.length})`}
-    </Link>
+    </HashLink>
   );
 };
 

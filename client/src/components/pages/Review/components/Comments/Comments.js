@@ -1,7 +1,9 @@
 // package
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
 // component
 import TextAreaInputField from './../../../../layout/TextAreaInputField/TextAreaInputField';
@@ -112,4 +114,4 @@ Comments.propTypes = {
   review: PropTypes.object.isRequired
 };
 
-export default Comments;
+export default withRouter(Comments);

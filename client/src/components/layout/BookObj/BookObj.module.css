@@ -1,0 +1,61 @@
+.wrapper {
+  margin: 1.5rem auto;
+  max-width: 500px;
+  padding: 0 16px;
+}
+
+@media (min-width: 768px) {
+  .wrapper {
+    margin: 1.5rem auto;
+    max-width: 500px;
+    padding: 0;
+  }
+}
+
+.book__image {
+  display: block;
+}
+
+.header {
+  width: 100%;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .header {
+    text-align: left;
+  }
+}
+
+.authors {
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .authors {
+    text-align: left;
+  }
+}
+
+.year {
+  text-align: center;
+  margin-bottom: 2rem !important;
+}
+
+@media (min-width: 768px) {
+  .year {
+    text-align: left;
+    margin-bottom: 1rem !important;
+  }
+}
+
+.viewButton {
+  padding-top: 12px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .viewButton {
+    text-align: left;
+  }
+}
