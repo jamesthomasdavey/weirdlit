@@ -115,7 +115,7 @@ router.get('/handle/:handle', passport.authenticate('jwt', { session: false }), 
 // @route     get /api/profile/user/:userId
 // @desc      get specific profile from user ID
 // @access    private
-router.get('/user/:userId', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/user/:userId', (req, res) => {
   const errors = {};
   Profile.findOne({ user: req.params.userId })
     .populate('user', ['_id', 'name'])

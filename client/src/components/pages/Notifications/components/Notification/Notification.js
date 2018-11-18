@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import renderHTML from 'react-render-html';
 import axios from 'axios';
 
@@ -23,13 +24,14 @@ class Notification extends Component {
       });
     });
   };
-  readNotificationHandler = () => {
+  readNotificationHandler = e => {
+    e.preventDefault();
     if (this.props.notification.read) {
-      this.props.history.push(this.props.notification.link);
+      document.querySelector('.viewLink').click();
     } else {
       this.setState({ isRedirecting: true }, () => {
         axios.put(`/api/users/notifications/${this.props.notification._id}`).then(res => {
-          this.props.history.push(this.props.notification.link);
+          document.querySelector('.viewLink').click();
         });
       });
     }
@@ -56,6 +58,7 @@ class Notification extends Component {
                 this.state.isRedirecting ? 'loading' : ''
               ].join(' ')}
             >
+              <HashLink className="viewLink" to={this.props.notification.link} />
               View
             </button>{' '}
             <i

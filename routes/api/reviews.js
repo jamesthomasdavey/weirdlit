@@ -5,6 +5,7 @@ const passport = require('passport');
 // load input validation
 const isEmpty = require('./../../validation/is-empty');
 const validateReviewInput = require('./../../validation/review');
+const validateCommentInput = require('../../validation/comment');
 
 // load mongoose models
 const Book = require('./../../models/Book');
@@ -290,6 +291,8 @@ router.post(
   verifyBookId,
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
+    const errors = validateCommentInput(req.body);
+    if (!isEmpty(errors)) return res.json({ errors });
     Comment.create({
       text: req.body.text.replace(/\n\s*\n\s*\n/g, '\n\n'),
       creator: req.user._id
@@ -297,7 +300,7 @@ router.post(
       Review.findById(req.params.reviewId).then(review => {
         review.comments.push(comment._id);
         review.save().then(() => {
-          res.json({ success: true });
+          res.json({ comment, user: req.user });
         });
       });
     });

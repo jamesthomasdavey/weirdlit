@@ -57,7 +57,12 @@ class LikeButton extends Component {
 
     if (this.state.likes > 0) {
       likeButton = (
-        <div className="ui button labeled" tabIndex="0">
+        <div
+          className={['ui button labeled', !this.props.auth.isAuthenticated && 'disabled'].join(
+            ' '
+          )}
+          tabIndex="0"
+        >
           <div
             className={[
               'ui tiny button',
@@ -75,7 +80,11 @@ class LikeButton extends Component {
     } else {
       likeButton = (
         <div
-          className={['ui tiny button', this.state.isLoading && 'loading'].join(' ')}
+          className={[
+            'ui tiny button',
+            this.state.isLoading && 'loading',
+            !this.props.auth.isAuthenticated && 'disabled'
+          ].join(' ')}
           onClick={this.toggleLikeReviewHandler}
         >
           <i className={['thumbs up icon', classes.icon].join(' ')} />

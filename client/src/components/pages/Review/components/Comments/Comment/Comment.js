@@ -37,7 +37,10 @@ class Comment extends Component {
   };
   render() {
     return (
-      <div className={['comment', this.state.isBeingDeleted && classes.deleted].join(' ')}>
+      <div
+        className={['comment', this.state.isBeingDeleted && classes.deleted].join(' ')}
+        id={this.props.comment._id}
+      >
         {this.state.isLoading && <div className="ui active loader" />}
         <Link
           to={`/profile/user/${this.props.comment.creator._id}`}

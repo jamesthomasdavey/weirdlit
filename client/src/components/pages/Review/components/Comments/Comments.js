@@ -1,9 +1,12 @@
 // package
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+// validation
+import isEmpty from './../../../../../validation/is-empty';
 
 // component
 import TextAreaInputField from './../../../../layout/TextAreaInputField/TextAreaInputField';
@@ -26,6 +29,7 @@ class Comments extends Component {
   changeInputHandler = e => {
     const currentState = this.state;
     currentState[e.target.name] = e.target.value;
+    currentState.errors = {};
     this.setState(currentState);
   };
   formSubmitHandler = e => {
@@ -38,10 +42,28 @@ class Comments extends Component {
             text: this.state.newComment
           }
         )
-        .then(() => {
-          this.setState({ isSubmitting: false, isLoading: true }, this.updateFromReview);
+        .then(res => {
+          if (res.data.errors && !isEmpty(res.data.errors)) {
+            this.setState({ errors: res.data.errors, isSubmitting: false });
+          } else {
+            this.setState({ isSubmitting: false, isLoading: true }, () => {
+              this.notifyReviewerHandler(res.data);
+            });
+          }
         });
     });
+  };
+  notifyReviewerHandler = commentInfo => {
+    axios
+      .post(`/api/users/${this.props.review.creator._id}/notifications`, {
+        content: `<strong>${commentInfo.user.name}</strong> commented on your review for <em>${
+          this.props.review.book.title
+        }</em>.`,
+        link: `/books/${this.props.review.book._id}/reviews/${this.props.review._id}/#${
+          commentInfo.comment._id
+        }`
+      })
+      .then(this.updateFromReview);
   };
   updateFromReview = () => {
     axios
@@ -111,7 +133,15 @@ class Comments extends Component {
 }
 
 Comments.propTypes = {
-  review: PropTypes.object.isRequired
+  review: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
-export default withRouter(Comments);
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  {}
+)(withRouter(Comments));
