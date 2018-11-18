@@ -32,6 +32,7 @@ class StarRating extends Component {
               color="#666"
               color2="orange"
               onChange={this.changeRatingHandler}
+              size={28}
             />
           </div>
         </Fragment>

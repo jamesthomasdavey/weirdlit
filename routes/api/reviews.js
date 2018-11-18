@@ -46,11 +46,11 @@ router.post('/', verifyBookId, passport.authenticate('jwt', { session: false }),
     .then(async review => {
       if (review) {
         errors.alreadyReviewed = 'You have already reviewed this book';
-        return res.status(400).json(errors);
+        return res.json({ errors });
       }
       // now validate input
       errors = validateReviewInput(req.body);
-      if (!isEmpty(errors)) return res.status(400).json(errors);
+      if (!isEmpty(errors)) return res.json({ errors });
 
       // make/save review
       const newReview = new Review({
