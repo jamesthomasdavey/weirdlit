@@ -6,19 +6,20 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from './../../../actions/authActions';
 
+// validation
+import isEmpty from './../../../validation/is-empty';
+
 // component
 import TextInputField from '../../layout/TextInputField/TextInputField';
+import FavoriteBookSearch from '../../layout/FavoriteBookSearch/FavoriteBookSearch';
+import FavoriteBook from '../../layout/FavoriteBook/FavoriteBook';
 
 // css
 import './Register.css';
 
 class Register extends Component {
   state = {
-    name: '',
-    email: '',
-    password: '',
-    password2: '',
-    favoriteBook: '',
+    form: { name: '', email: '', password: '', password2: '', favoriteBook: {} },
     loading: false,
     errors: {}
   };
@@ -36,18 +37,31 @@ class Register extends Component {
   };
 
   changeInputHandler = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    const currentState = this.state;
+    currentState.form[e.target.name] = e.target.value;
+    this.setState(currentState, this.checkIfChanged);
+  };
+
+  addFavoriteBookHandler = bookObj => {
+    const currentState = this.state;
+    currentState.form.favoriteBook = bookObj;
+    this.setState(currentState);
+  };
+  removeFavoriteBookHandler = () => {
+    const currentState = this.state;
+    currentState.form.favoriteBook = {};
+    this.setState(currentState);
   };
 
   submitFormHandler = e => {
     e.preventDefault();
     this.setState({ loading: true }, () => {
       const newUser = {
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password,
-        password2: this.state.password2,
-        favoriteBook: this.state.favoriteBook
+        name: this.state.form.name,
+        email: this.state.form.email,
+        password: this.state.form.password,
+        password2: this.state.form.password2,
+        favoriteBook: this.state.form.favoriteBook
       };
       this.props.registerUser(newUser, this.props.history);
     });
@@ -105,15 +119,23 @@ class Register extends Component {
                   onChange={this.changeInputHandler}
                   error={errors.password2}
                 />
-                <TextInputField
-                  name="favoriteBook"
-                  label="What is your favorite book?"
-                  maxLength="200"
-                  placeholder="Book Title (optional)"
-                  value={this.state.favoriteBook}
-                  onChange={this.changeInputHandler}
-                  error={errors.favoriteBook}
-                />
+                <div className={['ui field', this.state.errors.favoriteBook && 'error'].join(' ')}>
+                  <label>What is your favorite book? (Optional)</label>
+                  {!isEmpty(this.state.form.favoriteBook) && (
+                    <FavoriteBook
+                      removeFavoriteBookHandler={this.removeFavoriteBookHandler}
+                      title={this.state.form.favoriteBook.title}
+                      isVisible={!isEmpty(this.state.form.favoriteBook)}
+                    />
+                  )}
+                  <FavoriteBookSearch
+                    addFavoriteBookHandler={this.addFavoriteBookHandler}
+                    isVisible={isEmpty(this.state.form.favoriteBook)}
+                  />
+                  {this.state.errors.favoriteBook && (
+                    <div className="ui pointing basic label">{this.state.errors.favoriteBook}</div>
+                  )}
+                </div>
                 <input type="submit" className="ui button grey" value="Register" />
               </form>
               <div className="ui message">

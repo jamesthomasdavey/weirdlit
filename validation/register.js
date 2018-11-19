@@ -41,5 +41,13 @@ module.exports = reqBody => {
     errors.password2 = 'Passwords do not match';
   }
 
+  // favoriteBook
+  if (
+    !isEmpty(reqBody.favoriteBook) &&
+    !Validator.isLength(reqBody.favoriteBook.title, { max: 200 })
+  ) {
+    errors.favoriteBook = 'Favorite Book must be 200 characters or less';
+  }
+
   return errors;
 };
