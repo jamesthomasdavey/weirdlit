@@ -12,13 +12,22 @@ class Reviews extends Component {
   state = {
     reviews: [],
     isLoading: true,
+    canReview: false,
     errors: {}
   };
   componentDidMount = () => {
     axios
       .get(`/api/books/${this.props.book._id}/reviews`)
       .then(res => {
-        this.setState({ reviews: res.data, isLoading: false, errors: {} });
+        let canReview = true;
+        if (this.props.auth.isAuthenticated && res.data.length > 0) {
+          res.data.forEach(review => {
+            if (review.creator._id === this.props.auth.user._id) {
+              canReview = false;
+            }
+          });
+        }
+        this.setState({ reviews: res.data, isLoading: false, canReview, errors: {} });
       })
       .catch(err => {
         this.setState({ reviews: [], isLoading: false, errors: err });
@@ -33,16 +42,6 @@ class Reviews extends Component {
         return new Date(a.date) - new Date(b.date);
       })
       .reverse();
-
-    let hasReviewed;
-
-    if (this.props.auth.isAuthenticated && this.state.reviews.length > 0) {
-      this.state.reviews.forEach(review => {
-        if (review.creator._id === this.props.auth.user._id) {
-          hasReviewed = true;
-        }
-      });
-    }
 
     const numberOfReviewsToDisplay = 5;
 
@@ -97,10 +96,13 @@ class Reviews extends Component {
           )}
         </div>
         <div style={{ textAlign: 'center' }}>
-          {!this.state.isLoading && !hasReviewed && this.state.reviews.length > 0 && (
+          {!this.state.isLoading && this.state.reviews.length > 0 && (
             <Link
               to={`/books/${this.props.book._id}/reviews/new`}
-              className="ui tiny primary button"
+              className={['ui tiny primary button', this.state.canReview ? '' : 'disabled'].join(
+                ' '
+              )}
+              disabled={!this.state.canReview}
             >
               Write a Review
             </Link>

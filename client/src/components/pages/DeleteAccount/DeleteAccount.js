@@ -1,6 +1,6 @@
 // package
 import React, { Fragment, Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import isEmpty from './../../../validation/is-empty';
@@ -25,7 +25,7 @@ class DeleteAccount extends Component {
       if (!isEmpty(res.data.errors)) {
         this.setState({ errors: res.data.errors });
       } else {
-        this.props.logoutUser();
+        this.props.logoutUser(this.props.history);
       }
     });
   };
@@ -73,4 +73,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { logoutUser }
-)(DeleteAccount);
+)(withRouter(DeleteAccount));

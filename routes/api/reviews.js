@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const passport = require('passport');
+const mongoose = require('mongoose');
 
 // load input validation
 const isEmpty = require('./../../validation/is-empty');
@@ -28,8 +29,8 @@ const verifyBookId = (req, res, next) => {
 // @access    public
 router.get('/', verifyBookId, (req, res) => {
   Review.find({ book: req.params.bookId })
-    .populate('creator', 'name')
-    .populate('book', '_id')
+    .populate('creator', ['name', '_id'])
+    .populate('book', ['title', '_id'])
     .then(reviews => {
       if (!reviews || reviews.length === 0) return res.json([]);
       res.json(reviews);
@@ -98,6 +99,21 @@ router.post('/', verifyBookId, passport.authenticate('jwt', { session: false }),
     .catch(err => res.status(400).json(err));
 });
 
+// @route     get /api/books/:bookId/reviews/:reviewId
+// @desc      get review to book
+// @access    public
+router.get('/:reviewId', verifyBookId, (req, res) => {
+  Review.findById(req.params.reviewId)
+    .populate('creator', ['name', '_id'])
+    .populate('book', ['title', '_id'])
+    .populate({ path: 'comments', populate: { path: 'creator' } })
+    .then(review => {
+      if (!review.book._id.equals(req.params.bookId))
+        return res.status(404).json({ success: false });
+      res.json(review);
+    });
+});
+
 // @route     get /api/books/:bookId/reviews/:reviewId/edit
 // @desc      edit review to book
 // @access    private
@@ -122,21 +138,6 @@ router.get(
       .catch(err => res.status(404).json(err));
   }
 );
-
-// @route     get /api/books/:bookId/reviews/:reviewId
-// @desc      get review to book
-// @access    public
-router.get('/:reviewId', verifyBookId, (req, res) => {
-  Review.findById(req.params.reviewId)
-    .populate('creator', ['name', '_id'])
-    .populate('book', ['title', '_id'])
-    .populate({ path: 'comments', populate: { path: 'creator' } })
-    .then(review => {
-      if (!review.book._id.equals(req.params.bookId))
-        return res.status(404).json({ success: false });
-      res.json(review);
-    });
-});
 
 // @route     put /api/books/:bookId/reviews/:reviewId
 // @desc      update review to book
@@ -223,63 +224,17 @@ router.delete(
 // @route     post /api/books/:bookId/reviews/:reviewId/like
 // @desc      like review of book
 // @access    private
-router.post(
-  '/:reviewId/like',
+router.put(
+  '/:reviewId/likes',
   verifyBookId,
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    const errors = {};
     Review.findById(req.params.reviewId)
       .then(review => {
-        if (!review) {
-          errors.noreview = 'Review not found';
-          return res.status(404).json(errors);
-        }
-        if (
-          review.likes.length > 0 &&
-          review.likes.filter(like => like.user.equals(req.user._id))
-        ) {
-          errors.alreadyLiked = 'User already liked this review';
-          return res.status(400).json(errors);
-        }
-        review.likes.unshift({ user: req.user._id });
-        review
-          .save()
-          .then(review => res.json(review))
-          .catch(err => res.status(400).json(err));
-      })
-      .catch(err => res.status(400).json(err));
-  }
-);
-
-// @route     post /api/books/:bookId/reviews/:reviewId/unlike
-// @desc      unlike review of book
-// @access    private
-router.post(
-  '/:reviewId/unlike',
-  verifyBookId,
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    const errors = {};
-    Review.findById(req.params.reviewId)
-      .then(review => {
-        if (!review) {
-          errors.noreview = 'Review not found';
-          return res.status(404).json(errors);
-        }
-        if (
-          review.likes.length === 0 ||
-          !review.likes.filter(like => like.user.equals(req.user._id))
-        ) {
-          errors.notliked = 'User has not liked this review';
-          return res.status(400).json(errors);
-        }
-        const removeIndex = review.likes.map(like => like.user.toString()).indexOf(req.user._id);
-        review.likes.splice(removeIndex, 1);
-        review
-          .save()
-          .then(review => res.json(review))
-          .catch(err => res.status(400).json(err));
+        review.likes = req.body.likes;
+        review.save().then(() => {
+          res.json({ success: true });
+        });
       })
       .catch(err => res.status(400).json(err));
   }

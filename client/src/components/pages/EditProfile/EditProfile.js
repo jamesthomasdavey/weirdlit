@@ -47,14 +47,14 @@ class EditProfile extends Component {
   updateFromProfile = () => {
     axios.get('/api/profile').then(res => {
       const profile = {
-        handle: res.data.handle,
-        favoriteBook: res.data.favoriteBook,
-        location: res.data.location,
-        bio: res.data.bio,
-        goodreads: res.data.social.goodreads,
-        twitter: res.data.social.twitter,
-        facebook: res.data.social.facebook,
-        instagram: res.data.social.instagram,
+        handle: res.data.handle || '',
+        favoriteBook: res.data.favoriteBook || '',
+        location: res.data.location || '',
+        bio: res.data.bio || '',
+        goodreads: res.data.social.goodreads || '',
+        twitter: res.data.social.twitter || '',
+        facebook: res.data.social.facebook || '',
+        instagram: res.data.social.instagram || '',
         date: res.data.date
       };
       const currentState = this.state;

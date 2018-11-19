@@ -55,8 +55,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => 
 router.get('/user/:userId/reviews', (req, res) => {
   Review.find({ creator: req.params.userId })
     .populate({ path: 'book', populate: { path: 'authors' } })
-    .populate('comments', 'user')
-    .populate('likes', 'user')
+    .populate('creator', ['name', '_id'])
     .then(reviews => {
       if (reviews.length > 0) return res.json({ reviews });
       res.json({ reviews: [] });
@@ -79,7 +78,7 @@ router.get('/user/reviews', passport.authenticate('jwt', { session: false }), (r
 // @route     get /api/profile/handle/:handle
 // @desc      get specific profile from profile handle
 // @access    private
-router.get('/handle/:handle', passport.authenticate('jwt', { session: false }), (req, res) => {
+router.get('/handle/:handle', (req, res) => {
   const errors = {};
   Profile.findOne({ handle: req.params.handle })
     .populate('user', ['_id', 'name'])
@@ -154,50 +153,46 @@ router.get('/user/:userId', (req, res) => {
 router.put('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   const errors = validateProfileInput(req.body);
   if (!isEmpty(errors)) return res.json({ errors });
-  Profile.findOne({ handle: req.body.handle.toLowerCase() }).then(async profile => {
-    if (profile && !profile.user.equals(req.user._id)) {
+  Profile.findOne({ handle: req.body.handle.toLowerCase() }).then(handleProfile => {
+    if (handleProfile && !handleProfile.user.equals(req.user._id)) {
       // check if the handle is taken, or if it is, make sure it is owned by the current user
       errors.handle = 'This handle has already been taken';
       return res.json({ errors });
     }
-    if (isEmpty(errors)) {
-      let favoriteBook = {};
-      if (req.body.favoriteBook.id) {
-        favoriteBook = req.body.favoriteBook;
-      } else if (req.body.favoriteBook.title) {
-        favoriteBook = { title: req.body.favoriteBook.title };
-      }
-      const updatedProfile = {
-        handle: req.body.handle.toLowerCase(),
-        favoriteBook,
-        location: req.body.location,
-        bio: req.body.bio.replace(/\n\s*\n\s*\n/g, '\n\n'),
-        social: {
+    Profile.findOne({ user: req.user._id }).then(profile => {
+      if (isEmpty(errors)) {
+        let favoriteBook = {};
+        if (req.body.favoriteBook.id) {
+          favoriteBook = req.body.favoriteBook;
+        } else if (req.body.favoriteBook.title) {
+          favoriteBook = { title: req.body.favoriteBook.title };
+        }
+        profile.handle = req.body.handle.toLowerCase();
+        profile.favoriteBook = favoriteBook;
+        profile.location = req.body.location;
+        profile.bio = req.body.bio.replace(/\n\s*\n\s*\n/g, '\n\n');
+        profile.social = {
           goodreads: req.body.goodreads ? prependHttp(req.body.goodreads) : '',
           twitter: req.body.twitter ? prependHttp(req.body.twitter) : '',
           facebook: req.body.facebook ? prependHttp(req.body.facebook) : '',
           instagram: req.body.instagram ? prependHttp(req.body.instagram) : ''
-        },
-        date: req.body.date,
-        booksRead: profile.booksRead
-      };
+        };
 
-      if (req.body.favoriteBook.id) {
-        let hasReadFavoriteBook;
-        updatedProfile.booksRead.forEach(book => {
-          if (book._id.equals(req.body.favoriteBook.id)) {
-            hasReadFavoriteBook = true;
+        if (req.body.favoriteBook.id) {
+          let hasReadFavoriteBook;
+          profile.booksRead.forEach(book => {
+            if (book._id.equals(req.body.favoriteBook.id)) {
+              hasReadFavoriteBook = true;
+            }
+          });
+          if (!hasReadFavoriteBook) {
+            profile.booksRead.push(req.body.favoriteBook.id);
           }
-        });
-        if (!hasReadFavoriteBook) {
-          updatedProfile.booksRead.push(req.body.favoriteBook.id);
         }
-      }
 
-      Profile.findOneAndUpdate({ user: req.user._id }, { $set: updatedProfile }, { new: true })
-        .then(() => res.json({ success: true }))
-        .catch(err => res.status(400).json(err));
-    }
+        profile.save().then(() => res.json({ success: true }));
+      }
+    });
   });
   // .catch(err => res.status(400).json(err));
 });

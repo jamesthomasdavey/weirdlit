@@ -19,7 +19,7 @@ class NewReview extends Component {
     form: {
       headline: '',
       rating: 0,
-      body: ''
+      text: ''
     },
     errors: {},
     bookId: '',

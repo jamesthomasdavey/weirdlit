@@ -9,7 +9,7 @@ import classes from './LikeButton.module.css';
 
 class LikeButton extends Component {
   state = {
-    likes: 0,
+    likes: [],
     hasLiked: false,
     isLoading: false
   };
@@ -18,41 +18,71 @@ class LikeButton extends Component {
   };
   updateFromProps = () => {
     const currentState = this.state;
-    currentState.likes = this.props.review.likes.length;
+    currentState.likes = this.props.review.likes;
     if (this.props.auth.isAuthenticated) {
-      this.props.review.likes.forEach(like => {
-        if (this.props.auth.user._id.toString() === like.user.toString()) {
+      currentState.likes.forEach(like => {
+        if (like === this.props.auth.user._id) {
           currentState.hasLiked = true;
         }
       });
     }
     this.setState(currentState);
   };
+  updateFromReview = () => {
+    this.setState({ isLoading: true }, () => {
+      axios
+        .get(`/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}`)
+        .then(res => {
+          const currentState = this.state;
+          currentState.likes = res.data.likes;
+          if (this.props.auth.isAuthenticated) {
+            currentState.likes.forEach(like => {
+              if (like === this.props.auth.user._id) {
+                currentState.hasLiked = true;
+              }
+            });
+          }
+          currentState.isLoading = false;
+          this.setState(currentState);
+        });
+    });
+  };
   toggleLikeReviewHandler = () => {
-    if (this.props.auth.isAuthenticated) {
-      this.setState({ isLoading: true }, () => {
-        if (!this.state.hasLiked) {
-          axios
-            .post(`/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}/like`)
-            .then(res => {
-              this.setState(
-                { likes: res.data.likes.length, hasLiked: true, isLoading: false },
-                this.notifyReviewCreator
-              );
-            });
-        } else if (this.state.hasLiked) {
-          axios
-            .post(
-              `/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}/unlike`
-            )
-            .then(res => {
-              this.setState({ likes: res.data.likes.length, hasLiked: false, isLoading: false });
-            });
+    if (!this.state.hasLiked) {
+      const currentState = this.state;
+      currentState.likes.push(this.props.auth.user._id);
+      currentState.hasLiked = true;
+      currentState.isLoading = false;
+      this.setState(currentState, this.updateReview);
+    } else {
+      const currentState = this.state;
+      let removeIndex;
+      currentState.likes.forEach((like, index) => {
+        if (like === this.props.auth.user._id) {
+          removeIndex = index;
         }
       });
-    } else {
-      /// MODAL
+      currentState.likes.splice(removeIndex, 1);
+      currentState.hasLiked = false;
+      currentState.isLoading = false;
+      this.setState(currentState, this.updateReview);
     }
+  };
+  updateReview = () => {
+    this.setState({ isLoading: true }, () => {
+      axios
+        .put(`/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}/likes`, {
+          likes: this.state.likes
+        })
+        .then(() => {
+          this.setState({ isLoading: false }, () => {
+            if (this.state.hasLiked) {
+              this.notifyReviewCreator();
+            }
+          });
+        })
+        .catch(this.updateFromReview);
+    });
   };
   notifyReviewCreator = () => {
     if (this.props.auth.user._id !== this.props.review.creator._id) {
@@ -67,9 +97,10 @@ class LikeButton extends Component {
   render() {
     let likeButton;
 
-    if (this.state.likes > 0) {
+    if (this.state.likes.length > 0) {
       likeButton = (
         <div
+          disabled={this.state.isLoading}
           className={['ui button labeled', !this.props.auth.isAuthenticated && 'disabled'].join(
             ' '
           )}
@@ -79,22 +110,23 @@ class LikeButton extends Component {
             className={[
               'ui tiny button',
               classes.uiButton,
-              this.state.isLoading && 'loading',
+              this.state.isLoading && 'disabled',
               this.state.hasLiked ? 'active' : ''
             ].join(' ')}
             onClick={this.toggleLikeReviewHandler}
           >
             <i className={['thumbs up icon', classes.icon].join(' ')} />
           </div>
-          <span className="ui label">{this.state.likes}</span>
+          <span className="ui label">{this.state.likes.length}</span>
         </div>
       );
     } else {
       likeButton = (
         <div
+          disabled={this.state.isLoading}
           className={[
             'ui tiny button',
-            this.state.isLoading && 'loading',
+            this.state.isLoading && 'disabled',
             !this.props.auth.isAuthenticated && 'disabled'
           ].join(' ')}
           onClick={this.toggleLikeReviewHandler}
