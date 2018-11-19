@@ -13,7 +13,8 @@ const Heading = props => {
           User since {date.toLocaleString('en-us', { month: 'long' })} {date.getFullYear()}
         </span>
         {props.isCurrentUser && (
-          <Link to="/profile/edit" className="ui right floated button tiny">
+          <Link to="/profile/edit" className="ui right floated button tiny icon labeled">
+            <i className="edit icon" />
             Edit Profile
           </Link>
         )}
