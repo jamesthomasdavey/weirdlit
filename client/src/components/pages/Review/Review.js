@@ -1,6 +1,8 @@
 // package
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 // Component
 import { default as ReviewComponent } from './../../layout/Review/Review';
@@ -35,8 +37,17 @@ class Review extends Component {
           this.state.review.book.title
         } | WeirdLit`;
 
+    let isCreatedByCurrentUser;
     let review;
     let comments;
+
+    if (!this.state.isLoading) {
+      if (this.props.auth.isAuthenticated) {
+        if (this.state.review.creator._id === this.props.auth.user._id) {
+          isCreatedByCurrentUser = true;
+        }
+      }
+    }
 
     if (this.state.isLoading) {
       review = <Spinner />;
@@ -47,6 +58,7 @@ class Review extends Component {
           showReviewCreator
           showReviewFullText
           showLikeButton
+          showEditButton={isCreatedByCurrentUser}
         />
       );
     }
@@ -69,4 +81,15 @@ class Review extends Component {
   }
 }
 
-export default Review;
+Review.propTypes = {
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  {}
+)(Review);

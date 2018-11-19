@@ -32,6 +32,7 @@ class Review extends Component {
     let showButton;
     let likeButton;
     let commentButton;
+    let editButton;
 
     if (this.props.showBookInfo) {
       bookImage = (
@@ -123,6 +124,18 @@ class Review extends Component {
       commentButton = <CommentButton review={this.props.review} />;
     }
 
+    if (this.props.showEditButton) {
+      editButton = (
+        <Link
+          to={`/books/${this.props.review.book._id}/reviews/${this.props.review._id}/edit`}
+          className="ui tiny labeled icon button"
+        >
+          <i className="edit icon" />
+          Edit
+        </Link>
+      );
+    }
+
     return (
       <div className="ui item">
         {bookImage}
@@ -157,8 +170,11 @@ class Review extends Component {
             {lastUpdated}
             {showButton}
           </div>
-          <div className="meta">
-            {likeButton} {commentButton}
+          <div className={['meta', classes.bottomLinks].join(' ')}>
+            <div>
+              {likeButton} {commentButton}
+            </div>
+            <div>{editButton}</div>
           </div>
         </div>
         <div />
@@ -177,6 +193,7 @@ Review.propTypes = {
   showReviewFullText: PropTypes.bool.isRequired,
   showLikeButton: PropTypes.bool.isRequired,
   showCommentButton: PropTypes.bool.isRequired,
+  showEditButton: PropTypes.bool.isRequired,
   maxReviewChars: PropTypes.number.isRequired
 };
 
@@ -188,6 +205,7 @@ Review.defaultProps = {
   showReviewFullText: false,
   showLikeButton: false,
   showCommentButton: false,
+  showEditButton: false,
   maxReviewChars: 600
 };
 

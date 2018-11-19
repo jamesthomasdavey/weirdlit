@@ -18,3 +18,9 @@
   color: #4585c8;
   cursor: pointer;
 }
+
+.bottomLinks {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
