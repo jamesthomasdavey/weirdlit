@@ -98,7 +98,7 @@ class Review extends Component {
       }
     }
 
-    if (this.props.review.lastUpdated) {
+    if (this.props.review.lastUpdated && this.props.showLastUpdated) {
       lastUpdated = (
         <span className={classes['last-updated']}>
           Last updated {timeAgo.ago(this.props.review.lastUpdated)}
@@ -194,6 +194,7 @@ Review.propTypes = {
   showLikeButton: PropTypes.bool.isRequired,
   showCommentButton: PropTypes.bool.isRequired,
   showEditButton: PropTypes.bool.isRequired,
+  showLastUpdated: PropTypes.bool.isRequired,
   maxReviewChars: PropTypes.number.isRequired
 };
 
@@ -206,6 +207,7 @@ Review.defaultProps = {
   showLikeButton: false,
   showCommentButton: false,
   showEditButton: false,
+  showLastUpdated: false,
   maxReviewChars: 600
 };
 

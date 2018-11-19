@@ -58,6 +58,7 @@ class Review extends Component {
           showReviewCreator
           showReviewFullText
           showLikeButton
+          showLastUpdated
           showEditButton={isCreatedByCurrentUser}
         />
       );
