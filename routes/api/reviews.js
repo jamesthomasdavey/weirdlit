@@ -124,15 +124,14 @@ router.get(
   (req, res) => {
     const errors = {};
     Review.findById(req.params.reviewId)
+      .populate('book', ['title', '_id'])
       .then(review => {
-        if (!review) {
-          errors.noreview = 'No review found';
-          return res.status(404).json(errors);
-        }
         if (!review.creator.equals(req.user._id)) {
           errors.unauthorized = 'You are not authorized to do that';
           return res.status(400).json(errors);
         }
+        if (!review.book._id.equals(req.params.bookId))
+          return res.status(404).json({ success: false });
         res.json(review);
       })
       .catch(err => res.status(404).json(err));
@@ -163,19 +162,16 @@ router.put(
         }
         // validate input
         errors = validateReviewInput(req.body);
-        if (!isEmpty(errors)) return res.status(400).json(errors);
+        if (!isEmpty(errors)) return res.json({ errors });
         // create the new review
-        const updatedReview = {
-          headline: req.body.headline,
-          text: req.body.text.replace(/\n\s*\n\s*\n/g, '\n\n'),
-          name: req.body.name,
-          rating: req.body.rating,
-          lastUpdated: Date.now()
-        };
+        review.headline = req.body.headline;
+        review.text = req.body.text.replace(/\n\s*\n\s*\n/g, '\n\n');
+        review.rating = Number(req.body.rating);
+        review.lastUpdated = Date.now();
         // update review
-        await Review.findByIdAndUpdate(req.params.reviewId, { $set: updatedReview }, { new: true });
+        await review.save();
         // reset book rating
-        let newRating = null;
+        let newRating;
         await Review.find({ book: req.params.bookId }).then(reviews => {
           newRating = (
             reviews.reduce((prev, current) => prev + current.rating, 0) / reviews.length
@@ -186,7 +182,7 @@ router.put(
           book.save();
         });
         // send or redirect
-        res.redirect(`/api/books/${req.params.bookId}`);
+        res.json({ success: true });
       })
       .catch(err => res.status(400).json(err));
   }

@@ -11,9 +11,10 @@ class StarRating extends Component {
   state = {
     value: 0
   };
-  componentDidMount = () => {
-    if (this.props.changeRatingHandler) {
-      this.setState({ value: this.props.value });
+  componentWillReceiveProps = props => {
+    if (props.changeRatingHandler) {
+      const value = props.value;
+      this.setState({ value }, () => {});
     }
   };
   changeRatingHandler = value => {

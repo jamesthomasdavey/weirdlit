@@ -1,7 +1,7 @@
 // package
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
@@ -51,7 +51,7 @@ class NewReview extends Component {
   changeInputHandler = e => {
     const currentState = this.state;
     currentState.form[e.target.name] = e.target.value;
-    this.setState(currentState, this.checkIfChanged);
+    this.setState(currentState);
   };
   changeRatingHandler = rating => {
     const currentState = this.state;
@@ -124,6 +124,13 @@ class NewReview extends Component {
               >
                 Submit
               </button>
+              <Link
+                to={`/books/${this.props.match.params.bookId}`}
+                style={{ marginLeft: '1rem' }}
+                className="ui button"
+              >
+                Cancel
+              </Link>
             </form>
           </div>
         </div>

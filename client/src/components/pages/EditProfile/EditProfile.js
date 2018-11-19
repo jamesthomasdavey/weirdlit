@@ -38,6 +38,7 @@ class EditProfile extends Component {
       instagram: ''
     },
     isLoading: true,
+    hasSaved: false,
     hasChanged: false,
     errors: {}
   };

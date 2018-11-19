@@ -34,7 +34,7 @@ import AddCustomBook from './components/pages/AddCustomBook/AddCustomBook';
 // import BookReviews from './components/pages/BookReviews/BookReviews';
 import Review from './components/pages/Review/Review';
 import NewReview from './components/pages/NewReview/NewReview';
-// import EditReview from './components/pages/EditReview/EditReview';
+import EditReview from './components/pages/EditReview/EditReview';
 import Account from './components/pages/Account/Account';
 import Notifications from './components/pages/Notifications/Notifications';
 import DeleteAccount from './components/pages/DeleteAccount/DeleteAccount';
@@ -88,7 +88,11 @@ class App extends Component {
               {/* <Route exact path="/books/:bookId/reviews" component={BookReviews} /> */}
               <PrivateRoute exact path="/books/:bookId/reviews/new" component={NewReview} />
               <Route exact path="/books/:bookId/reviews/:reviewId" component={Review} />
-              {/* <Route exact path="/books/:bookId/reviews/:reviewId/edit" component={EditReview} /> */}
+              <PrivateRoute
+                exact
+                path="/books/:bookId/reviews/:reviewId/edit"
+                component={EditReview}
+              />
             </Switch>
             <Switch>
               <PrivateRoute exact path="/profile" component={Profile} />
