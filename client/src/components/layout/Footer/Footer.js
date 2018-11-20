@@ -14,7 +14,7 @@ const Footer = props => {
         <div className="ui horizontal small divided link list">
           {props.auth.isAuthenticated && (
             <Link to="/books/add" className="item">
-              Request
+              Add
             </Link>
           )}
           <Link to="/about" className="item">

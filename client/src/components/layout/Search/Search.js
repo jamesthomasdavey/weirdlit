@@ -33,6 +33,8 @@ class Search extends Component {
             this.setState({ searchResults, isSearching: false });
           });
         });
+      } else {
+        this.setState({ isSearching: false, searchResults: {} });
       }
     });
   };

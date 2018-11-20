@@ -66,12 +66,12 @@ class ReadButton extends Component {
     });
   };
   readBookHandler = () => {
-    this.setState({ isLoading: true }, () => {
+    this.setState({ hasRead: true, isLoading: true }, () => {
       axios
         .put('/api/profile/booksRead', { hasRead: true, bookId: this.props.bookId })
         .then(res => {
           if (res.data.success) {
-            this.setState({ hasRead: true, canUnread: true, isLoading: false });
+            this.updateFromProfile(this.props.bookId);
           }
         })
         .catch(err => {
@@ -80,12 +80,12 @@ class ReadButton extends Component {
     });
   };
   unreadBookHandler = () => {
-    this.setState({ isLoading: true }, () => {
+    this.setState({ hasRead: false, isLoading: true }, () => {
       axios
         .put('/api/profile/booksRead', { hasRead: false, bookId: this.props.bookId })
         .then(res => {
           if (res.data.success) {
-            this.setState({ hasRead: false, canUnread: true, isLoading: false });
+            this.updateFromProfile(this.props.bookId);
           }
         })
         .catch(err => {
@@ -99,7 +99,8 @@ class ReadButton extends Component {
       if (this.state.isLoading) {
         readButton = (
           <button
-            className="ui teal disabled labeled icon button loading small"
+            disabled
+            className="ui teal disabled labeled icon button small"
             style={{ cursor: 'default' }}
           >
             <i className="check circle outline icon" />I have read this
@@ -125,8 +126,8 @@ class ReadButton extends Component {
           } else if (!this.state.canUnread) {
             readButton = (
               <button
-                className="ui teal labeled icon button small disabled"
                 disabled
+                className="ui teal labeled icon button small disabled"
                 style={{ cursor: 'default' }}
               >
                 <i className="check circle outline icon" />I have read this
