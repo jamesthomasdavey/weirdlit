@@ -14,6 +14,13 @@ const Review = require('./../../models/Review');
 const User = require('./../../models/User');
 const Comment = require('../../models/Comment');
 
+// functions
+const asyncForEach = async (arr, callback) => {
+  for (let i = 0; i < arr.length; i++) {
+    await callback(arr[i]);
+  }
+};
+
 // middleware
 const verifyBookId = (req, res, next) => {
   Book.findOne({ _id: req.params.bookId, isApproved: true })
@@ -197,7 +204,7 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Review.findById(req.params.reviewId)
-      .then(review => {
+      .then(async review => {
         // check if review exists
         if (!review) {
           errors.noreview = 'No review found';
@@ -208,6 +215,10 @@ router.delete(
           errors.unauthorized = 'You are not authorized to do that';
           return res.status(400).json(errors);
         }
+        await asyncForEach(review.comments, async comment => {
+          await Comment.findByIdAndRemove(comment);
+        });
+
         review
           .remove()
           .then(res.json({ success: true }))

@@ -1,15 +1,15 @@
 // package
-import React, { Fragment, Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
+// validation
 import isEmpty from './../../../validation/is-empty';
-import PropTypes from 'prop-types';
 
 // component
 import TextInputField from './../../layout/TextInputField/TextInputField';
 
-class DeleteBook extends Component {
+class DeleteReview extends Component {
   state = {
     title: '',
     bookTitle: '',
@@ -19,9 +19,11 @@ class DeleteBook extends Component {
   };
   componentDidMount = () => {
     axios
-      .get(`/api/books/${this.props.match.params.bookId}`)
+      .get(
+        `/api/books/${this.props.match.params.bookId}/reviews/${this.props.match.params.reviewId}`
+      )
       .then(res => {
-        this.setState({ bookTitle: res.data.title, isLoading: false, errors: {} });
+        this.setState({ bookTitle: res.data.book.title, isLoading: false });
       })
       .catch(() => {
         this.props.history.push('/404');
@@ -34,45 +36,55 @@ class DeleteBook extends Component {
   formSubmitHandler = e => {
     e.preventDefault();
     this.setState({ isDeleting: true }, () => {
-      axios.delete(`/api/books/${this.props.match.params.bookId}`).then(res => {
-        if (!isEmpty(res.data.errors)) {
-          this.setState({ errors: res.data.errors, isDeleting: false });
-        } else {
-          this.props.history.push('/books');
-        }
-      });
+      axios
+        .delete(
+          `/api/books/${this.props.match.params.bookId}/reviews/${this.props.match.params.reviewId}`
+        )
+        .then(res => {
+          if (res.data.errors && !isEmpty(res.data.errors)) {
+            this.setState({ errors: res.data.errors, isDeleting: false });
+          } else {
+            this.props.history.push(`/books/${this.props.match.params.bookId}`);
+          }
+        });
     });
   };
   render() {
+    document.title = this.state.bookTitle
+      ? `Delete Your Review for ${this.state.bookTitle} | WeirdLit`
+      : 'Delete Your Review | WeirdLit';
     return (
       <Fragment>
         <div className="ui container">
           <div className="ui text container">
-            <h1>Delete {this.state.bookTitle || 'Book'}</h1>
+            <h1>Delete Your Review for {this.state.bookTitle || 'this Book'}</h1>
             <h3>Are you sure? This cannot be undone.</h3>
             <form
               onSubmit={this.formSubmitHandler}
               className={['ui form', this.state.isLoading && 'loading'].join(' ')}
             >
               <TextInputField
-                label="Please type the name of the book to delete:"
+                label="Please type the name of the book to delete your review:"
                 value={this.state.title || ''}
                 onChange={this.changeInputHandler}
                 type="text"
                 name="title"
               />
-              <input
+              <button
                 type="submit"
                 className={[
                   'button negative ui',
                   this.state.title === this.state.bookTitle ? '' : 'disabled',
-                  this.state.isDeleting ? '' : 'loading'
+                  this.state.isDeleting ? 'loading' : ''
                 ].join(' ')}
-                value={`Delete ${this.state.bookTitle || 'Book'}`}
                 disabled={this.state.title !== this.state.bookTitle}
-              />
+              >
+                Delete Review
+              </button>
               <Link
-                to={`/books/${this.props.match.params.bookId}/edit`}
+                to={`/books/${this.props.match.params.bookId}/reviews/${
+                  this.props.match.params.reviewId
+                }`}
                 className="button ui"
                 style={{ marginLeft: '1rem' }}
               >
@@ -86,15 +98,4 @@ class DeleteBook extends Component {
   }
 }
 
-DeleteBook.propTypes = {
-  auth: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-  auth: state.auth
-});
-
-export default connect(
-  mapStateToProps,
-  {}
-)(withRouter(DeleteBook));
+export default DeleteReview;

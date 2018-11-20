@@ -149,13 +149,22 @@ class EditReview extends Component {
                 value={this.state.hasSaved ? 'Saved' : 'Save'}
               />
               <Link
-                className={['ui button'].join(' ')}
+                className="ui button"
                 to={`/books/${this.props.match.params.bookId}/reviews/${
                   this.props.match.params.reviewId
                 }`}
                 style={{ marginLeft: '1rem' }}
               >
                 {this.state.hasSaved ? `Back to ${this.state.bookTitle}` : 'Cancel'}
+              </Link>
+              <Link
+                className="ui negative button"
+                to={`/books/${this.props.match.params.bookId}/reviews/${
+                  this.props.match.params.reviewId
+                }/delete`}
+                style={{ marginLeft: '1rem' }}
+              >
+                Delete Review
               </Link>
             </form>
           </div>

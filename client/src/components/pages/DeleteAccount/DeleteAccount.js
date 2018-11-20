@@ -13,6 +13,7 @@ import TextInputField from './../../layout/TextInputField/TextInputField';
 class DeleteAccount extends Component {
   state = {
     password: '',
+    isDeleting: false,
     errors: {}
   };
   changeInputHandler = e => {
@@ -21,12 +22,14 @@ class DeleteAccount extends Component {
   };
   formSubmitHandler = e => {
     e.preventDefault();
-    axios.post('/api/users/delete', { password: this.state.password }).then(res => {
-      if (!isEmpty(res.data.errors)) {
-        this.setState({ errors: res.data.errors });
-      } else {
-        this.props.logoutUser(this.props.history);
-      }
+    this.setState({ isDeleting: true }, () => {
+      axios.post('/api/users/delete', { password: this.state.password }).then(res => {
+        if (!isEmpty(res.data.errors)) {
+          this.setState({ errors: res.data.errors, isDeleting: false });
+        } else {
+          this.props.logoutUser(this.props.history);
+        }
+      });
     });
   };
   render() {
@@ -47,7 +50,11 @@ class DeleteAccount extends Component {
               />
               <input
                 type="submit"
-                className={['button negative ui', this.state.password ? '' : 'disabled'].join(' ')}
+                className={[
+                  'button negative ui',
+                  this.state.password ? '' : 'disabled',
+                  this.state.isDeleting ? '' : 'loading'
+                ].join(' ')}
                 value="Delete My Account"
               />
               <Link to="/account" className="button ui" style={{ marginLeft: '1rem' }}>
