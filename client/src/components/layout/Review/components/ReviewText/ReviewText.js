@@ -7,24 +7,24 @@ import classes from './ReviewText.module.css';
 
 class ReviewText extends Component {
   state = {
-    isShortText: false,
+    isShortReview: false,
     showFull: false
   };
   componentDidMount = () => {
-    if (this.props.text > this.props.maxChars) {
-      this.setState({ isShortText: false });
+    if (this.props.review.length > this.props.maxChars) {
+      this.setState({ isShortReview: false });
     } else {
-      this.setState({ isShortText: true });
+      this.setState({ isShortReview: true });
     }
   };
   toggleShowFullHandler = () => {
     this.setState({ showFull: !this.state.showFull });
   };
   render() {
-    if (this.state.isShortText) {
+    if (this.state.isShortReview) {
       return (
         <p>
-          {this.props.text.split('\n').map((item, key) => {
+          {this.props.review.split('\n').map((item, key) => {
             return (
               <span key={key}>
                 {item}
@@ -35,12 +35,12 @@ class ReviewText extends Component {
         </p>
       );
     } else {
-      let text;
+      let review;
       let showFullButton;
       if (this.state.showFull) {
-        text = (
+        review = (
           <p>
-            {this.props.text.split('\n').map((item, key) => {
+            {this.props.review.split('\n').map((item, key) => {
               return (
                 <span key={key}>
                   {item}
@@ -51,12 +51,12 @@ class ReviewText extends Component {
           </p>
         );
       } else {
-        const shortenedTextArray = this.props.text.substring(0, this.props.maxChars).split(' ');
-        const shortenedText =
-          shortenedTextArray.splice(0, shortenedTextArray.length - 1).join(' ') + '...';
-        text = (
+        const shortenedReviewArray = this.props.review.substring(0, this.props.maxChars).split(' ');
+        const shortenedReview =
+          shortenedReviewArray.splice(0, shortenedReviewArray.length - 1).join(' ') + '...';
+        review = (
           <p>
-            {shortenedText.split('\n').map((item, key) => {
+            {shortenedReview.split('\n').map((item, key) => {
               return (
                 <span key={key}>
                   {item}
@@ -76,7 +76,7 @@ class ReviewText extends Component {
       );
       return (
         <Fragment>
-          {text}
+          {review}
           {showFullButton}
         </Fragment>
       );
@@ -86,7 +86,7 @@ class ReviewText extends Component {
 
 ReviewText.propTypes = {
   showAll: PropTypes.bool.isRequired,
-  text: PropTypes.string.isRequired,
+  review: PropTypes.string.isRequired,
   maxChars: PropTypes.number.isRequired
 };
 

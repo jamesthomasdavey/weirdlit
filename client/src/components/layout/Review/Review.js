@@ -120,7 +120,7 @@ const Review = props => {
           <StarRating value={Number(props.review.rating)} />
         </div>
         <div className="description">
-          <ReviewText showAll={props.showReviewFullText} text={props.review.text} />
+          <ReviewText showAll={props.showReviewFullText} review={props.review.text} />
         </div>
         <div className="extra">
           {lastUpdated}

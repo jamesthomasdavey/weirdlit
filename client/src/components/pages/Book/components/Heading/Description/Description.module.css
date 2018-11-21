@@ -31,27 +31,8 @@
 }
 
 .description__wrapper {
-  transition: height 0.3s ease-out;
+  /* transition: height 0.3s ease-out; */
   padding: 24px 0;
-}
-
-.description__text {
-  color: white;
-  line-height: 26px;
-}
-
-.show__wrapper {
-  width: 100%;
-  text-align: right;
-}
-
-.show-full__button {
-  color: #4183c4;
-}
-
-.show-full__button:hover {
-  color: #1e70bf;
-  cursor: pointer;
 }
 
 .description__backdrop {

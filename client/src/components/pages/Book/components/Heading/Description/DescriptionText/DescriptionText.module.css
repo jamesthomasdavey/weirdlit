@@ -1,0 +1,18 @@
+.show__wrapper {
+  width: 100%;
+  text-align: right;
+}
+
+.description__text {
+  color: white;
+  line-height: 26px;
+}
+
+.show-full__button {
+  color: #4183c4;
+}
+
+.show-full__button:hover {
+  color: #1e70bf;
+  cursor: pointer;
+}
