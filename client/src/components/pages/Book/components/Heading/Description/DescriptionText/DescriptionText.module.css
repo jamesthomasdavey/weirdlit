@@ -1,11 +1,12 @@
+.description__text,
+.description__text > p {
+  color: white;
+  line-height: 26px;
+}
+
 .show__wrapper {
   width: 100%;
   text-align: right;
-}
-
-.description__text {
-  color: white;
-  line-height: 26px;
 }
 
 .show-full__button {

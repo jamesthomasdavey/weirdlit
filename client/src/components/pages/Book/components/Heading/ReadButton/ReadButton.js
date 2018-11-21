@@ -9,6 +9,7 @@ class ReadButton extends Component {
     hasRead: false,
     canUnread: true,
     isLoading: true,
+    isChanging: false,
     errors: []
   };
   componentDidMount = () => {
@@ -36,14 +37,14 @@ class ReadButton extends Component {
         }
       }
       // set the state with the current settings
-      this.setState({ hasRead, canUnread }, () => {
+      this.setState({ hasRead, canUnread, isChanging: false }, () => {
         // if the user has read it and can unread it,
         if (this.state.hasRead && this.state.canUnread) {
           // then check if they have written any reviews
           this.updateFromReviews(bookId);
         } else {
           // otherwise, just set loading to false
-          this.setState({ isLoading: false });
+          this.setState({ isLoading: false, isChanging: false });
         }
       });
     });
@@ -55,18 +56,18 @@ class ReadButton extends Component {
         // check each review
         res.data.reviews.forEach(review => {
           if (review.book === bookId) {
-            this.setState({ canUnread: false, isLoading: false });
+            this.setState({ canUnread: false, isLoading: false, isChanging: false });
           } else {
-            this.setState({ isLoading: false });
+            this.setState({ isLoading: false, isChanging: false });
           }
         });
       } else {
-        this.setState({ isLoading: false });
+        this.setState({ isLoading: false, isChanging: false });
       }
     });
   };
   readBookHandler = () => {
-    this.setState({ hasRead: true, isLoading: true }, () => {
+    this.setState({ hasRead: true, isChanging: true }, () => {
       axios
         .put('/api/profile/booksRead', { hasRead: true, bookId: this.props.bookId })
         .then(res => {
@@ -80,7 +81,7 @@ class ReadButton extends Component {
     });
   };
   unreadBookHandler = () => {
-    this.setState({ hasRead: false, isLoading: true }, () => {
+    this.setState({ hasRead: false, isChanging: true }, () => {
       axios
         .put('/api/profile/booksRead', { hasRead: false, bookId: this.props.bookId })
         .then(res => {
@@ -100,16 +101,22 @@ class ReadButton extends Component {
         readButton = (
           <button
             disabled
-            className="ui teal disabled labeled icon button small"
+            className="ui grey disabled labeled icon button small"
             style={{ cursor: 'default' }}
           >
-            <i className="check circle outline icon" />I have read this
+            <i className="check circle outline icon" />I haven't read this
           </button>
         );
       } else {
         if (!this.state.hasRead) {
           readButton = (
-            <button onClick={this.readBookHandler} className="ui grey labeled icon button small">
+            <button
+              onClick={this.readBookHandler}
+              className={[
+                'ui grey labeled icon button small',
+                this.state.isChanging && 'disabled'
+              ].join(' ')}
+            >
               <i className="circle outline icon" />I haven't read this
             </button>
           );
@@ -118,7 +125,10 @@ class ReadButton extends Component {
             readButton = (
               <button
                 onClick={this.unreadBookHandler}
-                className="ui teal labeled icon button small"
+                className={[
+                  'ui teal labeled icon button small',
+                  this.state.isChanging && 'disabled'
+                ].join(' ')}
               >
                 <i className="check circle outline icon" />I have read this
               </button>

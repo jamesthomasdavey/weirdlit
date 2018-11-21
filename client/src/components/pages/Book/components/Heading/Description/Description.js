@@ -39,7 +39,7 @@ class Description extends Component {
           </h3>
         </div>
         <SmoothCollapse expanded={this.state.isExpanded}>
-          <div className={['ui container', classes.description__wrapper].join(' ')}>
+          <div className={['ui text container', classes.description__wrapper].join(' ')}>
             <DescriptionText description={this.props.description} />
           </div>
         </SmoothCollapse>
