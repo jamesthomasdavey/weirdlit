@@ -12,6 +12,7 @@ class ProfileBooks extends Component {
   state = {
     numberOfBooksToShow: 12,
     booksRead: [],
+    name: '',
     isLoading: true
   };
   componentDidMount = () => {
@@ -24,10 +25,14 @@ class ProfileBooks extends Component {
   };
   updateFromProfile = userId => {
     axios.get(`/api/profile/user/${userId}`).then(res => {
-      this.setState({ booksRead: res.data.booksRead, isLoading: false });
+      this.setState({ booksRead: res.data.booksRead, name: res.data.user.name, isLoading: false });
     });
   };
   render() {
+    document.title = this.state.isLoading
+      ? 'Books Read | WeirdLit'
+      : `Books Read by ${this.state.name.split(' ')[0]} | WeirdLit`;
+
     let bookCards;
     let showMoreBooksButton;
 

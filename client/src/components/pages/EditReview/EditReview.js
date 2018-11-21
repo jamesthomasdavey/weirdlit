@@ -155,7 +155,7 @@ class EditReview extends Component {
                 }`}
                 style={{ marginLeft: '1rem' }}
               >
-                {this.state.hasSaved ? `Back to ${this.state.bookTitle}` : 'Cancel'}
+                {this.state.hasSaved ? `Back to Review` : 'Cancel'}
               </Link>
               <Link
                 className="ui negative button"

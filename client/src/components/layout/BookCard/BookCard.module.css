@@ -1,6 +1,13 @@
 .wrapper {
   width: 50%;
-  margin-bottom: 18px;
+  padding: 8px;
+}
+
+.wrapper > div {
+  border: 1px solid #dededf;
+  border-radius: 8px;
+  padding: 12px 6px;
+  box-shadow: 0 0 8px -1px rgba(0, 0, 0, 0.3);
 }
 
 @media (min-width: 540px) {
@@ -17,7 +24,6 @@
 
 .imageWrapper {
   width: 100%;
-  padding: 0 8%;
   text-align: center;
   margin-bottom: 8px;
 }

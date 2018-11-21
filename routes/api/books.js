@@ -16,6 +16,7 @@ const Book = require('./../../models/Book');
 const Review = require('./../../models/Review');
 const User = require('./../../models/User');
 const Tag = require('./../../models/Tag');
+const Featured = require('./../../models/Featured');
 
 // functions
 const asyncForEach = async (arr, callback) => {
@@ -56,6 +57,55 @@ router.get('/', (req, res) => {
       res.json(books);
     })
     .catch(err => res.status(400).json(err));
+});
+
+// @route     get /api/books/featured
+// @desc      get featured book ID
+// @access    public
+router.get('/featured', (req, res) => {
+  let date = Math.floor(new Date().getTime() / 1000 / 60 / 60 / 24);
+  while (date % 7 !== 0) {
+    date--;
+  }
+  Featured.findOne({ featuredDate: date }).then(featured => {
+    if (featured) return res.json({ bookId: featured.bookId });
+    Featured.find().then(featureds => {
+      const featuredIds = featureds.map(featured => featured.bookId.toString());
+      Book.find({ isApproved: true }).then(books => {
+        const getRandomBookId = () => books[Math.floor(Math.random() * books.length)]._id;
+        let randomBookId = getRandomBookId();
+        while (featuredIds.includes(randomBookId.toString())) {
+          randomBookId = getRandomBookId();
+        }
+        Featured.create({ featuredDate: date, bookId: randomBookId }).then(newFeatured => {
+          res.json({ bookId: newFeatured.bookId });
+        });
+      });
+    });
+  });
+
+  Featured.find().then(featureds => {
+    const featuredDates = featureds.map(book => book.featuredDate);
+    if (featuredDates.includes(date)) {
+      const index = featuredDates.indexOf(date);
+      res.json({ bookId: featured.books[index].bookId });
+    } else {
+      Book.find({ isApproved: true }).then(books => {
+        const featuredIds = featured.books.map(book => book.bookId.toString());
+        const getRandomBookId = () => {
+          return books[Math.floor(Math.random() * books.length)]._id;
+        };
+        let randomBookId = getRandomBookId().toString();
+        while (featuredIds.includes(randomBookId)) {
+          randomBookId = getRandomBookId();
+        }
+        featured.books.push({ featuredDate: date, bookId: randomBookId });
+        featured.save().then(() => {
+          res.json({ bookId: randomBookId });
+        });
+      });
+    }
+  });
 });
 
 // @route     get /api/books/pending

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 // component
 import StarRating from './../StarRating/StarRating';
 import AuthorLinks from './../AuthorLinks/AuthorLinks';
+import BookThumb from './components/BookThumb/BookThumb';
 
 // css
 import classes from './BookCard.module.css';
@@ -45,22 +46,20 @@ class BookCard extends Component {
 
     return (
       <div className={classes.wrapper}>
-        <div className={classes.imageWrapper}>
-          <div className={['ui small image', classes.uiSmallImage].join(' ')}>
-            <Link to={`/books/${this.props.book._id}`} className={classes.inlineBlockLink}>
-              <img src={this.props.book.image.largeThumbnail} alt="cover" />
-            </Link>
+        <div>
+          <div className={classes.imageWrapper}>
+            <BookThumb book={this.props.book} />
           </div>
-        </div>
-        <div className={classes.info}>
-          <h3 className={classes.title}>{this.props.book.title}</h3>
-          {rating}
-          {authors}
-          {publishedDate}
-          <div className={classes.viewButton}>
-            <Link to={`/books/${this.props.book._id}`} className="ui tiny primary button">
-              View
-            </Link>
+          <div className={classes.info}>
+            <h3 className={classes.title}>{this.props.book.title}</h3>
+            {rating}
+            {authors}
+            {publishedDate}
+            <div className={classes.viewButton}>
+              <Link to={`/books/${this.props.book._id}`} className="ui tiny primary button">
+                View
+              </Link>
+            </div>
           </div>
         </div>
       </div>
