@@ -36,10 +36,10 @@ class BookObj extends Component {
     });
   };
   render() {
-    let bookCardContent;
+    let bookObjContent;
 
     if (this.state.isLoading) {
-      bookCardContent = <Spinner />;
+      bookObjContent = <Spinner />;
     } else {
       let descriptionContent;
 
@@ -51,7 +51,7 @@ class BookObj extends Component {
         descriptionContent = descriptionArray.join(' ') + '...';
       }
 
-      bookCardContent = (
+      bookObjContent = (
         <div className={classes.wrapper}>
           <div className="ui items">
             <div className="ui item">
@@ -85,7 +85,7 @@ class BookObj extends Component {
         </div>
       );
     }
-    return <div>{bookCardContent}</div>;
+    return <div>{bookObjContent}</div>;
   }
 }
 

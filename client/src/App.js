@@ -25,6 +25,7 @@ import Login from './components/pages/Login/Login';
 import Browse from './components/pages/Browse/Browse';
 import Profile from './components/pages/Profile/Profile';
 import EditProfile from './components/pages/EditProfile/EditProfile';
+import ProfileBooks from './components/pages/ProfileBooks/ProfileBooks';
 import Pending from './components/pages/Pending/Pending';
 import Book from './components/pages/Book/Book';
 import AddBook from './components/pages/AddBook/AddBook';
@@ -104,7 +105,7 @@ class App extends Component {
               <PrivateRoute exact path="/profile" component={Profile} />
               <PrivateRoute exact path="/profile/edit" component={EditProfile} />
               <Route exact path="/profile/user/:userId" component={Profile} />
-              {/* <Route exact path="/profile/user/:userId/books" component={ProfileBooks} /> */}
+              <Route exact path="/profile/user/:userId/books" component={ProfileBooks} />
               <Route exact path="/profile/:handle" component={Profile} />
               {/* <Route exact path="/profile/:handle/books" component={ProfileBooks} /> */}
             </Switch>

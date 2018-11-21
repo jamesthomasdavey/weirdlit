@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // component
-import BookCard from './../../../../layout/BookCard/BookCard';
+import BookThumb from './../../../../layout/BookThumb/BookThumb';
 
 // css
 import classes from './BooksRead.module.css';
@@ -17,7 +17,7 @@ const BooksRead = props => {
       .splice(0, numberOfBooksToDisplay);
 
     let booksReadContent = randomizedBooks.map(book => (
-      <BookCard book={book} history={props.history} key={book._id} />
+      <BookThumb book={book} key={book._id} />
     ));
     return (
       <Fragment>

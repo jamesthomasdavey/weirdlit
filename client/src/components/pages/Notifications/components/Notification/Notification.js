@@ -27,11 +27,11 @@ class Notification extends Component {
   readNotificationHandler = e => {
     e.preventDefault();
     if (this.props.notification.read) {
-      document.querySelector('.viewLink').click();
+      document.querySelector(`#id${this.props.notification._id}`).click();
     } else {
       this.setState({ isRedirecting: true }, () => {
-        axios.put(`/api/users/notifications/${this.props.notification._id}`).then(res => {
-          document.querySelector('.viewLink').click();
+        axios.put(`/api/users/notifications/${this.props.notification._id}`).then(() => {
+          document.querySelector(`#id${this.props.notification._id}`).click();
         });
       });
     }
@@ -58,7 +58,7 @@ class Notification extends Component {
                 this.state.isRedirecting ? 'loading' : ''
               ].join(' ')}
             >
-              <HashLink className="viewLink" to={this.props.notification.link} />
+              <HashLink id={`id${this.props.notification._id}`} to={this.props.notification.link} />
               View
             </button>{' '}
             <i

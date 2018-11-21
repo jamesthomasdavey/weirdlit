@@ -9,7 +9,7 @@ module.exports = reqBody => {
 
   if (!reqBody.rating) {
     errors.rating = 'Rating is required';
-  } else if (parseInt(reqBody.rating) < 1 / 2 || parseInt(reqBody.rating) > 4) {
+  } else if (Number(reqBody.rating) < 1 / 2 || Number(reqBody.rating) > 4) {
     errors.rating = 'Rating must be between half a star and 4 stars';
   }
 

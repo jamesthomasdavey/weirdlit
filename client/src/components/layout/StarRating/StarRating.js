@@ -23,10 +23,15 @@ class StarRating extends Component {
     });
   };
   render() {
+    let styles;
+    if (this.props.center) {
+      styles = { textAlign: 'center' };
+    }
+
     if (this.props.changeRatingHandler) {
       return (
         <Fragment>
-          <div className={[classes.wrapper, classes.wrapper__edit].join(' ')}>
+          <div className={[classes.wrapper, classes.wrapper__edit].join(' ')} style={styles}>
             <ReactStars
               count={4}
               value={this.state.value}
@@ -41,7 +46,7 @@ class StarRating extends Component {
     } else if (!this.props.noRating) {
       return (
         <Fragment>
-          <div className={classes.wrapper}>
+          <div className={classes.wrapper} style={styles}>
             <ReactStarRatings
               rating={this.props.value}
               numberOfStars={4}
@@ -61,6 +66,7 @@ class StarRating extends Component {
 
 StarRating.propTypes = {
   noRating: PropTypes.bool,
+  center: PropTypes.bool,
   value: PropTypes.number,
   changeRatingHandler: PropTypes.func
 };

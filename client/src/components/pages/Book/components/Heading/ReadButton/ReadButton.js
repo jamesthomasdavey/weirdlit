@@ -28,9 +28,9 @@ class ReadButton extends Component {
         }
       });
       // if the user's favorite book is in the database,
-      if (res.data.favoriteBookObj) {
+      if (res.data.favoriteBook) {
         // and if it's selected as the user's favorite book,
-        if (res.data.favoriteBookObj._id === bookId) {
+        if (res.data.favoriteBook.id === bookId) {
           // then they can't unread it
           canUnread = false;
         }
