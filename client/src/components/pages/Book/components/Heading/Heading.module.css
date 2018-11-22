@@ -50,7 +50,7 @@
 }
 
 .edit__button {
-  position: absolute;
+  position: absolute !important;
   right: 16px;
   top: 16px;
 }

@@ -1,69 +1,152 @@
 .wrapper {
-  margin: 0 auto;
-  max-width: 500px;
-  /* padding: 1.5rem 16px 1.5rem; */
-  z-index: 20;
   position: relative;
+  margin: 0 auto;
+  padding: 1.5rem 16px;
+  z-index: 20;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 @media (min-width: 768px) {
   .wrapper {
     margin: 0 auto;
-    max-width: 500px;
-    padding: 1.5rem 16px;
   }
 }
 
-.book__image {
-  display: block;
+.content {
+  width: 100%;
+  padding-top: 16px;
+  color: white;
+  text-shadow: 0 0 16px rgba(0, 0, 0, 0.67);
 }
 
-.header {
-  width: 100%;
-  color: white !important;
-  text-align: center;
+@media (min-width: 600px) {
+  .content {
+    width: 240px;
+    padding-top: 0;
+  }
 }
 
 @media (min-width: 768px) {
-  .header {
-    text-align: left;
+  .content {
+    width: 100%;
+    padding: 16px 16px 0;
   }
+}
+
+@media (min-width: 992px) {
+  .content {
+    width: 300px;
+    padding-top: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .content {
+    width: 340px;
+  }
+}
+
+.header {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 14px;
+  line-height: 26px;
 }
 
 .authors {
   text-align: center;
-}
-
-@media (min-width: 768px) {
-  .authors {
-    text-align: left;
-  }
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 .year {
   text-align: center;
-  margin-bottom: 2rem !important;
-  color: #bbb !important;
+  color: #ccc;
+  margin-bottom: 8px;
 }
 
-@media (min-width: 768px) {
-  .year {
-    text-align: left;
-    margin-bottom: 1rem !important;
-  }
+.description,
+.description > p {
+  line-height: 20px;
+  margin-bottom: 12px;
 }
 
 .viewButton {
-  padding-top: 12px;
   text-align: center;
+  margin-bottom: 12px;
 }
 
-@media (min-width: 768px) {
+.viewButton > a {
+  box-shadow: 0 0 14px 2px rgba(0, 0, 0, 0.25) !important;
+}
+
+.moreByLinks {
+  text-align: center;
+  line-height: 20px;
+}
+
+.moreByLink {
+  display: block;
+  color: white;
+}
+
+.moreByLink:hover {
+  color: white;
+}
+
+@media (min-width: 600px) {
+  .header {
+    text-align: left;
+  }
+  .authors {
+    text-align: left;
+  }
+  .year {
+    text-align: left;
+  }
   .viewButton {
+    text-align: left;
+  }
+  .moreByLinks {
     text-align: left;
   }
 }
 
-.description {
-  color: white !important;
+@media (min-width: 768px) {
+  .header {
+    text-align: center;
+  }
+  .authors {
+    text-align: center;
+  }
+  .year {
+    text-align: center;
+  }
+  .viewButton {
+    text-align: center;
+  }
+  .moreByLinks {
+    text-align: center;
+  }
+}
+
+@media (min-width: 992px) {
+  .header {
+    text-align: left;
+  }
+  .authors {
+    text-align: left;
+  }
+  .year {
+    text-align: left;
+  }
+  .viewButton {
+    text-align: left;
+  }
+  .moreByLinks {
+    text-align: left;
+  }
 }

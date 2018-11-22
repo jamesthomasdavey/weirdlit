@@ -1,9 +1,10 @@
 // package
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 
 // component
 import FeaturedBook from './components/FeaturedBook/FeaturedBook';
 import Tags from './components/Tags/Tags';
+import RecentlyPublished from './components/RecentlyPublished/RecentlyPublished';
 
 // css
 import classes from './Browse.module.css';
@@ -26,7 +27,8 @@ class Browse extends Component {
               </div>
             </div>
           </div>
-          <div className="ui raised segment" />
+
+          <RecentlyPublished />
         </div>
       </div>
     );

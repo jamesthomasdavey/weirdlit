@@ -11,12 +11,14 @@ import classes from './FeaturedBook.module.css';
 class FeaturedBook extends Component {
   state = {
     book: {},
+    featuredDate: '',
     isLoading: true
   };
   componentDidMount = () => {
     axios
       .get('/api/books/featured')
       .then(res => {
+        this.setState({ featuredDate: res.data.featuredDate });
         return axios.get(`/api/books/${res.data.bookId}`);
       })
       .then(res => {
@@ -25,6 +27,7 @@ class FeaturedBook extends Component {
   };
   render() {
     let backgroundImage;
+    let dateHeading;
     let bookObj;
 
     if (!this.state.isLoading) {
@@ -35,14 +38,27 @@ class FeaturedBook extends Component {
       bookObj = <BookObj bookId={this.state.book._id} />;
     }
 
+    if (!this.state.isLoading) {
+      const date = new Date(this.state.featuredDate * 24 * 60 * 60 * 1000);
+      const month = date.toLocaleString('en-us', { month: 'long' });
+      const day = date.getDate();
+      const year = date.getFullYear();
+      dateHeading = `Week of ${month} ${day}, ${year}`;
+    }
+
     return (
       <div className={classes.wrapper}>
-        <div
-          className={classes.backdrop}
-          style={{ backgroundImage: `url('${backgroundImage}')` }}
-        />
+        {!this.state.isLoading && (
+          <div
+            className={classes.backdrop}
+            style={{ backgroundImage: `url('${backgroundImage}')` }}
+          />
+        )}
         <div className={classes.backdrop__cover} />
-        <h2 className={classes.featuredHeader}>FEATURED</h2>
+        <div className={classes.featuredHeader}>
+          <h2>FEATURED</h2>
+          <h4>{dateHeading}</h4>
+        </div>
         {bookObj}
       </div>
     );

@@ -33,10 +33,49 @@
 .featuredHeader {
   position: absolute;
   z-index: 22;
-  color: white;
-  left: 16px;
-  top: 10px;
+  width: 100%;
+  left: 0;
+  top: 0;
   margin: 0 !important;
-  user-select: none;
+}
+
+.featuredHeader > h2 {
+  color: white;
+  /* display: inline; */
   letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  text-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+}
+
+.featuredHeader > h4 {
+  color: #ccc;
+  /* display: inline; */
+  user-select: none;
+  font-weight: normal;
+  text-align: center;
+  margin-top: 0;
+  text-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+}
+
+@media (min-width: 600px) {
+  .featuredHeader {
+    position: absolute;
+    z-index: 22;
+    width: auto;
+    left: 16px;
+    top: 10px;
+    margin: 0 !important;
+  }
+  .featuredHeader > h2 {
+    display: inline;
+    text-align: left;
+  }
+  .featuredHeader > h4 {
+    display: inline;
+    text-align: left;
+    margin-left: 1rem;
+  }
 }

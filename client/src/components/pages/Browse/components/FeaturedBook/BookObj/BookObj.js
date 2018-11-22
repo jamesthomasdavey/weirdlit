@@ -8,6 +8,7 @@ import renderHTML from 'react-render-html';
 // component
 import Spinner from './../../../../../layout/Spinner/Spinner';
 import AuthorLinks from './../../../../../layout/AuthorLinks/AuthorLinks';
+import BookThumb from './BookThumb/BookThumb';
 
 // css
 import classes from './BookObj.module.css';
@@ -43,55 +44,44 @@ class BookObj extends Component {
     } else {
       let descriptionContent;
 
-      if (this.state.description.length < 250) {
+      if (this.state.description.length < 300) {
         descriptionContent = this.state.description;
       } else {
-        const descriptionArray = this.state.description.substring(0, 250).split(' ');
+        const descriptionArray = this.state.description.substring(0, 300).split(' ');
         descriptionArray.pop();
         descriptionContent = descriptionArray.join(' ') + '...';
       }
 
+      const moreByLink = this.state.authors.map((author, index) => {
+        if (index < 2) {
+          return (
+            <Link
+              to={`/authors/${author._id}/books`}
+              key={author._id}
+              className={classes.moreByLink}
+            >
+              More by {author.name}
+            </Link>
+          );
+        } else return null;
+      });
+
       bookObjContent = (
         <div className={classes.wrapper}>
-          <div className="ui items">
-            <div className="ui item">
-              <Link
-                to={`/books/${this.props.bookId}`}
-                className={['ui medium image', classes.book__image].join(' ')}
-              >
-                <img
-                  src={this.state.image.largeThumbnail}
-                  className="book__image"
-                  alt={this.state.title}
-                />
-              </Link>
-              <div className="content">
-                <div className={['header', classes.header].join(' ')}>{this.state.title}</div>
-                <div className={classes.authors}>
-                  <AuthorLinks authors={this.state.authors} inverted />
-                </div>
-                <div className={['meta', classes.year].join(' ')}>
-                  {this.state.publishedDate.getFullYear()}
-                </div>
-                <div className={['description', classes.description].join(' ')}>
-                  {renderHTML(descriptionContent)}
-                </div>
-                <div className={['meta', classes.viewButton].join(' ')}>
-                  <Link to={`/books/${this.props.bookId}`} className="tiny primary button ui">
-                    View
-                  </Link>
-                </div>
-                {this.state.authors.map((author, index) => {
-                  if (index < 2) {
-                    return (
-                      <div>
-                        <Link to={`/authors/${author._id}/books`}>More by {author.name}</Link>
-                      </div>
-                    );
-                  } else return null;
-                })}
-              </div>
+          <BookThumb book={{ image: this.state.image, _id: this.props.bookId }} />
+          <div className={classes.content}>
+            <div className={classes.header}>{this.state.title}</div>
+            <div className={classes.authors}>
+              <AuthorLinks authors={this.state.authors} inverted />
             </div>
+            <div className={classes.year}>{this.state.publishedDate.getFullYear()}</div>
+            <div className={classes.description}>{renderHTML(descriptionContent)}</div>
+            <div className={classes.viewButton}>
+              <Link to={`/books/${this.props.bookId}`} className="tiny primary button ui">
+                View
+              </Link>
+            </div>
+            <div className={classes.moreByLinks}>{moreByLink}</div>
           </div>
         </div>
       );

@@ -16,9 +16,7 @@ const BooksRead = props => {
       .sort(() => Math.random() - 0.5)
       .splice(0, numberOfBooksToDisplay);
 
-    let booksReadContent = randomizedBooks.map(book => (
-      <BookThumb book={book} key={book._id} />
-    ));
+    let booksReadContent = randomizedBooks.map(book => <BookThumb book={book} key={book._id} />);
     return (
       <Fragment>
         <h5 className="ui horizontal divider header">

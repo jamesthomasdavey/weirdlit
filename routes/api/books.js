@@ -59,6 +59,19 @@ router.get('/', (req, res) => {
     .catch(err => res.status(400).json(err));
 });
 
+// @route     get /api/books/sort/publishedDate/limit/:limitAmount/skip/:skipAmount
+// @desc      view approved books
+// @access    public
+router.get('/sort/publishedDate/limit/:limitAmount/skip/:skipAmount', (req, res) => {
+  Book.find({ isApproved: true })
+    .sort({ publishedDate: -1 })
+    .skip(parseInt(req.params.skipAmount))
+    .limit(parseInt(req.params.limitAmount))
+    .then(books => {
+      res.json(books);
+    });
+});
+
 // @route     get /api/books/featured
 // @desc      get featured book ID
 // @access    public
@@ -67,8 +80,9 @@ router.get('/featured', (req, res) => {
   while (date % 7 !== 0) {
     date--;
   }
+  date -= 3;
   Featured.findOne({ featuredDate: date }).then(featured => {
-    if (featured) return res.json({ bookId: featured.bookId });
+    if (featured) return res.json(featured);
     Featured.find().then(featureds => {
       const featuredIds = featureds.map(featured => featured.bookId.toString());
       Book.find({ isApproved: true }).then(books => {
@@ -78,7 +92,7 @@ router.get('/featured', (req, res) => {
           randomBookId = getRandomBookId();
         }
         Featured.create({ featuredDate: date, bookId: randomBookId }).then(newFeatured => {
-          res.json({ bookId: newFeatured.bookId });
+          res.json(newFeatured);
         });
       });
     });
