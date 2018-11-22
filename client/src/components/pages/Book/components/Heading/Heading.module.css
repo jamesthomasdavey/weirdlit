@@ -51,6 +51,7 @@
 
 .edit__button {
   position: absolute !important;
+  z-index: 88;
   right: 16px;
   top: 16px;
 }

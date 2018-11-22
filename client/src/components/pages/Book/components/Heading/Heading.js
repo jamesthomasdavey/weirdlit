@@ -26,9 +26,8 @@ const Heading = props => {
           {props.auth.user.isAdmin && (
             <Link
               to={`/books/${props.book._id}/edit`}
-              className={['ui tiny button labeled icon', classes.edit__button].join(' ')}
+              className={['ui tiny button', classes.edit__button].join(' ')}
             >
-              <i className="edit icon" />
               Edit
             </Link>
           )}
