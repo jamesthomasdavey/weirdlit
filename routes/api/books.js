@@ -72,6 +72,10 @@ router.get('/sort/publishedDate/limit/:limitAmount/skip/:skipAmount', (req, res)
     });
 });
 
+// router.get('/filter/:tags/sort/publishedDate/:sortOrder/skip/:skipAmount', (req, res) => {
+
+// })
+
 // @route     get /api/books/featured
 // @desc      get featured book ID
 // @access    public
@@ -97,29 +101,23 @@ router.get('/featured', (req, res) => {
       });
     });
   });
+});
 
-  Featured.find().then(featureds => {
-    const featuredDates = featureds.map(book => book.featuredDate);
-    if (featuredDates.includes(date)) {
-      const index = featuredDates.indexOf(date);
-      res.json({ bookId: featured.books[index].bookId });
-    } else {
-      Book.find({ isApproved: true }).then(books => {
-        const featuredIds = featured.books.map(book => book.bookId.toString());
-        const getRandomBookId = () => {
-          return books[Math.floor(Math.random() * books.length)]._id;
-        };
-        let randomBookId = getRandomBookId().toString();
-        while (featuredIds.includes(randomBookId)) {
-          randomBookId = getRandomBookId();
-        }
-        featured.books.push({ featuredDate: date, bookId: randomBookId });
-        featured.save().then(() => {
-          res.json({ bookId: randomBookId });
-        });
-      });
-    }
-  });
+// @route     get /api/books/random
+// @desc      view random books
+// @access    public
+router.get('/random', (req, res) => {
+  const errors = {};
+  Book.find({ isApproved: true, isRejected: false })
+    .then(books => {
+      if (books.length === 0) {
+        errors.nobooks = 'No books found';
+        return res.status(404).json(errors);
+      }
+      const randomBook = books[Math.floor(Math.random() * books.length)];
+      res.json({ bookId: randomBook._id });
+    })
+    .catch(err => res.status(404).json(err));
 });
 
 // @route     get /api/books/pending
@@ -188,23 +186,6 @@ router.put(
     });
   }
 );
-
-// @route     get /api/books/random
-// @desc      view random books
-// @access    public
-router.get('/random', (req, res) => {
-  const errors = {};
-  Book.find({ isApproved: true })
-    .then(books => {
-      if (books.length === 0) {
-        errors.nobooks = 'No books found';
-        return res.status(404).json(errors);
-      }
-      const randomBook = books[Math.floor(Math.random() * books.length)];
-      res.redirect(`/api/books/${randomBook._id}`);
-    })
-    .catch(err => res.status(404).json(err));
-});
 
 // @route     post /api/books/add/search
 // @desc      search for books to add, return a list of up to 10 results

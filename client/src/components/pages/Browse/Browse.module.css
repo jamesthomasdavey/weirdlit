@@ -2,3 +2,20 @@
   /* padding: 0 !important; */
   overflow: hidden;
 }
+
+@media (min-width: 768px) {
+  .tableRow {
+    display: table-row;
+  }
+  .tableCell {
+    display: table-cell;
+  }
+  .otherSegment {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+  }
+}

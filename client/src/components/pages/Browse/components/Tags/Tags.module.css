@@ -1,0 +1,12 @@
+.wrapper {
+  width: 100%;
+}
+
+.tags {
+  text-align: center;
+}
+
+.tag {
+  display: inline-block;
+  margin: 0 6px 6px 0 !important;
+}

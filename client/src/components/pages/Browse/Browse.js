@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 // component
 import FeaturedBook from './components/FeaturedBook/FeaturedBook';
 import Tags from './components/Tags/Tags';
+import Random from './components/Random/Random'
 import RecentlyPublished from './components/RecentlyPublished/RecentlyPublished';
 
 // css
@@ -15,15 +16,16 @@ class Browse extends Component {
     return (
       <div className="ui container">
         <div className="ui segment">
-          <div className="ui two column stackable grid">
-            <div className="eleven wide column">
+          <div className={['ui two column stackable grid', classes.tableRow].join(' ')}>
+            <div className={['eleven wide column', classes.tableCell].join(' ')}>
               <div className={['ui raised segment', classes.featuredSegment].join(' ')}>
                 <FeaturedBook />
               </div>
             </div>
-            <div className="five wide column">
-              <div className="ui raised segment">
+            <div className={['five wide column', classes.tableCell].join(' ')}>
+              <div className={['ui raised segment', classes.otherSegment].join(' ')}>
                 <Tags />
+                <Random />
               </div>
             </div>
           </div>
