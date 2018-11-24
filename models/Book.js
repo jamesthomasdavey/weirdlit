@@ -48,13 +48,6 @@ const BookSchema = new Schema({
   pageCount: {
     type: Number
   },
-  rating: {
-    type: Number
-  },
-  ratingDisplay: {
-    type: Boolean,
-    default: false
-  },
   description: {
     type: String
   },

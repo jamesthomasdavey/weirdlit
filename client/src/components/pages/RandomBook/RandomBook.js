@@ -13,7 +13,6 @@ class RandomBook extends Component {
   };
   componentDidMount = () => {
     axios.get('/api/books/random').then(res => {
-      console.log(res.data);
       this.setState({ bookId: res.data.bookId, isLoading: false });
     });
   };

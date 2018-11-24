@@ -28,6 +28,7 @@ import EditProfile from './components/pages/EditProfile/EditProfile';
 import ProfileBooks from './components/pages/ProfileBooks/ProfileBooks';
 import Pending from './components/pages/Pending/Pending';
 import Book from './components/pages/Book/Book';
+import Books from './components/pages/Books/Books';
 import AddBook from './components/pages/AddBook/AddBook';
 import EditBook from './components/pages/EditBook/EditBook';
 import DeleteBook from './components/pages/DeleteBook/DeleteBook';
@@ -86,8 +87,12 @@ class App extends Component {
               <PrivateRoute exact path="/books/add" component={AddBook} />
               <Route exact path="/books/random" component={RandomBook} />
               <PrivateRoute exact path="/books/add/custom" component={AddCustomBook} />
-              {/* <Route exact path="/books" component={Books} /> */}
-              {/* <Route exact path="/books/filter/:tags/sort/:sortMethod/:sortOrder" component={Books} /> */}
+              <Route exact path="/books" component={Books} />
+              <Route
+                exact
+                path="/books/filter/:tags/sort/:sortMethod/:sortOrder"
+                component={Books}
+              />
               <Route exact path="/books/:bookId" component={Book} />
               <AdminRoute exact path="/books/:bookId/edit" component={EditBook} />
               <AdminRoute exact path="/books/:bookId/delete" component={DeleteBook} />

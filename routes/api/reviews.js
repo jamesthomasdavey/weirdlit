@@ -70,24 +70,6 @@ router.post('/', verifyBookId, passport.authenticate('jwt', { session: false }),
         creator: req.user._id
       });
       await newReview.save();
-      // average out ratings
-      let newRating = null;
-      await Review.find({ book: req.params.bookId }).then(reviews => {
-        newRating = (
-          reviews.reduce((prev, current) => prev + current.rating, 0) / reviews.length
-        ).toFixed(2);
-      });
-      await Book.findById(req.params.bookId).then(async book => {
-        book.rating = newRating;
-        await Review.find({ book: req.params.bookId }).then(async reviews => {
-          if (reviews.length > 2) {
-            book.ratingDisplay = true;
-          } else {
-            book.ratingDisplay = false;
-          }
-        });
-        await book.save();
-      });
       await Profile.findOne({ user: req.user._id }).then(async profile => {
         let hasRead;
         profile.booksRead.forEach(bookRead => {
@@ -177,17 +159,6 @@ router.put(
         review.lastUpdated = Date.now();
         // update review
         await review.save();
-        // reset book rating
-        let newRating;
-        await Review.find({ book: req.params.bookId }).then(reviews => {
-          newRating = (
-            reviews.reduce((prev, current) => prev + current.rating, 0) / reviews.length
-          ).toFixed(2);
-        });
-        await Book.findById(req.params.bookId).then(book => {
-          book.rating = newRating;
-          book.save();
-        });
         // send or redirect
         res.json({ success: true });
       })

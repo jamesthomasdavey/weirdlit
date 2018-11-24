@@ -5,6 +5,7 @@ const flatted = require('flatted');
 const googleBooksApiKey = require('./../../config/keys').googleBooksApiKey;
 const passport = require('passport');
 const imgur = require('imgur-node-api');
+const firstBy = require('thenby');
 
 // load input validation
 const isEmpty = require('./../../validation/is-empty');
@@ -72,9 +73,80 @@ router.get('/sort/publishedDate/limit/:limitAmount/skip/:skipAmount', (req, res)
     });
 });
 
-// router.get('/filter/:tags/sort/publishedDate/:sortOrder/skip/:skipAmount', (req, res) => {
-
-// })
+router.get('/filter/:tags/sort/:sortMethod/:sortOrder/skip/:skipAmount', async (req, res) => {
+  let tagIds = [];
+  if (req.params.tags !== 'none') {
+    tagIds = req.params.tags.split('+');
+  }
+  let books = [];
+  if (tagIds.length > 0) {
+    await Book.find({ tags: tagIds[0] })
+      .populate('authors', 'name')
+      .then(matchingBooks => {
+        matchingBooks.forEach(matchingBook => {
+          let doesFit = true;
+          tagIds.forEach(tagId => {
+            let matchingBookTags = matchingBook.tags.map(tag => tag.toString());
+            if (!matchingBookTags.includes(tagId.toString())) {
+              doesFit = false;
+            }
+          });
+          if (doesFit) {
+            books.push(matchingBook);
+          }
+        });
+      });
+  } else {
+    await Book.find()
+      .populate('authors', 'name')
+      .then(allBooks => {
+        allBooks.forEach(book => {
+          books.push(book);
+        });
+      });
+  }
+  if (req.params.sortMethod === 'publishedDate') {
+    books.sort((a, b) => {
+      a = new Date(a.publishedDate);
+      b = new Date(b.publishedDate);
+      return a > b ? -1 : a < b ? 1 : 0;
+    });
+  } else if (req.params.sortMethod === 'rating') {
+    const updatedBooks = [];
+    await asyncForEach(books, async book => {
+      await Review.find({ book: book._id }).then(reviews => {
+        const updatedBook = book;
+        if (reviews.length === 0) {
+          updatedBook.rating = 0;
+          updatedBook.numOfReviews = 0;
+        } else {
+          const rating =
+            reviews.reduce((acc, current) => {
+              return acc + current.rating;
+            }, 0) / reviews.length;
+          updatedBook.rating = rating;
+          updatedBook.numOfReviews = reviews.length;
+        }
+        updatedBooks.push(updatedBook);
+      });
+    });
+    updatedBooks.sort(
+      firstBy((a, b) => a.rating - b.rating, -1).thenBy(
+        (a, b) => a.numOfReviews - b.numOfReviews,
+        -1
+      )
+    );
+    books = updatedBooks;
+  } else if (req.params.sortMethod === 'pageCount') {
+    books.sort((a, b) => a.pageCount - b.pageCount).reverse();
+  }
+  if (req.params.sortOrder === 'asc') {
+    books.reverse();
+  }
+  const totalAvailable = books.length;
+  const skippedBooks = books.splice(req.params.skipAmount, 12);
+  res.json({ totalAvailable, books: skippedBooks });
+});
 
 // @route     get /api/books/featured
 // @desc      get featured book ID
@@ -88,17 +160,27 @@ router.get('/featured', (req, res) => {
   Featured.findOne({ featuredDate: date }).then(featured => {
     if (featured) return res.json(featured);
     Featured.find().then(featureds => {
-      const featuredIds = featureds.map(featured => featured.bookId.toString());
-      Book.find({ isApproved: true }).then(books => {
-        const getRandomBookId = () => books[Math.floor(Math.random() * books.length)]._id;
-        let randomBookId = getRandomBookId();
-        while (featuredIds.includes(randomBookId.toString())) {
-          randomBookId = getRandomBookId();
-        }
-        Featured.create({ featuredDate: date, bookId: randomBookId }).then(newFeatured => {
-          res.json(newFeatured);
+      if (featureds.length > 0) {
+        const featuredIds = featureds.map(featured => featured.bookId.toString());
+        Book.find({ isApproved: true }).then(books => {
+          const getRandomBookId = () => books[Math.floor(Math.random() * books.length)]._id;
+          let randomBookId = getRandomBookId();
+          while (featuredIds.includes(randomBookId.toString())) {
+            randomBookId = getRandomBookId();
+          }
+          Featured.create({ featuredDate: date, bookId: randomBookId }).then(newFeatured => {
+            res.json(newFeatured);
+          });
         });
-      });
+      } else {
+        Book.find({ isApproved: true }).then(books => {
+          const getRandomBookId = () => books[Math.floor(Math.random() * books.length)]._id;
+          let randomBookId = getRandomBookId();
+          Featured.create({ featuredDate: date, bookId: randomBookId }).then(newFeatured => {
+            res.json(newFeatured);
+          });
+        });
+      }
     });
   });
 });
