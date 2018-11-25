@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 // component
 import FeaturedBook from './components/FeaturedBook/FeaturedBook';
 import Tags from './components/Tags/Tags';
-import Random from './components/Random/Random'
+import Random from './components/Random/Random';
 import RecentlyPublished from './components/RecentlyPublished/RecentlyPublished';
 
 // css
@@ -29,7 +29,6 @@ class Browse extends Component {
               </div>
             </div>
           </div>
-
           <RecentlyPublished />
         </div>
       </div>

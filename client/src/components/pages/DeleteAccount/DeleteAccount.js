@@ -48,15 +48,16 @@ class DeleteAccount extends Component {
                 name="password"
                 error={this.state.errors.password}
               />
-              <input
+              <button
                 type="submit"
                 className={[
                   'button negative ui',
                   this.state.password ? '' : 'disabled',
-                  this.state.isDeleting ? '' : 'loading'
+                  this.state.isDeleting ? 'loading' : ''
                 ].join(' ')}
-                value="Delete My Account"
-              />
+              >
+                Delete My Account
+              </button>
               <Link to="/account" className="button ui" style={{ marginLeft: '1rem' }}>
                 Cancel
               </Link>

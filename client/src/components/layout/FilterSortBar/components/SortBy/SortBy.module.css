@@ -1,0 +1,29 @@
+.wrapper {
+  position: relative;
+  z-index: 25;
+  margin: 0 auo;
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .wrapper {
+    justify-content: flex-end;
+  }
+}
+
+.sortOrder {
+  transition: 0.2s all ease;
+  transform-origin: center center;
+  padding: 8px 0 8px 8px;
+}
+
+.sortOrder > i {
+  font-size: 18px;
+  transform: rotate(90deg);
+}
+
+.sortOrder:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}

@@ -61,16 +61,17 @@ class DeleteBook extends Component {
                 type="text"
                 name="title"
               />
-              <input
+              <button
                 type="submit"
                 className={[
                   'button negative ui',
                   this.state.title === this.state.bookTitle ? '' : 'disabled',
-                  this.state.isDeleting ? '' : 'loading'
+                  this.state.isDeleting ? 'loading' : ''
                 ].join(' ')}
-                value={`Delete ${this.state.bookTitle || 'Book'}`}
                 disabled={this.state.title !== this.state.bookTitle}
-              />
+              >
+                Delete {this.state.bookTitle || 'Book'}
+              </button>
               <Link
                 to={`/books/${this.props.match.params.bookId}/edit`}
                 className="button ui"

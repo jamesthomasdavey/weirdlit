@@ -1,10 +1,11 @@
 // package
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 
 // component
 import Spinner from './../../layout/Spinner/Spinner';
 import BookCard from './../../layout/BookCard/BookCard';
+import FilterSortBar from './../../layout/FilterSortBar/FilterSortBar';
 
 // css
 import classes from './Books.module.css';
@@ -19,6 +20,7 @@ class Books extends Component {
       sortOrder: ''
     },
     isLoading: true,
+    isLoadingBooks: false,
     isLoadingMore: false
   };
   componentDidMount = () => {
@@ -121,30 +123,96 @@ class Books extends Component {
       .get(
         `/api/books/filter/${tags}/sort/${this.state.sort.sortMethod}/${
           this.state.sort.sortOrder
-        }/skip/${this.state.booksOnDisplay.length}`
+        }/skip/0`
       )
       .then(res => {
-        const currentBooksOnDisplay = this.state.booksOnDisplay;
-        const newBooksToDisplay = res.data.books;
-        const books = [...currentBooksOnDisplay, ...newBooksToDisplay];
         this.setState({
-          booksOnDisplay: books,
+          booksOnDisplay: res.data.books,
           totalAvailable: res.data.totalAvailable,
           isLoading: false,
+          isLoadingBooks: false,
           isLoadingMore: false
         });
       });
   };
+  toggleSelectedHandler = tagName => {
+    const currentState = this.state;
+    currentState.tags = currentState.tags.map(tag => {
+      if (tag.name === tagName) {
+        tag.isSelected = !tag.isSelected;
+      }
+      return tag;
+    });
+    currentState.isLoadingBooks = true;
+    this.setState(currentState, this.updateUrl);
+  };
+  sortMethodHandler = sortMethod => {
+    const currentState = this.state;
+    currentState.sort.sortMethod = sortMethod;
+    currentState.isLoadingBooks = true;
+    this.setState(currentState, this.updateUrl);
+  };
+  toggleSortOrderHandler = () => {
+    const currentState = this.state;
+    currentState.sort.sortOrder = this.state.sort.sortOrder === 'desc' ? 'asc' : 'desc';
+    currentState.isLoadingBooks = true;
+    this.setState(currentState, this.updateUrl);
+  };
   showMoreBooksHandler = () => {
-    this.setState({ isLoadingMore: true }, this.updateFromBooks);
+    this.setState({ isLoadingMore: true }, () => {
+      let tags;
+      tags = this.state.tags.reduce((acc, current) => {
+        if (current.isSelected) {
+          return [...acc, current._id];
+        } else {
+          return acc;
+        }
+      }, []);
+
+      if (tags.length > 0) {
+        tags = tags.join('+');
+      } else {
+        tags = 'none';
+      }
+      axios
+        .get(
+          `/api/books/filter/${tags}/sort/${this.state.sort.sortMethod}/${
+            this.state.sort.sortOrder
+          }/skip/${this.state.booksOnDisplay.length}`
+        )
+        .then(res => {
+          const currentBooksOnDisplay = this.state.booksOnDisplay;
+          const newBooksToDisplay = res.data.books;
+          const books = [...currentBooksOnDisplay, ...newBooksToDisplay];
+          this.setState({
+            booksOnDisplay: books,
+            totalAvailable: res.data.totalAvailable,
+            isLoading: false,
+            isLoadingMore: false
+          });
+        });
+    });
   };
   render() {
     document.title = 'Browse Books | WeirdLit';
 
+    let filterSortBar;
     let books;
     let showMoreBooksButton;
 
-    if (this.state.isLoading) {
+    if (!this.state.isLoading) {
+      filterSortBar = (
+        <FilterSortBar
+          tags={this.state.tags}
+          sort={this.state.sort}
+          toggleSelectedHandler={this.toggleSelectedHandler}
+          sortMethodHandler={this.sortMethodHandler}
+          toggleSortOrderHandler={this.toggleSortOrderHandler}
+        />
+      );
+    }
+
+    if (this.state.isLoading || this.state.isLoadingBooks) {
       books = <Spinner />;
     } else {
       books = this.state.booksOnDisplay.map(book => {
@@ -163,12 +231,15 @@ class Books extends Component {
     }
 
     return (
-      <div className="ui container">
-        <div className="ui segment">
-          <div className={classes.booksWrapper}>{books}</div>
-          {showMoreBooksButton}
+      <Fragment>
+        {filterSortBar}
+        <div className="ui container">
+          <div className="ui segment">
+            <div className={classes.booksWrapper}>{books}</div>
+            {showMoreBooksButton}
+          </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }

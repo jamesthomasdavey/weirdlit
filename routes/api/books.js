@@ -153,10 +153,9 @@ router.get('/filter/:tags/sort/:sortMethod/:sortOrder/skip/:skipAmount', async (
 // @access    public
 router.get('/featured', (req, res) => {
   let date = Math.floor(new Date().getTime() / 1000 / 60 / 60 / 24);
-  while (date % 7 !== 0) {
+  while (date % 7 !== 4) {
     date--;
   }
-  date -= 3;
   Featured.findOne({ featuredDate: date }).then(featured => {
     if (featured) return res.json(featured);
     Featured.find().then(featureds => {

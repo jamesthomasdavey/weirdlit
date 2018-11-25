@@ -88,6 +88,7 @@ class App extends Component {
               <Route exact path="/books/random" component={RandomBook} />
               <PrivateRoute exact path="/books/add/custom" component={AddCustomBook} />
               <Route exact path="/books" component={Books} />
+              <Route exact path="/books/filter/:tags" component={Books} />
               <Route
                 exact
                 path="/books/filter/:tags/sort/:sortMethod/:sortOrder"
