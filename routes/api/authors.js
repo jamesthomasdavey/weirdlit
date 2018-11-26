@@ -12,26 +12,24 @@ router.get('/:authorId', (req, res) => {
   Author.findById(req.params.authorId)
     .then(author => {
       if (!author) return res.status(404).json({ author: 'Author not found' });
-      Book.find({ authors: req.params.authorId, isApproved: true, isRejected: false })
-        .then(books => {
-          res.json({
-            _id: author._id,
-            name: author.name,
-            date: author.date,
-            books: books.map(book => {
-              return {
-                _id: book._id,
-                title: book.title,
-                subtitle: book.subtitle,
-                publishedDate: book.publishedDate,
-                pageCount: book.pageCount
-              };
-            })
-          });
-        })
-        .catch(err => res.status(400).json(err));
+      res.json(author);
     })
     .catch(err => res.status(400).json(err));
 });
+
+router.get(
+  '/:authorId/books/sort/publishedDate/limit/:limitAmount/skip/:skipAmount',
+  (req, res) => {
+    Book.find({ authors: req.params.authorId, isApproved: true, isRejected: false })
+      .sort({ publishedDate: -1 })
+      .skip(parseInt(req.params.skipAmount))
+      .limit(parseInt(req.params.limitAmount))
+      .populate('authors', 'name')
+      .then(books => {
+        res.json(books);
+      })
+      .catch(err => res.status(400).json(err));
+  }
+);
 
 module.exports = router;

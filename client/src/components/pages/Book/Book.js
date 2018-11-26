@@ -45,19 +45,16 @@ class Book extends Component {
       });
   };
   render() {
-    document.title = this.state.book.title
-      ? `${this.state.book.title} | WeirdLit`
-      : 'WeirdLit | The Database for Strange Writings';
+    if (!this.state.isLoading) {
+      document.title = `${this.state.book.title} | WeirdLit`;
+    }
     return (
       <Fragment>
         {!this.state.isLoading && <Heading book={this.state.book} />}
         <div className="ui container">
           {!this.state.isLoading && (
             <div className="ui segment">
-              <Reviews
-                book={this.state.book}
-                history={this.props.history}
-              />
+              <Reviews book={this.state.book} history={this.props.history} />
             </div>
           )}
         </div>

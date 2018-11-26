@@ -46,7 +46,6 @@ const BooksRead = props => {
 
 BooksRead.propTypes = {
   books: PropTypes.array.isRequired,
-  history: PropTypes.object.isRequired,
   userId: PropTypes.string.isRequired
 };
 

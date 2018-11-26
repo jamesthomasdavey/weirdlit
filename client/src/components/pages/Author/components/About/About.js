@@ -1,0 +1,62 @@
+// package
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+import Link from 'react-router-dom';
+
+// component
+
+const About = props => {
+  let bio, website;
+
+  if (props.bio) {
+    bio = (
+      <Fragment>
+        <h5>Bio</h5>
+        <p>
+          {props.bio.split('\n').map((item, key) => {
+            return (
+              <span key={key}>
+                {item}
+                <br />
+              </span>
+            );
+          })}
+        </p>
+      </Fragment>
+    );
+  }
+
+  if (props.website) {
+    website = (
+      <p>
+        <Link to={props.website}>Website</Link>
+      </p>
+    );
+  }
+
+  return (
+    <Fragment>
+      <h5 className="ui horizontal divider header">
+        <i className="user icon" />
+        About
+      </h5>
+      <div className="ui raised segment" style={{ padding: '22px' }}>
+        <div className="ui stackable two column grid">
+          <LatestBook authorId={props.authorId} />
+          <div className="column">
+            {bio}
+            {website}
+          </div>
+        </div>
+      </div>
+    </Fragment>
+  );
+};
+
+About.propTypes = {
+  authorId: PropTypes.string.isRequired,
+  bio: PropTypes.string,
+  website: PropTypes.string
+};
+
+export default About;

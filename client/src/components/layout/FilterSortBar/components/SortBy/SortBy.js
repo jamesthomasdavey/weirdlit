@@ -1,7 +1,7 @@
 // package
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, Header } from 'semantic-ui-react';
+import { Dropdown } from 'semantic-ui-react';
 
 // css
 import classes from './SortBy.module.css';

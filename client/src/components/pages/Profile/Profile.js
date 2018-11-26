@@ -100,7 +100,7 @@ class Profile extends Component {
 
   render() {
     document.title = `${this.state.profile.user.name || 'Profile'} | WeirdLit`;
-    let profileContent = (
+    const profileContent = (
       <div className={['ui segment', this.state.profile.isLoading ? 'loading' : ''].join(' ')}>
         {this.state.profile.isLoading && (
           <Fragment>
@@ -122,13 +122,9 @@ class Profile extends Component {
               location={this.state.profile.location}
               bio={this.state.profile.bio}
               social={this.state.profile.social}
-              history={this.props.history}
+              // history={this.props.history}
             />
-            <BooksRead
-              books={this.state.profile.booksRead}
-              history={this.props.history}
-              userId={this.state.profile.user._id}
-            />
+            <BooksRead books={this.state.profile.booksRead} userId={this.state.profile.user._id} />
             <Reviews
               userId={this.state.profile.user._id}
               name={this.state.profile.user.name}
@@ -139,11 +135,7 @@ class Profile extends Component {
       </div>
     );
 
-    return (
-      <Fragment>
-        <div className="ui container">{profileContent}</div>
-      </Fragment>
-    );
+    return <div className="ui container">{profileContent}</div>;
   }
 }
 

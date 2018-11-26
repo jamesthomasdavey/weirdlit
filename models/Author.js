@@ -6,6 +6,12 @@ const AuthorSchema = new Schema({
     type: String,
     required: true
   },
+  bio: {
+    type: String
+  },
+  website: {
+    type: String
+  },
   date: {
     type: Date,
     default: Date.now

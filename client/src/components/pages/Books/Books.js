@@ -215,9 +215,13 @@ class Books extends Component {
     if (this.state.isLoading || this.state.isLoadingBooks) {
       books = <Spinner />;
     } else {
-      books = this.state.booksOnDisplay.map(book => {
-        return <BookCard key={book._id} book={book} showRating showAuthors showPublishedDate />;
-      });
+      if (this.state.booksOnDisplay.length > 0) {
+        books = this.state.booksOnDisplay.map(book => {
+          return <BookCard key={book._id} book={book} showRating showAuthors showPublishedDate />;
+        });
+      } else {
+        books = <h5 style={{textAlign: 'center', width: '100%', margin: '2rem 0'}}>No books to display.</h5>;
+      }
     }
 
     if (this.state.totalAvailable > this.state.booksOnDisplay.length) {

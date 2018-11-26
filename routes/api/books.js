@@ -157,7 +157,8 @@ router.get('/featured', (req, res) => {
     date--;
   }
   Featured.findOne({ featuredDate: date }).then(featured => {
-    if (featured) return res.json(featured);
+    if (featured)
+      return res.json({ featuredDate: featured.featuredDate + 1, bookId: featured.bookId });
     Featured.find().then(featureds => {
       if (featureds.length > 0) {
         const featuredIds = featureds.map(featured => featured.bookId.toString());
@@ -176,7 +177,7 @@ router.get('/featured', (req, res) => {
           const getRandomBookId = () => books[Math.floor(Math.random() * books.length)]._id;
           let randomBookId = getRandomBookId();
           Featured.create({ featuredDate: date, bookId: randomBookId }).then(newFeatured => {
-            res.json(newFeatured);
+            res.json({ featuredDate: newFeatured.featuredDate + 1, bookId: newFeatured.bookId });
           });
         });
       }
