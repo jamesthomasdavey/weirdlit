@@ -27,12 +27,12 @@ const ReviewSortBar = props => {
       }
     },
     {
-      key: 'length',
-      text: 'Length',
-      value: 'length',
-      content: 'Length',
+      key: 'wordCount',
+      text: 'Word Count',
+      value: 'wordCount',
+      content: 'Word Count',
       onClick: function() {
-        props.sortMethodHandler('length');
+        props.sortMethodHandler('wordCount');
       }
     }
   ];

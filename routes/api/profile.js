@@ -90,12 +90,14 @@ router.get('/user/:userId/reviews/sort/:sortMethod/:sortOrder/skip/:skipAmount',
       } else if (req.params.sortMethod === 'rating') {
         updatedReviews.sort(
           firstBy((a, b) => a.rating - b.rating, -1).thenBy(
-            (a, b) => a.text.length - b.text.length,
+            (a, b) => a.text.split(' ').length - b.text.split(' ').length,
             -1
           )
         );
-      } else if (req.params.sortMethod === 'length') {
-        updatedReviews.sort((a, b) => a.text.length - b.text.length).reverse();
+      } else if (req.params.sortMethod === 'wordCount') {
+        updatedReviews
+          .sort((a, b) => a.text.split(' ').length - b.text.split(' ').length)
+          .reverse();
       }
       if (req.params.sortOrder === 'asc') {
         updatedReviews.reverse();
@@ -108,16 +110,16 @@ router.get('/user/:userId/reviews/sort/:sortMethod/:sortOrder/skip/:skipAmount',
 });
 
 // @route     get /api/profile/user/reviews
-// @desc      get reviews for logged in user
+// @desc      get reviews for logged in user, to check if they can unread a book or not
 // @access    private
-// router.get('/user/reviews', passport.authenticate('jwt', { session: false }), (req, res) => {
-//   Review.find({ creator: req.user._id })
-//     .then(reviews => {
-//       if (reviews.length > 0) return res.json({ reviews });
-//       res.json({ reviews: [] });
-//     })
-//     .catch(() => res.status(404).json({ reviews: [] }));
-// });
+router.get('/user/reviews', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Review.find({ creator: req.user._id })
+    .then(reviews => {
+      if (reviews.length > 0) return res.json({ reviews });
+      res.json({ reviews: [] });
+    })
+    .catch(() => res.status(404).json({ reviews: [] }));
+});
 
 // @route     get /api/profile/handle/:handle
 // @desc      get specific profile from profile handle

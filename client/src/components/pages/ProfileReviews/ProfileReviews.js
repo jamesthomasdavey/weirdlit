@@ -7,6 +7,9 @@ import Spinner from './../../layout/Spinner/Spinner';
 import Review from './../../layout/Review/Review';
 import ProfileReviewsHeader from './components/ProfileReviewsHeader/ProfileReviewsHeader';
 
+// css
+import classes from './ProfileReviews.module.css';
+
 class ProfileReviews extends Component {
   state = {
     reviewsOnDisplay: [],
@@ -40,7 +43,7 @@ class ProfileReviews extends Component {
     if (
       this.state.sort.sortMethod === 'writtenDate' ||
       this.state.sort.sortMethod === 'rating' ||
-      this.state.sort.sortMethod === 'length'
+      this.state.sort.sortMethod === 'wordCount'
     ) {
       if (this.state.sort.sortOrder === 'asc' || this.state.sort.sortOrder === 'desc') {
         window.history.pushState(
@@ -107,8 +110,20 @@ class ProfileReviews extends Component {
     });
   };
   render() {
-    let reviews;
     let profileReviewsHeader;
+    let reviews;
+    let showMoreReviewsButton;
+
+    if (!this.state.isLoading) {
+      profileReviewsHeader = (
+        <ProfileReviewsHeader
+          userId={this.props.match.params.userId}
+          sort={this.state.sort}
+          sortMethodHandler={this.sortMethodHandler}
+          toggleSortOrderHandler={this.toggleSortOrderHandler}
+        />
+      );
+    }
 
     if (this.state.isLoading || this.state.isLoadingReviews) {
       reviews = <Spinner />;
@@ -132,14 +147,13 @@ class ProfileReviews extends Component {
       }
     }
 
-    if (!this.state.isLoading) {
-      profileReviewsHeader = (
-        <ProfileReviewsHeader
-          userId={this.props.match.params.userId}
-          sort={this.state.sort}
-          sortMethodHandler={this.sortMethodHandler}
-          toggleSortOrderHandler={this.toggleSortOrderHandler}
-        />
+    if (this.state.totalAvailable > this.state.reviewsOnDisplay.length) {
+      showMoreReviewsButton = (
+        <div className={classes.showMoreWrapper} onClick={this.showMoreReviewsHandler}>
+          <button className={['ui tiny button', this.state.isLoadingMore && 'loading'].join(' ')}>
+            Show More
+          </button>
+        </div>
       );
     }
 
@@ -150,6 +164,7 @@ class ProfileReviews extends Component {
             {profileReviewsHeader}
             <div className="ui divided items" style={{ padding: '0 12px' }}>
               {reviews}
+              {showMoreReviewsButton}
             </div>
           </div>
         </div>
