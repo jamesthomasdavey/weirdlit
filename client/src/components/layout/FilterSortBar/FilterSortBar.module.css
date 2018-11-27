@@ -56,6 +56,10 @@
   letter-spacing: 0;
 }
 
+.tagButton:hover {
+  cursor: pointer;
+}
+
 .toggleIcon {
   display: inline-block;
   padding: 0 4px 0 8px;

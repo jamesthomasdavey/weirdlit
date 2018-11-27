@@ -38,39 +38,45 @@ class Comment extends Component {
   render() {
     return (
       <div
-        className={['comment', this.state.isBeingDeleted && classes.deleted].join(' ')}
+        className={['comment', this.state.isBeingDeleted ? classes.deleted : ''].join(' ')}
         id={this.props.comment._id}
       >
         {this.state.isLoading && <div className="ui active loader" />}
-        <Link
-          to={`/profile/user/${this.props.comment.creator._id}`}
-          className={['author', this.state.isLoading && classes.loading].join(' ')}
-        >
-          {this.props.comment.creator.name}
-        </Link>
-        <div className="metadata">
-          <span className="date">{timeAgo.ago(this.props.comment.date)}</span>
-        </div>
-        <div className={['text', this.state.isLoading && classes.loading].join(' ')}>
-          {this.props.comment.text.split('\n').map((item, key) => {
-            return (
-              <span key={key}>
-                {item}
-                <br />
-              </span>
-            );
-          })}
-        </div>
-        {this.state.isCurrentUser && (
-          <div className="actions">
-            <span
-              onClick={() => this.deleteCommentHandler(this.props.comment._id)}
-              className={[classes.deleteButton, this.state.isLoading && classes.loading].join(' ')}
-            >
-              Delete
-            </span>
+        <div className="content">
+          <Link
+            to={`/profile/user/${this.props.comment.creator._id}`}
+            className={['author', this.state.isLoading ? classes.loading : ''].join(' ')}
+          >
+            {this.props.comment.creator.name}
+          </Link>
+          <div className="metadata">
+            <span className="date">{timeAgo.ago(this.props.comment.date)}</span>
           </div>
-        )}
+          <div className={['text', this.state.isLoading ? classes.loading : ''].join(' ')}>
+            {this.props.comment.text.split('\n').map((item, key) => {
+              return (
+                <span key={key}>
+                  {item}
+                  <br />
+                </span>
+              );
+            })}
+          </div>
+          {this.state.isCurrentUser && (
+            <div className="actions">
+              <a
+                onClick={() => this.deleteCommentHandler(this.props.comment._id)}
+                className={[
+                  'reply',
+                  classes.deleteButton,
+                  this.state.isLoading ? classes.loading : ''
+                ].join(' ')}
+              >
+                Delete
+              </a>
+            </div>
+          )}
+        </div>
       </div>
     );
   }

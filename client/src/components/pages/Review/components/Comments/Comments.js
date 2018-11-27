@@ -94,7 +94,7 @@ class Comments extends Component {
           deleteCommentHandler={this.deleteCommentHandler}
         />
       ));
-      comments = <div className="ui comments">{commentsContent}</div>;
+      comments = <div className="ui minimal comments">{commentsContent}</div>;
     }
 
     return (

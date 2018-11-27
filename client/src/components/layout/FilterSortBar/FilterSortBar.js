@@ -49,27 +49,30 @@ class FilterSortBar extends Component {
             </span>
           );
         });
-      selectedTags = (
-        <Fragment>
-          {selectedTags.length > 0 ? (
-            selectedTags
-          ) : (
-            <span style={{ color: 'grey', userSelect: 'none' }}>No tags selected</span>
-          )}
-        </Fragment>
-      );
-      selectedTagsContent = (
-        <Fragment>
-          {selectedTags}{' '}
-          <h4
-            className={classes.toggleIcon}
-            style={{ color: 'grey' }}
+      if (selectedTags.length > 0) {
+        selectedTagsContent = (
+          <Fragment>
+            {selectedTags}{' '}
+            <h4
+              className={classes.toggleIcon}
+              style={{ color: 'grey' }}
+              onClick={this.toggleExpandHandler}
+            >
+              <i className="plus icon" />
+            </h4>
+          </Fragment>
+        );
+      } else {
+        selectedTagsContent = (
+          <span
+            className={['ui basic label', classes.tag, classes.tagButton].join(' ')}
             onClick={this.toggleExpandHandler}
           >
             <i className="plus icon" />
-          </h4>
-        </Fragment>
-      );
+            No tags selected
+          </span>
+        );
+      }
     }
 
     return (
