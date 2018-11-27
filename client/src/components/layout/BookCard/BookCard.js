@@ -29,11 +29,25 @@ class BookCard extends Component {
     }
 
     if (this.props.showAuthors) {
-      authors = (
-        <div className={classes.authors}>
-          <AuthorLinks authors={this.props.book.authors} />
-        </div>
-      );
+      if (!this.props.authorId) {
+        authors = (
+          <div className={classes.authors}>
+            <AuthorLinks authors={this.props.book.authors} />
+          </div>
+        );
+      } else if (this.props.authorId) {
+        if (this.props.book.authors.length > 1) {
+          const authorIdArray = this.props.book.authors.map(author => author._id);
+          const removeIndex = authorIdArray.indexOf(this.props.authorId);
+          const authorArray = [...this.props.book.authors];
+          authorArray.splice(removeIndex, 1);
+          authors = (
+            <div className={classes.authors}>
+              with <AuthorLinks authors={authorArray} />
+            </div>
+          );
+        }
+      }
     }
 
     if (this.props.showPublishedDate) {
@@ -69,7 +83,10 @@ class BookCard extends Component {
 
 BookCard.propTypes = {
   book: PropTypes.object.isRequired,
-  currentAuthor: PropTypes.object
+  currentAuthor: PropTypes.object,
+  showRating: PropTypes.bool,
+  showAuthors: PropTypes.bool,
+  showPublishedDate: PropTypes.bool
 };
 
 BookCard.defaultProps = {

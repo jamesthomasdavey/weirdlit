@@ -6,16 +6,16 @@ import PropTypes from 'prop-types';
 
 // component
 import Heading from './components/Heading/Heading';
-import About from './components/About/About'
+import About from './components/About/About';
 import BooksWritten from './components/BooksWritten/BooksWritten';
-
-// css
-import classes from './Author.module.css';
 
 class Author extends Component {
   state = {
     author: {},
     isLoading: true
+  };
+  componentWillReceiveProps = () => {
+    window.location.reload();
   };
   componentDidMount = () => {
     if (this.props.match.params.authorId) {
@@ -49,14 +49,17 @@ class Author extends Component {
         )}
         {!this.state.isLoading && (
           <Fragment>
-            <Heading name={this.state.author.name} id={this.state.author._id} isAdmin={this.props.auth.user.isAdmin} />
-            {/* <About
+            <Heading
+              name={this.state.author.name}
+              id={this.state.author._id}
+              isAdmin={this.props.auth.user.isAdmin}
+            />
+            <About
               authorId={this.state.author._id}
               bio={this.state.author.bio}
               website={this.state.author.website}
-            /> */}
-            {/* <BooksWritten authorId={this.state.author._id} /> */}
-            {/* <Reviews authorId={this.state.author._id} /> */}
+            />
+            <BooksWritten authorId={this.state.author._id} authorName={this.state.author.name} />
           </Fragment>
         )}
       </div>

@@ -8,6 +8,6 @@
   user-select: none;
 }
 
-.tag:hover {
+.enabled:hover {
   cursor: pointer;
 }

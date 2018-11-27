@@ -144,8 +144,18 @@ router.get('/filter/:tags/sort/:sortMethod/:sortOrder/skip/:skipAmount', async (
     books.reverse();
   }
   const totalAvailable = books.length;
+  const usableTagIds = books.reduce((accTags, currentBook) => {
+    const usableTagsFromBook = currentBook.tags.reduce((acc, currentTag) => {
+      if (!accTags.includes(currentTag)) {
+        return [...acc, currentTag];
+      } else {
+        return acc;
+      }
+    }, []);
+    return [...accTags, ...usableTagsFromBook];
+  }, []);
   const skippedBooks = books.splice(req.params.skipAmount, 12);
-  res.json({ totalAvailable, books: skippedBooks });
+  res.json({ totalAvailable, books: skippedBooks, usableTagIds });
 });
 
 // @route     get /api/books/featured

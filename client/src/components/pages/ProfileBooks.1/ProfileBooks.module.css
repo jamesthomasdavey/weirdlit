@@ -1,0 +1,10 @@
+.booksWrapper {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.showMoreWrapper {
+  width: 100%;
+  text-align: center;
+}

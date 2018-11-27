@@ -1,9 +1,10 @@
 // package
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import Link from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // component
+import LatestBook from './LatestBook/LatestBook';
 
 const About = props => {
   let bio, website;

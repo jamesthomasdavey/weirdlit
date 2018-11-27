@@ -35,6 +35,7 @@ mongoose
   )
   .then(() => console.log(`I've connected to the database.`))
   .catch(err => console.log(err));
+mongoose.set('useCreateIndex', true);
 
 // passport middleware
 app.use(passport.initialize());

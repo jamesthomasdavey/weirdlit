@@ -1,5 +1,5 @@
 // package
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -37,6 +37,25 @@ class BookObj extends Component {
   };
   render() {
     let bookObjContent;
+    let authorLinks;
+
+    if (!this.state.isLoading) {
+      if (!this.props.authorId) {
+        authorLinks = <AuthorLinks authors={this.state.authors} />;
+      } else if (this.props.authorId) {
+        if (this.state.authors.length > 1) {
+          const authorIdArray = this.state.authors.map(author => author._id);
+          const removeIndex = authorIdArray.indexOf(this.props.authorId);
+          const authorArray = [...this.state.authors];
+          authorArray.splice(removeIndex, 1);
+          authorLinks = (
+            <Fragment>
+              with <AuthorLinks authors={authorArray} />
+            </Fragment>
+          );
+        }
+      }
+    }
 
     if (this.state.isLoading) {
       bookObjContent = <Spinner />;
@@ -67,9 +86,7 @@ class BookObj extends Component {
               </Link>
               <div className="content">
                 <div className={['header', classes.header].join(' ')}>{this.state.title}</div>
-                <div className={classes.authors}>
-                  <AuthorLinks authors={this.state.authors} />
-                </div>
+                <div className={classes.authors}>{authorLinks}</div>
                 <div className={['meta', classes.year].join(' ')}>
                   {this.state.publishedDate.getFullYear()}
                 </div>
@@ -90,7 +107,8 @@ class BookObj extends Component {
 }
 
 BookObj.propTypes = {
-  bookId: PropTypes.string.isRequired
+  bookId: PropTypes.string.isRequired,
+  authorId: PropTypes.string
 };
 
 export default BookObj;

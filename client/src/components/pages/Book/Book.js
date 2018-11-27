@@ -28,6 +28,9 @@ class Book extends Component {
     },
     isLoading: true
   };
+  componentWillReceiveProps = () => {
+    window.location.reload();
+  };
   componentDidMount = () => {
     if (this.props.match.params.bookId) {
       this.updateFromBook(this.props.match.params.bookId);

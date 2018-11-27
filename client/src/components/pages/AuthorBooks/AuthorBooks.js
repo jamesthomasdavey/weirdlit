@@ -6,11 +6,12 @@ import axios from 'axios';
 import Spinner from './../../layout/Spinner/Spinner';
 import BookCard from './../../layout/BookCard/BookCard';
 import FilterSortBar from './../../layout/FilterSortBar/FilterSortBar';
+import AuthorBooksHeader from './components/AuthorBooksHeader/AuthorBooksHeader';
 
 // css
-import classes from './Books.module.css';
+import classes from './AuthorBooks.module.css';
 
-class Books extends Component {
+class AuthorBooks extends Component {
   state = {
     booksOnDisplay: [],
     totalAvailable: '',
@@ -93,7 +94,9 @@ class Books extends Component {
         window.history.pushState(
           '',
           '',
-          `/books/filter/${tags}/sort/${this.state.sort.sortMethod}/${this.state.sort.sortOrder}`
+          `/authors/${this.props.match.params.authorId}/books/filter/${tags}/sort/${
+            this.state.sort.sortMethod
+          }/${this.state.sort.sortOrder}`
         );
         this.updateFromBooks();
       } else {
@@ -121,9 +124,9 @@ class Books extends Component {
     }
     axios
       .get(
-        `/api/books/filter/${tags}/sort/${this.state.sort.sortMethod}/${
-          this.state.sort.sortOrder
-        }/skip/0`
+        `/api/authors/${this.props.match.params.authorId}/books/filter/${tags}/sort/${
+          this.state.sort.sortMethod
+        }/${this.state.sort.sortOrder}/skip/0`
       )
       .then(res => {
         const updatedTags = this.state.tags.map(tag => {
@@ -186,9 +189,9 @@ class Books extends Component {
       }
       axios
         .get(
-          `/api/books/filter/${tags}/sort/${this.state.sort.sortMethod}/${
-            this.state.sort.sortOrder
-          }/skip/${this.state.booksOnDisplay.length}`
+          `/api/authors/${this.props.match.params.authorId}/books/filter/${tags}/sort/${
+            this.state.sort.sortMethod
+          }/${this.state.sort.sortOrder}/skip/${this.state.booksOnDisplay.length}`
         )
         .then(res => {
           const currentBooksOnDisplay = this.state.booksOnDisplay;
@@ -214,8 +217,6 @@ class Books extends Component {
     });
   };
   render() {
-    document.title = 'Browse Books | WeirdLit';
-
     let filterSortBar;
     let books;
     let showMoreBooksButton;
@@ -237,7 +238,16 @@ class Books extends Component {
     } else {
       if (this.state.booksOnDisplay.length > 0) {
         books = this.state.booksOnDisplay.map(book => {
-          return <BookCard key={book._id} book={book} showRating showAuthors showPublishedDate />;
+          return (
+            <BookCard
+              key={book._id}
+              book={book}
+              showRating
+              showAuthors
+              authorId={this.props.match.params.authorId}
+              showPublishedDate
+            />
+          );
         });
       } else {
         books = (
@@ -263,7 +273,10 @@ class Books extends Component {
         {filterSortBar}
         <div className="ui container">
           <div className="ui segment">
-            <div className={classes.booksWrapper}>{books}</div>
+            <div className={classes.booksWrapper}>
+              <AuthorBooksHeader authorId={this.props.match.params.authorId} />
+              {books}
+            </div>
             {showMoreBooksButton}
           </div>
         </div>
@@ -272,4 +285,4 @@ class Books extends Component {
   }
 }
 
-export default Books;
+export default AuthorBooks;

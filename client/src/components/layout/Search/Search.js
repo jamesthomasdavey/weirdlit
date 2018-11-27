@@ -41,7 +41,6 @@ class Search extends Component {
   handleResultSelect = (e, { result }) => {
     this.setState({ searchQuery: '' }, () => {
       this.props.history.push(result.link);
-      window.location.reload();
     });
   };
   render() {
