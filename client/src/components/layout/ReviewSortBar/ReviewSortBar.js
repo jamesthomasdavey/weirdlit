@@ -4,17 +4,17 @@ import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
 
 // css
-import classes from './SortBy.module.css';
+import classes from './ReviewSortBar.module.css';
 
-const SortBy = props => {
+const ReviewSortBar = props => {
   const options = [
     {
-      key: 'publishedDate',
-      text: 'Date Published',
-      value: 'publishedDate',
-      content: 'Date Published',
+      key: 'writtenDate',
+      text: 'Date Written',
+      value: 'writtenDate',
+      content: 'Date Written',
       onClick: function() {
-        props.sortMethodHandler('publishedDate');
+        props.sortMethodHandler('writtenDate');
       }
     },
     {
@@ -27,28 +27,26 @@ const SortBy = props => {
       }
     },
     {
-      key: 'pageCount',
-      text: 'Page Count',
-      value: 'pageCount',
-      content: 'Page Count',
+      key: 'length',
+      text: 'Length',
+      value: 'length',
+      content: 'Length',
       onClick: function() {
-        props.sortMethodHandler('pageCount');
+        props.sortMethodHandler('length');
       }
     }
   ];
   return (
     <div className={classes.wrapper}>
       <div className={classes.sortMethod}>
-        <h3>
-          <span style={{ fontSize: '12px' }}>
-            <Dropdown
-              options={options}
-              placeholder="Sort by..."
-              selection
-              value={props.sort.sortMethod}
-            />
-          </span>
-        </h3>
+        <span style={{ fontSize: '12px' }}>
+          <Dropdown
+            options={options}
+            placeholder="Sort by..."
+            selection
+            value={props.sort.sortMethod}
+          />
+        </span>
       </div>
       <div className={classes.sortOrder} onClick={props.toggleSortOrderHandler}>
         <i className="exchange icon" />
@@ -57,10 +55,10 @@ const SortBy = props => {
   );
 };
 
-SortBy.propTypes = {
+ReviewSortBar.propTypes = {
   sort: PropTypes.object.isRequired,
   sortMethodHandler: PropTypes.func.isRequired,
   toggleSortOrderHandler: PropTypes.func.isRequired
 };
 
-export default SortBy;
+export default ReviewSortBar;

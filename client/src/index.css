@@ -79,3 +79,12 @@ html {
 .book__image:hover {
   cursor: pointer;
 }
+
+div.menu.transition > div[role='option'] > span.text {
+  font-size: 12px !important;
+}
+
+div[role='listbox'].ui.active.visible > div.menu.transition > div[role='option'] {
+  padding-top: 9px !important;
+  padding-bottom: 9px !important;
+}

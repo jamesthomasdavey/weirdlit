@@ -26,6 +26,7 @@ import Browse from './components/pages/Browse/Browse';
 import Profile from './components/pages/Profile/Profile';
 import EditProfile from './components/pages/EditProfile/EditProfile';
 import ProfileBooks from './components/pages/ProfileBooks/ProfileBooks';
+import ProfileReviews from './components/pages/ProfileReviews/ProfileReviews';
 import Pending from './components/pages/Pending/Pending';
 import Book from './components/pages/Book/Book';
 import Books from './components/pages/Books/Books';
@@ -128,6 +129,12 @@ class App extends Component {
               <PrivateRoute exact path="/profile" component={Profile} />
               <PrivateRoute exact path="/profile/edit" component={EditProfile} />
               <Route exact path="/profile/user/:userId" component={Profile} />
+              <Route exact path="/profile/user/:userId/reviews" component={ProfileReviews} />
+              <Route
+                exact
+                path="/profile/user/:userId/reviews/sort/:sortMethod/:sortOrder"
+                component={ProfileReviews}
+              />
               <Route exact path="/profile/user/:userId/books" component={ProfileBooks} />
               <Route
                 exact

@@ -3,14 +3,14 @@
   opacity: 0;
 }
 
-/* .deleteButton {
+.deleteButton {
   color: #999;
 }
 
 .deleteButton:hover {
   color: #373737;
   cursor: pointer;
-} */
+}
 
 .loading {
   color: #999 !important;

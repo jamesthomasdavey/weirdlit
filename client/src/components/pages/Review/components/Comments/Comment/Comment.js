@@ -64,16 +64,17 @@ class Comment extends Component {
           </div>
           {this.state.isCurrentUser && (
             <div className="actions">
-              <a
+              <span
+                href="#"
                 onClick={() => this.deleteCommentHandler(this.props.comment._id)}
                 className={[
-                  'reply',
+                  'ui reply',
                   classes.deleteButton,
                   this.state.isLoading ? classes.loading : ''
                 ].join(' ')}
               >
                 Delete
-              </a>
+              </span>
             </div>
           )}
         </div>

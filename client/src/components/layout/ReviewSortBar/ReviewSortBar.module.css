@@ -1,22 +1,25 @@
 .wrapper {
   position: relative;
-  top: 3px;
   z-index: 25;
-  margin: 0 auto;
+  top: -6px;
   display: flex;
+  align-items: center;
   justify-content: center;
+  margin-top: 1rem;
 }
 
 @media (min-width: 768px) {
   .wrapper {
-    justify-content: flex-end;
+    top: -11px;
+    justify-content: none;
+    margin-top: 0;
   }
 }
 
 .sortOrder {
   transition: 0.2s all ease;
   transform-origin: center center;
-  padding: 6px 0 8px 8px;
+  padding: 10px 0 8px 8px;
 }
 
 .sortOrder > i {

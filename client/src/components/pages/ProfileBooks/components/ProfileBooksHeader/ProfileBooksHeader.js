@@ -24,7 +24,9 @@ class ProfileBooksHeader extends Component {
 
     return (
       <div style={{ width: '100%', padding: '12px' }}>
-        {!this.state.isLoading && <h3>Books read by {profileLink}</h3>}
+        {!this.state.isLoading && (
+          <h3 className="ui dividing header">Books read by {profileLink}</h3>
+        )}
       </div>
     );
   }

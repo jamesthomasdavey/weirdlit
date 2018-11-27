@@ -23,7 +23,7 @@ class AuthorBooksHeader extends Component {
 
     return (
       <div style={{ width: '100%', padding: '12px' }}>
-        {!this.state.isLoading && <h3>Books by {authorLink}</h3>}
+        {!this.state.isLoading && <h3 className="ui dividing header">Books by {authorLink}</h3>}
       </div>
     );
   }
