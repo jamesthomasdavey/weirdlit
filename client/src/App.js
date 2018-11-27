@@ -36,6 +36,7 @@ import AddCustomBook from './components/pages/AddCustomBook/AddCustomBook';
 import RandomBook from './components/pages/RandomBook/RandomBook';
 import Author from './components/pages/Author/Author';
 import AuthorBooks from './components/pages/AuthorBooks/AuthorBooks';
+import EditAuthor from './components/pages/EditAuthor/EditAuthor';
 // import BookReviews from './components/pages/BookReviews/BookReviews';
 import Review from './components/pages/Review/Review';
 import NewReview from './components/pages/NewReview/NewReview';
@@ -116,6 +117,7 @@ class App extends Component {
             <Switch>
               <Route exact path="/authors/:authorId" component={Author} />
               <Route exact path="/authors/:authorId/books" component={AuthorBooks} />
+              <AdminRoute exact path="/authors/:authorId/edit" component={EditAuthor} />
               <Route
                 exact
                 path="/authors/:authorId/books/filter/:tags/sort/:sortMethod/:sortOrder"

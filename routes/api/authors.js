@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
+const prependHttp = require('prepend-http');
 const firstBy = require('thenby');
+
+// load input validation
+const isEmpty = require('./../../validation/is-empty');
+const validateAuthorInput = require('./../../validation/author');
 
 // load mongoose models
 const Author = require('./../../models/Author');
@@ -11,6 +17,13 @@ const asyncForEach = async (arr, callback) => {
   for (let i = 0; i < arr.length; i++) {
     await callback(arr[i]);
   }
+};
+
+// middleware
+const checkAuthLevel = (req, res, next) => {
+  if (!req.user.isAdmin)
+    return res.status(400).json({ unauthorized: 'You are not authorized to do that' });
+  next();
 };
 
 // @route     /api/authors/:authorId
@@ -24,6 +37,27 @@ router.get('/:authorId', (req, res) => {
     })
     .catch(err => res.status(400).json(err));
 });
+
+// @route     /api/authors/:authorId
+// @desc      update author page
+// @access    admin
+router.put(
+  '/:authorId',
+  passport.authenticate('jwt', { session: false }),
+  checkAuthLevel,
+  (req, res) => {
+    const errors = validateAuthorInput(req.body);
+    if (!isEmpty(errors)) res.json({ errors });
+    Author.findById(req.params.authorId).then(author => {
+      author.name = req.body.name;
+      author.bio = req.body.bio.replace(/\n\s*\n\s*\n/g, '\n\n');
+      author.website = req.body.website ? prependHttp(req.body.website) : '';
+      author.save().then(() => {
+        res.json({ success: true });
+      });
+    });
+  }
+);
 
 // @route     /api/authors/:authorId/books/latest
 // @desc      get ID for author's latest book

@@ -1,7 +1,6 @@
 // package
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 // component
 import LatestBook from './LatestBook/LatestBook';
@@ -30,7 +29,9 @@ const About = props => {
   if (props.website) {
     website = (
       <p>
-        <Link to={props.website}>Website</Link>
+        <a href={props.website} target="_blank" rel="noopener noreferrer">
+          Website
+        </a>
       </p>
     );
   }

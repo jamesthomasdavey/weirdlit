@@ -1,5 +1,5 @@
 // package
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -103,7 +103,7 @@ class EditProfile extends Component {
     const profileData = this.state.form;
     this.setState({ isLoading: true }, () => {
       axios.put('/api/profile', profileData).then(res => {
-        if (!isEmpty(res.data.errors)) {
+        if (res.data.errors && !isEmpty(res.data.errors)) {
           this.setState({ errors: res.data.errors, isLoading: false });
         } else {
           this.setState({ hasSaved: true, hasChanged: false, errors: {} }, this.updateFromProfile);
@@ -114,130 +114,127 @@ class EditProfile extends Component {
   render() {
     document.title = 'Edit Profile | WeirdLit';
     return (
-      <Fragment>
-        <div className="ui text container">
-          <div className="ui segment">
-            <form
-              noValidate
-              className={['ui form', this.state.isLoading ? 'loading' : ''].join(' ')}
-              onSubmit={this.formSubmitHandler}
-            >
-              <div style={{ paddingBottom: '20px' }}>
-                <h2>Edit Profile</h2>
-              </div>
-              <TextInputField
-                name="handle"
-                label="Handle"
-                maxLength="40"
-                autoFocus
-                value={this.state.form.handle}
-                onChange={this.changeInputHandler}
-                error={this.state.errors.handle}
-                info={
-                  this.state.form.handle
-                    ? 'A unique handle for your profile URL. Preview: weirdl.it/profile/' +
-                      this.state.form.handle.toLowerCase()
-                    : 'A unique handle for your profile URL.'
-                }
-              />
-              <div className={['ui field', this.state.errors.favoriteBook && 'error'].join(' ')}>
-                <label>Favorite Book</label>
-                {!isEmpty(this.state.form.favoriteBook) && (
-                  <FavoriteBook
-                    removeFavoriteBookHandler={this.removeFavoriteBookHandler}
-                    title={this.state.form.favoriteBook.title}
-                    isVisible={!isEmpty(this.state.form.favoriteBook)}
-                  />
-                )}
-                <FavoriteBookSearch
-                  addFavoriteBookHandler={this.addFavoriteBookHandler}
-                  isVisible={isEmpty(this.state.form.favoriteBook)}
+      <div className="ui text container">
+        <div className="ui segment">
+          <form
+            noValidate
+            className={['ui form', this.state.isLoading ? 'loading' : ''].join(' ')}
+            onSubmit={this.formSubmitHandler}
+          >
+            <div style={{ paddingBottom: '20px' }}>
+              <h2>Edit Profile</h2>
+            </div>
+            <TextInputField
+              name="handle"
+              label="Handle"
+              maxLength="40"
+              autoFocus
+              value={this.state.form.handle}
+              onChange={this.changeInputHandler}
+              error={this.state.errors.handle}
+              info={
+                this.state.form.handle
+                  ? 'A unique handle for your profile URL. Preview: weirdl.it/profile/' +
+                    this.state.form.handle.toLowerCase()
+                  : 'A unique handle for your profile URL.'
+              }
+            />
+            <div className={['ui field', this.state.errors.favoriteBook && 'error'].join(' ')}>
+              <label>Favorite Book</label>
+              {!isEmpty(this.state.form.favoriteBook) && (
+                <FavoriteBook
+                  removeFavoriteBookHandler={this.removeFavoriteBookHandler}
+                  title={this.state.form.favoriteBook.title}
+                  isVisible={!isEmpty(this.state.form.favoriteBook)}
                 />
-                {this.state.errors.favoriteBook && (
-                  <div className="ui pointing basic label">{this.state.errors.favoriteBook}</div>
-                )}
+              )}
+              <FavoriteBookSearch
+                addFavoriteBookHandler={this.addFavoriteBookHandler}
+                isVisible={isEmpty(this.state.form.favoriteBook)}
+              />
+              {this.state.errors.favoriteBook && (
+                <div className="ui pointing basic label">{this.state.errors.favoriteBook}</div>
+              )}
+            </div>
+            <TextInputField
+              name="location"
+              label="Location"
+              maxLength="100"
+              value={this.state.form.location}
+              onChange={this.changeInputHandler}
+              error={this.state.errors.location}
+            />
+            <TextAreaInputField
+              name="bio"
+              placeholder="Write a short bio about yourself."
+              label="Bio"
+              rows="1"
+              value={this.state.form.bio}
+              onChange={this.changeInputHandler}
+              error={this.state.errors.bio}
+              minHeight="136px"
+              maxLength="1000"
+              info={
+                this.state.form.bio && `Characters remaining: ${1000 - this.state.form.bio.length}`
+              }
+            />
+            <div className="ui segments">
+              <div className="ui segment">
+                <label htmlFor="goodreads">
+                  <h5>Social</h5>
+                </label>
               </div>
-              <TextInputField
-                name="location"
-                label="Location"
-                maxLength="100"
-                value={this.state.form.location}
-                onChange={this.changeInputHandler}
-                error={this.state.errors.location}
-              />
-              <TextAreaInputField
-                name="bio"
-                placeholder="Write a short bio about yourself."
-                label="Bio"
-                rows="1"
-                value={this.state.form.bio}
-                onChange={this.changeInputHandler}
-                error={this.state.errors.bio}
-                minHeight="136px"
-                maxLength="1000"
-                info={
-                  this.state.form.bio &&
-                  `Characters remaining: ${1000 - this.state.form.bio.length}`
-                }
-              />
-              <div className="ui segments">
-                <div className="ui segment">
-                  <label htmlFor="goodreads">
-                    <h5>Social</h5>
-                  </label>
-                </div>
-                <div className="ui secondary segment">
-                  <SocialInputField
-                    name="goodreads"
-                    placeholder="Goodreads"
-                    value={this.state.form.goodreads}
-                    icon="goodreads"
-                    onChange={this.changeInputHandler}
-                    error={this.state.errors.goodreads}
-                  />
-                  <SocialInputField
-                    name="twitter"
-                    placeholder="Twitter"
-                    value={this.state.form.twitter}
-                    icon="twitter"
-                    onChange={this.changeInputHandler}
-                    error={this.state.errors.twitter}
-                  />
-                  <SocialInputField
-                    name="facebook"
-                    placeholder="Facebook"
-                    value={this.state.form.facebook}
-                    icon="facebook"
-                    onChange={this.changeInputHandler}
-                    error={this.state.errors.facebook}
-                  />
-                  <SocialInputField
-                    name="instagram"
-                    placeholder="Instagram"
-                    value={this.state.form.instagram}
-                    icon="instagram"
-                    onChange={this.changeInputHandler}
-                    error={this.state.errors.instagram}
-                  />
-                </div>
+              <div className="ui secondary segment">
+                <SocialInputField
+                  name="goodreads"
+                  placeholder="Goodreads"
+                  value={this.state.form.goodreads}
+                  icon="goodreads"
+                  onChange={this.changeInputHandler}
+                  error={this.state.errors.goodreads}
+                />
+                <SocialInputField
+                  name="twitter"
+                  placeholder="Twitter"
+                  value={this.state.form.twitter}
+                  icon="twitter"
+                  onChange={this.changeInputHandler}
+                  error={this.state.errors.twitter}
+                />
+                <SocialInputField
+                  name="facebook"
+                  placeholder="Facebook"
+                  value={this.state.form.facebook}
+                  icon="facebook"
+                  onChange={this.changeInputHandler}
+                  error={this.state.errors.facebook}
+                />
+                <SocialInputField
+                  name="instagram"
+                  placeholder="Instagram"
+                  value={this.state.form.instagram}
+                  icon="instagram"
+                  onChange={this.changeInputHandler}
+                  error={this.state.errors.instagram}
+                />
               </div>
-              <input
-                type="submit"
-                disabled={!this.state.hasChanged}
-                className={['ui primary button', this.state.hasChanged ? '' : 'disabled'].join(' ')}
-                value={this.state.hasSaved ? 'Saved' : 'Save'}
-              />
-              <Link
-                to={`/profile/user/${this.props.auth.user._id}`}
-                style={{ marginLeft: '1rem' }}
-                className="ui button"
-              >
-                {this.state.hasSaved ? 'Back to Profile' : 'Cancel'}
-              </Link>
-            </form>
-          </div>
+            </div>
+            <input
+              type="submit"
+              disabled={!this.state.hasChanged}
+              className={['ui primary button', this.state.hasChanged ? '' : 'disabled'].join(' ')}
+              value={this.state.hasSaved ? 'Saved' : 'Save'}
+            />
+            <Link
+              to={`/profile/user/${this.props.auth.user._id}`}
+              style={{ marginLeft: '1rem' }}
+              className="ui button"
+            >
+              {this.state.hasSaved ? 'Back to Profile' : 'Cancel'}
+            </Link>
+          </form>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }
