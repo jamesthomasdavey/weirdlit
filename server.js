@@ -55,6 +55,6 @@ app.use('/api/users', users);
 const port = process.env.PORT || 5000;
 
 app.listen(port, () =>
-  console.log(`I'm glad you're here, James.
+  console.log(`Your girlfriend wants you.
 Find me on port ${port}.`)
 );

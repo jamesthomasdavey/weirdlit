@@ -127,6 +127,11 @@ class App extends Component {
               <PrivateRoute exact path="/profile/edit" component={EditProfile} />
               <Route exact path="/profile/user/:userId" component={Profile} />
               <Route exact path="/profile/user/:userId/books" component={ProfileBooks} />
+              <Route
+                exact
+                path="/profile/user/:userId/books/filter/:tags/sort/:sortMethod/:sortOrder"
+                component={ProfileBooks}
+              />
               <Route exact path="/profile/:handle" component={Profile} />
               {/* <Route exact path="/profile/:handle/books" component={ProfileBooks} /> */}
             </Switch>

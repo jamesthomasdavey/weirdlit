@@ -3,15 +3,24 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const passport = require('passport');
 const prependHttp = require('prepend-http');
+const firstBy = require('thenby');
 
 // require mongoose models
 const Book = require('./../../models/Book');
 const Profile = require('./../../models/Profile');
 const User = require('./../../models/User');
+const Review = require('./../../models/Review');
 
 // require validation
 const isEmpty = require('./../../validation/is-empty');
 const validateProfileInput = require('./../../validation/profile');
+
+// functions
+const asyncForEach = async (arr, callback) => {
+  for (let i = 0; i < arr.length; i++) {
+    await callback(arr[i]);
+  }
+};
 
 // @route     get /api/profile
 // @desc      get current profile
@@ -232,5 +241,90 @@ router.put('/booksRead', passport.authenticate('jwt', { session: false }), (req,
     }
   });
 });
+
+// @route     put /api/profile/booksRead
+// @desc      read or unread a book
+// @access    private
+router.get(
+  '/user/:userId/books/filter/:tags/sort/:sortMethod/:sortOrder/skip/:skipAmount',
+  (req, res) => {
+    Profile.findOne({ user: req.params.userId })
+      .populate({ path: 'booksRead', populate: { path: 'authors' } })
+      .then(async profile => {
+        let tagIds = [];
+        if (req.params.tags !== 'none') {
+          tagIds = req.params.tags.split('+');
+        }
+        let books = [];
+        if (tagIds.length > 0) {
+          profile.booksRead.forEach(bookRead => {
+            let doesFit = true;
+            const bookTags = bookRead.tags.map(tag => tag.toString());
+            tagIds.forEach(tagId => {
+              if (!bookTags.includes(tagId)) {
+                doesFit = false;
+              }
+            });
+            if (doesFit) {
+              books.push(bookRead);
+            }
+          });
+        } else {
+          books = profile.booksRead;
+        }
+        if (req.params.sortMethod === 'publishedDate') {
+          books.sort((a, b) => {
+            a = new Date(a.publishedDate);
+            b = new Date(b.publishedDate);
+            return a > b ? -1 : a < b ? 1 : 0;
+          });
+        } else if (req.params.sortMethod === 'rating') {
+          const updatedBooks = [];
+          await asyncForEach(books, async book => {
+            await Review.find({ book: book._id }).then(reviews => {
+              const updatedBook = book;
+              if (reviews.length === 0) {
+                updatedBook.rating = 0;
+                updatedBook.numOfReviews = 0;
+              } else {
+                const rating =
+                  reviews.reduce((acc, current) => {
+                    return acc + current.rating;
+                  }, 0) / reviews.length;
+                updatedBook.rating = rating;
+                updatedBook.numOfReviews = reviews.length;
+              }
+              updatedBooks.push(updatedBook);
+            });
+          });
+          updatedBooks.sort(
+            firstBy((a, b) => a.rating - b.rating, -1).thenBy(
+              (a, b) => a.numOfReviews - b.numOfReviews,
+              -1
+            )
+          );
+          books = updatedBooks;
+        } else if (req.params.sortMethod === 'pageCount') {
+          books.sort((a, b) => a.pageCount - b.pageCount).reverse();
+        }
+        if (req.params.sortOrder === 'asc') {
+          books.reverse();
+        }
+        const totalAvailable = books.length;
+        const usableTagIds = books.reduce((accTags, currentBook) => {
+          const usableTagsFromBook = currentBook.tags.reduce((acc, currentTag) => {
+            if (!accTags.includes(currentTag)) {
+              return [...acc, currentTag];
+            } else {
+              return acc;
+            }
+          }, []);
+          return [...accTags, ...usableTagsFromBook];
+        }, []);
+        const skippedBooks = books.splice(req.params.skipAmount, 12);
+        res.json({ totalAvailable, books: skippedBooks, usableTagIds });
+      });
+  }
+);
 
 module.exports = router;
