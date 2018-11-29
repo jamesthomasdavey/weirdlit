@@ -111,6 +111,16 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
           await profile.save();
         }
       });
+      // update ratings and number of reviews for book
+      await Review.find({ book: req.params.bookId }).then(async reviews => {
+        const numberOfReviews = reviews.length;
+        const rating = reviews.reduce((acc, current) => acc + current.rating, 0) / numberOfReviews;
+        await Book.findById(req.params.bookId).then(async book => {
+          book.numberOfReviews = numberOfReviews;
+          book.rating = rating;
+          await book.save();
+        });
+      });
       // send new review data
       res.json(newReview);
     })
@@ -157,7 +167,7 @@ router.get('/:reviewId/edit', passport.authenticate('jwt', { session: false }), 
 router.put('/:reviewId', passport.authenticate('jwt', { session: false }), (req, res) => {
   let errors = {};
   // check if review exists
-  Review.findById(req.params.reviewId)
+  Review.findOne({ _id: req.params.reviewId, book: req.params.bookId })
     .then(async review => {
       // check if review exists
       if (!review) {
@@ -179,7 +189,16 @@ router.put('/:reviewId', passport.authenticate('jwt', { session: false }), (req,
       review.lastUpdated = Date.now();
       // update review
       await review.save();
-      // send or redirect
+      // update book rating and number of reviews
+      await Review.find({ book: req.params.bookId }).then(async reviews => {
+        const numberOfReviews = reviews.length;
+        const rating = reviews.reduce((acc, current) => acc + current.rating, 0) / numberOfReviews;
+        await Book.findById(req.params.bookId).then(async book => {
+          book.numberOfReviews = numberOfReviews;
+          book.rating = rating;
+          await book.save();
+        });
+      });
       res.json({ success: true });
     })
     .catch(err => res.status(400).json(err));
@@ -204,10 +223,18 @@ router.delete('/:reviewId', passport.authenticate('jwt', { session: false }), (r
       await asyncForEach(review.comments, async comment => {
         await Comment.findByIdAndRemove(comment);
       });
-      review
-        .remove()
-        .then(res.json({ success: true }))
-        .catch(err => res.status(404).json(err));
+      await review.remove();
+      // update ratings to book
+      await Review.find({ book: req.params.bookId }).then(async reviews => {
+        const numberOfReviews = reviews.length;
+        const rating = reviews.reduce((acc, current) => acc + current.rating, 0) / numberOfReviews;
+        await Book.findById(req.params.bookId).then(async book => {
+          book.numberOfReviews = numberOfReviews;
+          book.rating = rating;
+          await book.save();
+        });
+      });
+      res.json({ success: true });
     })
     .catch(err => res.status(404).json(err));
 });

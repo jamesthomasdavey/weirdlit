@@ -122,7 +122,6 @@ class Profile extends Component {
               location={this.state.profile.location}
               bio={this.state.profile.bio}
               social={this.state.profile.social}
-              // history={this.props.history}
             />
             <BooksRead books={this.state.profile.booksRead} userId={this.state.profile.user._id} />
             <Reviews

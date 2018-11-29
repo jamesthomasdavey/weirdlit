@@ -323,31 +323,12 @@ router.get(
             return a > b ? -1 : a < b ? 1 : 0;
           });
         } else if (req.params.sortMethod === 'rating') {
-          const updatedBooks = [];
-          await asyncForEach(books, async book => {
-            await Review.find({ book: book._id }).then(reviews => {
-              const updatedBook = book;
-              if (reviews.length === 0) {
-                updatedBook.rating = 0;
-                updatedBook.numOfReviews = 0;
-              } else {
-                const rating =
-                  reviews.reduce((acc, current) => {
-                    return acc + current.rating;
-                  }, 0) / reviews.length;
-                updatedBook.rating = rating;
-                updatedBook.numOfReviews = reviews.length;
-              }
-              updatedBooks.push(updatedBook);
-            });
-          });
-          updatedBooks.sort(
+          books.sort(
             firstBy((a, b) => a.rating - b.rating, -1).thenBy(
-              (a, b) => a.numOfReviews - b.numOfReviews,
+              (a, b) => a.numberOfReviews - b.numberOfReviews,
               -1
             )
           );
-          books = updatedBooks;
         } else if (req.params.sortMethod === 'pageCount') {
           books.sort((a, b) => a.pageCount - b.pageCount).reverse();
         }

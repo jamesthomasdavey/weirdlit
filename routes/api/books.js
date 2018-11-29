@@ -5,6 +5,7 @@ const flatted = require('flatted');
 const googleBooksApiKey = require('./../../config/keys').googleBooksApiKey;
 const passport = require('passport');
 const imgur = require('imgur-node-api');
+const prependHttp = require('prepend-http');
 const firstBy = require('thenby');
 
 // load input validation
@@ -112,31 +113,12 @@ router.get('/filter/:tags/sort/:sortMethod/:sortOrder/skip/:skipAmount', async (
       return a > b ? -1 : a < b ? 1 : 0;
     });
   } else if (req.params.sortMethod === 'rating') {
-    const updatedBooks = [];
-    await asyncForEach(books, async book => {
-      await Review.find({ book: book._id }).then(reviews => {
-        const updatedBook = book;
-        if (reviews.length === 0) {
-          updatedBook.rating = 0;
-          updatedBook.numOfReviews = 0;
-        } else {
-          const rating =
-            reviews.reduce((acc, current) => {
-              return acc + current.rating;
-            }, 0) / reviews.length;
-          updatedBook.rating = rating;
-          updatedBook.numOfReviews = reviews.length;
-        }
-        updatedBooks.push(updatedBook);
-      });
-    });
-    updatedBooks.sort(
+    books.sort(
       firstBy((a, b) => a.rating - b.rating, -1).thenBy(
-        (a, b) => a.numOfReviews - b.numOfReviews,
+        (a, b) => a.numberOfReviews - b.numberOfReviews,
         -1
       )
     );
-    books = updatedBooks;
   } else if (req.params.sortMethod === 'pageCount') {
     books.sort((a, b) => a.pageCount - b.pageCount).reverse();
   }
@@ -526,6 +508,7 @@ router.get('/:bookId', (req, res) => {
           pageCount: book.pageCount,
           rating: book.rating,
           identifiers: book.identifiers,
+          social: book.social,
           tags: book.tags,
           image: book.image
         });
@@ -556,6 +539,7 @@ router.get(
           pageCount: book.pageCount,
           rating: book.rating,
           identifiers: book.identifiers,
+          social: book.social,
           tags: book.tags,
           image: book.image,
           isApproved: book.isApproved
@@ -583,9 +567,11 @@ router.put(
       book.subtitle = req.body.subtitle;
       book.publishedDate = new Date(req.body.publishedDate);
       book.pageCount = req.body.pageCount;
-      book.googleId = req.body.googleId;
-      book.isbn10 = req.body.isbn10;
-      book.isbn13 = req.body.isbn13;
+      book.identifiers.googleId = req.body.googleId;
+      book.identifiers.isbn10 = req.body.isbn10;
+      book.identifiers.isbn13 = req.body.isbn13;
+      book.social.amazon = req.body.amazon ? prependHttp(req.body.amazon) : '';
+      book.social.goodreads = req.body.goodreads ? prependHttp(req.body.goodreads) : '';
       book.tags = req.body.tags;
       book.description = req.body.description;
 

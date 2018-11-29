@@ -20,6 +20,14 @@ const BookSchema = new Schema({
       type: String
     }
   },
+  social: {
+    amazon: {
+      type: String
+    },
+    goodreads: {
+      type: String
+    }
+  },
   authors: [
     {
       type: Schema.Types.ObjectId,
@@ -50,6 +58,12 @@ const BookSchema = new Schema({
   },
   description: {
     type: String
+  },
+  rating: {
+    type: Number
+  },
+  numberOfReviews: {
+    type: Number
   },
   tags: [
     {

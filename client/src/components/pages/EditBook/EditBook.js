@@ -8,6 +8,7 @@ import moment from 'moment';
 // component
 import TextInputField from './../../layout/TextInputField/TextInputField';
 import IdentifierInputField from './components/IdentifierInputField/IdentifierInputField';
+import SocialInputField from './../../layout/SocialInputField/SocialInputField';
 import Tags from './components/Tags/Tags';
 import Authors from './../../layout/Authors/Authors';
 import AuthorSearch from './../../layout/AuthorSearch/AuthorSearch';
@@ -29,6 +30,8 @@ class EditBook extends Component {
       googleId: '',
       isbn10: '',
       isbn13: '',
+      amazon: '',
+      goodreads: '',
       tags: [],
       description: '',
       image: {
@@ -46,6 +49,8 @@ class EditBook extends Component {
       googleId: '',
       isbn10: '',
       isbn13: '',
+      amazon: '',
+      goodreads: '',
       tags: [],
       description: '',
       image: ''
@@ -77,6 +82,8 @@ class EditBook extends Component {
         form.googleId = res.data.identifiers.googleId ? res.data.identifiers.googleId : '';
         form.isbn10 = res.data.identifiers.isbn10 ? res.data.identifiers.isbn10 : '';
         form.isbn13 = res.data.identifiers.isbn13 ? res.data.identifiers.isbn13 : '';
+        form.amazon = res.data.social.amazon ? res.data.social.amazon : '';
+        form.goodreads = res.data.social.goodreads ? res.data.social.goodreads : '';
         form.tags = res.data.tags.length > 0 ? res.data.tags.map(tag => tag._id).sort() : [];
         form.description = res.data.description;
         form.image = { status: false, imageUrl: '', loading: false };
@@ -130,6 +137,8 @@ class EditBook extends Component {
       form.googleId !== oldForm.googleId ||
       form.isbn10 !== oldForm.isbn10 ||
       form.isbn13 !== oldForm.isbn13 ||
+      form.amazon !== oldForm.amazon ||
+      form.goodreads !== oldForm.goodreads ||
       form.tags.join('') !== oldForm.tags.join('') ||
       form.description !== oldForm.description
     ) {
@@ -205,6 +214,8 @@ class EditBook extends Component {
         googleId: this.state.form.googleId,
         isbn10: this.state.form.isbn10,
         isbn13: this.state.form.isbn13,
+        amazon: this.state.form.amazon,
+        goodreads: this.state.form.goodreads,
         tags: this.state.form.tags,
         description: this.state.form.description,
         image: ''
@@ -342,6 +353,31 @@ class EditBook extends Component {
                   error={this.state.errors.isbn13}
                   value={this.state.form.isbn13}
                   onChange={this.changeInputHandler}
+                />
+              </div>
+            </div>
+            <div className="ui segments">
+              <div className="ui segment">
+                <label htmlFor="amazon">
+                  <h5>Links</h5>
+                </label>
+              </div>
+              <div className="ui secondary segment">
+                <SocialInputField
+                  name="amazon"
+                  placeholder="Amazon"
+                  value={this.state.form.amazon}
+                  icon="amazon"
+                  onChange={this.changeInputHandler}
+                  error={this.state.errors.amazon}
+                />
+                <SocialInputField
+                  name="goodreads"
+                  placeholder="Goodreads"
+                  value={this.state.form.goodreads}
+                  icon="goodreads"
+                  onChange={this.changeInputHandler}
+                  error={this.state.errors.goodreads}
                 />
               </div>
             </div>

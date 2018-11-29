@@ -149,3 +149,29 @@
     margin: 16px 0 8px;
   }
 }
+
+.amazonIcon {
+  /* background: #f7f5f1 !important; */
+  /* color: #4d4022 !important; */
+  display: inline-block;
+}
+
+.amazonIcon > i {
+  /* font-size: 28px !important; */
+  position: relative;
+  /* top: 6px; */
+  /* left: -5px; */
+}
+
+.goodreadsIcon {
+  /* background: #f7f5f1 !important; */
+  /* color: #4d4022 !important; */
+  display: inline-block;
+}
+
+.goodreadsIcon > i {
+  /* font-size: 28px !important; */
+  position: relative;
+  /* top: 6px; */
+  /* left: -5px; */
+}

@@ -10,6 +10,8 @@ module.exports = reqBody => {
   reqBody.googleId = !isEmpty(reqBody.googleId) ? reqBody.googleId : '';
   reqBody.isbn10 = !isEmpty(reqBody.isbn10) ? reqBody.isbn10 : '';
   reqBody.isbn13 = !isEmpty(reqBody.isbn13) ? reqBody.isbn13 : '';
+  reqBody.amazon = !isEmpty(reqBody.amazon) ? reqBody.amazon : '';
+  reqBody.goodreads = !isEmpty(reqBody.goodreads) ? reqBody.goodreads : '';
   reqBody.description = !isEmpty(reqBody.description) ? reqBody.description : '';
   reqBody.image = !isEmpty(reqBody.image) ? reqBody.image : '';
 
@@ -45,6 +47,13 @@ module.exports = reqBody => {
   }
   if (!Validator.isEmpty(reqBody.isbn13) && reqBody.isbn13.length !== 13) {
     errors.isbn13 = 'ISBN 13 must be 13 characters';
+  }
+
+  if (!Validator.isEmpty(reqBody.amazon) && !Validator.isURL(reqBody.amazon)) {
+    errors.amazon = 'Not a valid URL';
+  }
+  if (!Validator.isEmpty(reqBody.goodreads) && !Validator.isURL(reqBody.goodreads)) {
+    errors.goodreads = 'Not a valid URL';
   }
 
   if (Validator.isEmpty(reqBody.description)) {

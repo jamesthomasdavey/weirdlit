@@ -12,8 +12,8 @@ import isEmpty from '../../../validation/is-empty';
 import TextInputField from '../../layout/TextInputField/TextInputField';
 import TextAreaInputField from '../../layout/TextAreaInputField/TextAreaInputField';
 import FavoriteBookSearch from '../../layout/FavoriteBookSearch/FavoriteBookSearch';
+import SocialInputField from './../../layout/SocialInputField/SocialInputField'
 import FavoriteBook from '../../layout/FavoriteBook/FavoriteBook';
-import SocialInputField from './components/SocialInputField/SocialInputField';
 
 class EditProfile extends Component {
   state = {

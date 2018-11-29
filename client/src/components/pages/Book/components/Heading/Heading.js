@@ -10,6 +10,10 @@ import Description from './Description/Description';
 import AuthorLinks from './../../../../layout/AuthorLinks/AuthorLinks';
 import Tags from './Tags/Tags';
 
+// image
+import amazonIcon from './../../../../../img/icons/amazon.svg';
+import goodreadsIcon from './../../../../../img/icons/goodreads.svg';
+
 // css
 import classes from './Heading.module.css';
 
@@ -54,6 +58,30 @@ const Heading = props => {
                 </div>
                 <div className={classes.info__tags}>
                   <Tags tags={props.book.tags} />
+                </div>
+                <div style={{ marginBottom: '12px' }}>
+                  {props.book.social.amazon && (
+                    <a
+                      href={props.book.social.amazon}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={['ui mini icon labeled button', classes.amazonIcon].join(' ')}
+                    >
+                      <i className="amazon icon" />
+                      Amazon
+                    </a>
+                  )}
+                  {props.book.social.goodreads && (
+                    <a
+                      href={props.book.social.goodreads}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={['ui mini icon labeled button', classes.goodreadsIcon].join(' ')}
+                    >
+                      <i className="goodreads icon" />
+                      Goodreads
+                    </a>
+                  )}
                 </div>
                 <ReadButton bookId={props.book._id} />
               </div>
