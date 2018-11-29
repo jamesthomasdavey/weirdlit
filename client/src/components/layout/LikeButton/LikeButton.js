@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
+// component
+import Modal from './../Modal/Modal';
+
 // css
 import classes from './LikeButton.module.css';
 
@@ -11,7 +14,8 @@ class LikeButton extends Component {
   state = {
     likes: [],
     hasLiked: false,
-    isLoading: false
+    isLoading: false,
+    modal: ''
   };
   componentDidMount = () => {
     this.updateFromProps();
@@ -48,7 +52,9 @@ class LikeButton extends Component {
     });
   };
   toggleLikeReviewHandler = () => {
-    if (!this.state.hasLiked) {
+    if (!this.props.auth.isAuthenticated) {
+      this.setState({ modal: 'login' });
+    } else if (!this.state.hasLiked) {
       const currentState = this.state;
       currentState.likes.push(this.props.auth.user._id);
       currentState.hasLiked = true;
@@ -99,18 +105,12 @@ class LikeButton extends Component {
 
     if (this.state.likes.length > 0) {
       likeButton = (
-        <div
-          disabled={this.state.isLoading}
-          className={['ui button labeled', !this.props.auth.isAuthenticated && 'disabled'].join(
-            ' '
-          )}
-          tabIndex="0"
-        >
+        <div disabled={this.state.isLoading} className="ui button labeled" tabIndex="0">
           <div
             className={[
               'ui tiny button',
               classes.uiButton,
-              this.state.isLoading && 'disabled',
+              this.state.isLoading ? 'disabled' : '',
               this.state.hasLiked ? 'active' : ''
             ].join(' ')}
             onClick={this.toggleLikeReviewHandler}
@@ -124,11 +124,7 @@ class LikeButton extends Component {
       likeButton = (
         <div
           disabled={this.state.isLoading}
-          className={[
-            'ui tiny button',
-            this.state.isLoading && 'disabled',
-            !this.props.auth.isAuthenticated && 'disabled'
-          ].join(' ')}
+          className={['ui tiny button', this.state.isLoading ? 'disabled' : ''].join(' ')}
           onClick={this.toggleLikeReviewHandler}
         >
           <i className={['thumbs up icon', classes.icon].join(' ')} />
@@ -136,7 +132,12 @@ class LikeButton extends Component {
       );
     }
 
-    return <Fragment>{likeButton}</Fragment>;
+    return (
+      <Fragment>
+        <Modal formType={this.state.modal} hideModal={() => this.setState({ modal: '' })} />
+        {likeButton}
+      </Fragment>
+    );
   }
 }
 
