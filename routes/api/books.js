@@ -340,7 +340,7 @@ router.get('/add/:googleId', passport.authenticate('jwt', { session: false }), (
 });
 
 // @route     post /api/books/
-// @desc      new book route. upload image and store in data.
+// @desc      new book route. upload image and store in data, add tags
 // @access    private
 router.post('/', passport.authenticate('jwt', { session: false }), (req, res) => {
   // upload image to imgur
@@ -374,6 +374,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), (req, res) =>
             },
             title: volumeInfo.title,
             authors: [],
+            tags: req.body.tags,
             creator: req.user._id,
             image: imageLinks
           });

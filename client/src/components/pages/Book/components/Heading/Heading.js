@@ -10,10 +10,6 @@ import Description from './Description/Description';
 import AuthorLinks from './../../../../layout/AuthorLinks/AuthorLinks';
 import Tags from './Tags/Tags';
 
-// image
-import amazonIcon from './../../../../../img/icons/amazon.svg';
-import goodreadsIcon from './../../../../../img/icons/goodreads.svg';
-
 // css
 import classes from './Heading.module.css';
 

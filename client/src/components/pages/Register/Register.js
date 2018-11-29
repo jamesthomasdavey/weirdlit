@@ -34,6 +34,9 @@ class Register extends Component {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors, loading: false });
     }
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push('/browse');
+    }
   };
 
   changeInputHandler = e => {

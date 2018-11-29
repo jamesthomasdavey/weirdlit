@@ -24,8 +24,14 @@ class StarRating extends Component {
   };
   render() {
     let styles;
+    let size;
+
     if (this.props.center) {
       styles = { textAlign: 'center' };
+    }
+
+    if (this.props.large) {
+      size = '28px';
     }
 
     if (this.props.changeRatingHandler) {
@@ -52,7 +58,7 @@ class StarRating extends Component {
               numberOfStars={4}
               starRatedColor="orange"
               starEmptyColor="#666"
-              starDimension="15px"
+              starDimension={size || '15px'}
               starSpacing="0"
             />
           </div>
@@ -67,11 +73,13 @@ class StarRating extends Component {
 StarRating.propTypes = {
   noRating: PropTypes.bool,
   center: PropTypes.bool,
+  large: PropTypes.bool,
   value: PropTypes.number,
   changeRatingHandler: PropTypes.func
 };
 
 StarRating.defaultProps = {
+  large: false,
   noRating: false,
   value: 0
 };

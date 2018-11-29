@@ -21,7 +21,7 @@ class ReviewText extends Component {
     this.setState({ showFull: !this.state.showFull });
   };
   render() {
-    if (this.state.isShortReview) {
+    if (this.state.isShortReview || this.props.showAll) {
       return (
         <p>
           {this.props.review.split('\n').map((item, key) => {

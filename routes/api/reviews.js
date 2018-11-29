@@ -227,7 +227,10 @@ router.delete('/:reviewId', passport.authenticate('jwt', { session: false }), (r
       // update ratings to book
       await Review.find({ book: req.params.bookId }).then(async reviews => {
         const numberOfReviews = reviews.length;
-        const rating = reviews.reduce((acc, current) => acc + current.rating, 0) / numberOfReviews;
+        let rating = 0;
+        if (numberOfReviews > 0) {
+          rating = reviews.reduce((acc, current) => acc + current.rating, 0) / numberOfReviews;
+        }
         await Book.findById(req.params.bookId).then(async book => {
           book.numberOfReviews = numberOfReviews;
           book.rating = rating;

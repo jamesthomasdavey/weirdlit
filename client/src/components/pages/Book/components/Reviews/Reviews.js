@@ -8,6 +8,7 @@ import axios from 'axios';
 // component
 import Review from './../../../../layout/Review/Review';
 import Modal from './../../../../layout/Modal/Modal';
+import StarRating from './../../../../layout/StarRating/StarRating';
 
 // css
 import classes from './Reviews.module.css';
@@ -132,6 +133,7 @@ class Reviews extends Component {
           <i className="align left icon" />
           Reviews for {this.props.book.title}
         </h5>
+        {this.props.book.rating && <StarRating center large value={this.props.book.rating} />}
         <div
           className={['ui raised segment', this.state.isLoading ? 'loading' : ''].join(' ')}
           style={{ padding: '22px' }}

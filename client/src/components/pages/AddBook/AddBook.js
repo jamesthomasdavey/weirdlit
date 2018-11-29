@@ -18,7 +18,8 @@ class NewBook extends Component {
     },
     submitPage: {
       status: false,
-      imageUrl: ''
+      imageUrl: '',
+      tags: []
     }
   };
   selectBookHandler = (googleId, searchQuery) => {
@@ -35,11 +36,11 @@ class NewBook extends Component {
     currentState.submitPage = { status: false, imageUrl: '' };
     this.setState(currentState);
   };
-  submitImageHandler = imageUrl => {
+  submitHandler = (imageUrl, tags) => {
     const currentState = this.state;
     currentState.searchPage.status = false;
     currentState.resultPage.status = false;
-    currentState.submitPage = { status: true, imageUrl };
+    currentState.submitPage = { status: true, imageUrl, tags };
     this.setState(currentState);
   };
   render() {
@@ -54,7 +55,7 @@ class NewBook extends Component {
         {this.state.resultPage.status && (
           <ResultPage
             setSearchPageHandler={this.setSearchPageHandler}
-            submitImageHandler={this.submitImageHandler}
+            submitHandler={this.submitHandler}
             googleId={this.state.resultPage.googleId}
           />
         )}
@@ -62,6 +63,7 @@ class NewBook extends Component {
           <SubmitPage
             googleId={this.state.resultPage.googleId}
             imageUrl={this.state.submitPage.imageUrl}
+            tags={this.state.submitPage.tags}
             setSearchPageHandler={this.setSearchPageHandler}
           />
         )}

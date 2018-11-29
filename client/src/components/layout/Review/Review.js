@@ -93,7 +93,7 @@ const Review = props => {
     editButton = (
       <Link
         to={`/books/${props.review.book._id}/reviews/${props.review._id}/edit`}
-        className="ui tiny labeled icon button"
+        className="ui mini labeled icon button"
       >
         <i className="edit icon" />
         Edit

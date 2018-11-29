@@ -12,8 +12,9 @@ class SubmitPage extends Component {
   componentDidMount = () => {
     const googleId = this.props.googleId;
     const imageUrl = this.props.imageUrl;
+    const tags = this.props.tags;
     axios
-      .post('/api/books', { googleId, imageUrl })
+      .post('/api/books', { googleId, imageUrl, tags })
       .then(res => {
         if (res.data.errors && res.data.errors.length > 0) {
           this.setState({ loading: false, success: false, errors: res.data.errors });
@@ -90,6 +91,7 @@ class SubmitPage extends Component {
 SubmitPage.propTypes = {
   googleId: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,
+  tags: PropTypes.array.isRequired,
   setSearchPageHandler: PropTypes.func.isRequired
 };
 
