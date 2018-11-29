@@ -76,76 +76,83 @@ class Register extends Component {
 
     return (
       <Fragment>
-        <div className="ui container">
-          <div className="ui one column stackable center aligned page grid">
-            <div className="column nine wide">
-              <form
-                noValidate
-                onSubmit={this.submitFormHandler}
-                className={[
-                  'register__form ui fluid form',
-                  this.state.loading ? 'loading' : ''
-                ].join(' ')}
-              >
-                <TextInputField
-                  name="name"
-                  placeholder="Name"
-                  maxLength="40"
-                  autoFocus
-                  value={this.state.name}
-                  onChange={this.changeInputHandler}
-                  error={errors.name}
-                />
-                <TextInputField
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  value={this.state.email}
-                  onChange={this.changeInputHandler}
-                  error={errors.email}
-                />
-                <TextInputField
-                  name="password"
-                  type="password"
-                  maxLength="30"
-                  placeholder="Password"
-                  value={this.state.password}
-                  onChange={this.changeInputHandler}
-                  error={errors.password}
-                />
-                <TextInputField
-                  name="password2"
-                  type="password"
-                  maxLength="30"
-                  placeholder="Confirm Password"
-                  value={this.state.password2}
-                  onChange={this.changeInputHandler}
-                  error={errors.password2}
-                />
-                <div className={['ui field', this.state.errors.favoriteBook && 'error'].join(' ')}>
-                  <label>What is your favorite book? (Optional)</label>
-                  {!isEmpty(this.state.form.favoriteBook) && (
-                    <FavoriteBook
-                      removeFavoriteBookHandler={this.removeFavoriteBookHandler}
-                      title={this.state.form.favoriteBook.title}
-                      isVisible={!isEmpty(this.state.form.favoriteBook)}
-                    />
-                  )}
-                  <FavoriteBookSearch
-                    addFavoriteBookHandler={this.addFavoriteBookHandler}
-                    isVisible={isEmpty(this.state.form.favoriteBook)}
+        <div className="ui text container">
+          <div className="ui segment">
+            <div className="ui one column stackable center aligned page grid">
+              <div className="column eleven wide">
+              <h3>Register</h3>
+                <form
+                  noValidate
+                  onSubmit={this.submitFormHandler}
+                  className={[
+                    'register__form ui fluid form',
+                    this.state.loading ? 'loading' : ''
+                  ].join(' ')}
+                >
+                  <TextInputField
+                    name="name"
+                    placeholder="Name"
+                    maxLength="40"
+                    autoFocus
+                    value={this.state.name}
+                    onChange={this.changeInputHandler}
+                    error={errors.name}
                   />
-                  {this.state.errors.favoriteBook && (
-                    <div className="ui pointing basic label">{this.state.errors.favoriteBook}</div>
-                  )}
+                  <TextInputField
+                    name="email"
+                    type="email"
+                    placeholder="Email"
+                    value={this.state.email}
+                    onChange={this.changeInputHandler}
+                    error={errors.email}
+                  />
+                  <TextInputField
+                    name="password"
+                    type="password"
+                    maxLength="30"
+                    placeholder="Password"
+                    value={this.state.password}
+                    onChange={this.changeInputHandler}
+                    error={errors.password}
+                  />
+                  <TextInputField
+                    name="password2"
+                    type="password"
+                    maxLength="30"
+                    placeholder="Confirm Password"
+                    value={this.state.password2}
+                    onChange={this.changeInputHandler}
+                    error={errors.password2}
+                  />
+                  <div
+                    className={['ui field', this.state.errors.favoriteBook && 'error'].join(' ')}
+                  >
+                    <label>What is your favorite book? (Optional)</label>
+                    {!isEmpty(this.state.form.favoriteBook) && (
+                      <FavoriteBook
+                        removeFavoriteBookHandler={this.removeFavoriteBookHandler}
+                        title={this.state.form.favoriteBook.title}
+                        isVisible={!isEmpty(this.state.form.favoriteBook)}
+                      />
+                    )}
+                    <FavoriteBookSearch
+                      addFavoriteBookHandler={this.addFavoriteBookHandler}
+                      isVisible={isEmpty(this.state.form.favoriteBook)}
+                    />
+                    {this.state.errors.favoriteBook && (
+                      <div className="ui pointing basic label">
+                        {this.state.errors.favoriteBook}
+                      </div>
+                    )}
+                  </div>
+                  <input type="submit" className="ui button grey" value="Register" />
+                </form>
+                <div className="ui message">
+                  <p>Already have an account?</p>
+                  <p>
+                    <Link to="/login">Sign in here!</Link>
+                  </p>
                 </div>
-                <input type="submit" className="ui button grey" value="Register" />
-              </form>
-              <div className="ui message">
-                <p>Already have an account?</p>
-                <p>
-                  <Link to="/login">Sign in here!</Link>
-                </p>
               </div>
             </div>
           </div>

@@ -7,7 +7,7 @@ import classes from './Tags.module.css';
 
 const Tags = props => {
   const tags = props.tags.map(tag => {
-    if (tag.isDisabled) {
+    if (tag.isDisabled && !tag.isSelected) {
       return (
         <span key={tag._id} className={['ui label disabled', classes.tag].join(' ')}>
           {tag.name}

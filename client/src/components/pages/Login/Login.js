@@ -55,7 +55,8 @@ class Login extends Component {
         <div className="ui text container">
           <div className="ui segment">
             <div className="ui one column stackable center aligned page grid">
-              <div className="column nine wide">
+              <div className="column eleven wide">
+                <h3>Sign In</h3>
                 <form
                   noValidate
                   onSubmit={this.submitFormHandler}
