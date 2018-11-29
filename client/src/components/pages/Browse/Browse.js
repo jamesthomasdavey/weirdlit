@@ -6,6 +6,7 @@ import FeaturedBook from './components/FeaturedBook/FeaturedBook';
 import Tags from './components/Tags/Tags';
 import Random from './components/Random/Random';
 import RecentlyPublished from './components/RecentlyPublished/RecentlyPublished';
+import RecentReviews from './components/RecentReviews/RecentReviews';
 
 // css
 import classes from './Browse.module.css';
@@ -30,6 +31,7 @@ class Browse extends Component {
             </div>
           </div>
           <RecentlyPublished />
+          <RecentReviews />
         </div>
       </div>
     );

@@ -61,6 +61,9 @@ router.post('/register', (req, res) => {
         date: newUser.date,
         favoriteBook
       });
+      if (favoriteBook.id) {
+        newProfile.booksRead.push(favoriteBook.id);
+      }
       // save the new profile
       await newProfile.save();
       // output data to user

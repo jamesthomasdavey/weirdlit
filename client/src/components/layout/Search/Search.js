@@ -30,6 +30,12 @@ class Search extends Component {
                 results: res.data.authors
               };
             }
+            if (res.data.tags.length > 0) {
+              searchResults.tags = {
+                name: 'Tags',
+                results: res.data.tags
+              };
+            }
             this.setState({ searchResults, isSearching: false });
           });
         });

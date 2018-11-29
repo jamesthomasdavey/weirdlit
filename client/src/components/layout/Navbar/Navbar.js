@@ -12,13 +12,15 @@ import './../../../img/bird-1903523.png';
 // components
 import shellLogo from './../../../img/beach-1297237.svg';
 import Search from './../Search/Search';
+import Modal from './../Modal/Modal';
 
 // css
 import './Navbar.css';
 
 class Navbar extends Component {
   state = {
-    notificationsCount: 0
+    notificationsCount: 0,
+    modal: ''
   };
 
   componentDidMount = () => {
@@ -38,7 +40,7 @@ class Navbar extends Component {
   };
 
   logoutHandler = () => {
-    this.props.logoutUser(this.props.history);
+    this.props.logoutUser();
   };
 
   render() {
@@ -93,16 +95,18 @@ class Navbar extends Component {
         <i className="user circle outline icon large" />
         <i className="dropdown icon" />
         <div className="menu" style={{ zIndex: '999' }}>
-          <Link to="/login">
-            <div className="item profile__item-link">
-              <span className="menu__item-link">Sign In</span>
-            </div>
-          </Link>
-          <Link to="/register">
-            <div className="item profile__item-link">
-              <span className="menu__item-link">Register</span>
-            </div>
-          </Link>
+          <div
+            onClick={() => this.setState({ modal: 'login' })}
+            className="item profile__item-link"
+          >
+            <span className="menu__item-link">Sign In</span>
+          </div>
+          <div
+            onClick={() => this.setState({ modal: 'register' })}
+            className="item profile__item-link"
+          >
+            <span className="menu__item-link">Register</span>
+          </div>
         </div>
       </div>
     );
@@ -111,7 +115,11 @@ class Navbar extends Component {
 
     return (
       <Fragment>
-        <div className="navbar ui borderless stackable menu large">
+        <Modal formType={this.state.modal} hideModal={() => this.setState({ modal: '' })} />
+        <div
+          className="navbar ui borderless stackable menu large"
+          style={{ position: 'relative', zIndex: '999' }}
+        >
           <div className="ui container">
             <Link to="/">
               <div className="header item">

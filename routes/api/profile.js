@@ -77,8 +77,8 @@ router.get('/user/:userId/reviews', (req, res) => {
 // @access    public
 router.get('/user/:userId/reviews/sort/:sortMethod/:sortOrder/skip/:skipAmount', (req, res) => {
   Review.find({ creator: req.params.userId })
-    .populate({ path: 'book', populate: { path: 'authors' } })
     .populate('creator', ['name', '_id'])
+    .populate({ path: 'book', populate: { path: 'authors' } })
     .then(reviews => {
       const updatedReviews = reviews;
       if (req.params.sortMethod === 'writtenDate') {
@@ -87,6 +87,13 @@ router.get('/user/:userId/reviews/sort/:sortMethod/:sortOrder/skip/:skipAmount',
           b = new Date(b.date);
           return a > b ? -1 : a < b ? 1 : 0;
         });
+      } else if (req.params.sortMethod === 'likes') {
+        updatedReviews.sort(
+          firstBy((a, b) => a.likes.length - b.likes.length, -1).thenBy(
+            (a, b) => (a.comments.length = b.comments.length),
+            -1
+          )
+        );
       } else if (req.params.sortMethod === 'rating') {
         updatedReviews.sort(
           firstBy((a, b) => a.rating - b.rating, -1).thenBy(

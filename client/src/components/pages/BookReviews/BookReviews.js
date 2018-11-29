@@ -5,10 +5,10 @@ import axios from 'axios';
 // component
 import Spinner from './../../layout/Spinner/Spinner';
 import Review from './../../layout/Review/Review';
-import ProfileReviewsHeader from './components/ProfileReviewsHeader/ProfileReviewsHeader';
+import BookReviewsHeader from './components/BookReviewsHeader/BookReviewsHeader';
 
 // css
-import classes from './ProfileReviews.module.css';
+import classes from './BookReviews.module.css';
 
 class ProfileReviews extends Component {
   state = {
@@ -42,16 +42,17 @@ class ProfileReviews extends Component {
   updateUrl = () => {
     if (
       this.state.sort.sortMethod === 'writtenDate' ||
+      this.state.sort.sortMethod === 'likes' ||
       this.state.sort.sortMethod === 'rating' ||
-      this.state.sort.sortMethod === 'length'
+      this.state.sort.sortMethod === 'wordCount'
     ) {
       if (this.state.sort.sortOrder === 'asc' || this.state.sort.sortOrder === 'desc') {
         window.history.pushState(
           '',
           '',
-          `/profile/user/${this.props.match.params.userId}/reviews/sort/${
-            this.state.sort.sortMethod
-          }/${this.state.sort.sortOrder}`
+          `/books/${this.props.match.params.bookId}/reviews/sort/${this.state.sort.sortMethod}/${
+            this.state.sort.sortOrder
+          }`
         );
         this.updateFromReviews();
       } else {
@@ -64,9 +65,9 @@ class ProfileReviews extends Component {
   updateFromReviews = () => {
     axios
       .get(
-        `/api/profile/user/${this.props.match.params.userId}/reviews/sort/${
-          this.state.sort.sortMethod
-        }/${this.state.sort.sortOrder}/skip/0`
+        `/api/books/${this.props.match.params.bookId}/reviews/sort/${this.state.sort.sortMethod}/${
+          this.state.sort.sortOrder
+        }/skip/0`
       )
       .then(res => {
         this.setState({
@@ -93,9 +94,9 @@ class ProfileReviews extends Component {
   showMoreReviewsHandler = () => {
     this.setState({ isLoadingMore: true }, () => {
       axios.get(
-        `/api/profile/user/${this.props.match.params.userId}/reviews/sort/${
-          this.state.sort.sortMethod
-        }/${this.state.sortOrder}/skip/${this.state.reviewsOnDisplay.length}`
+        `/api/books/${this.props.match.params.bookId}/reviews/sort/${this.state.sort.sortMethod}/${
+          this.state.sortOrder
+        }/skip/${this.state.reviewsOnDisplay.length}`
       );
     }).then(res => {
       const currentReviewsOnDisplay = this.state;
@@ -110,20 +111,8 @@ class ProfileReviews extends Component {
     });
   };
   render() {
-    let profileReviewsHeader;
     let reviews;
     let showMoreReviewsButton;
-
-    if (!this.state.isLoading) {
-      profileReviewsHeader = (
-        <ProfileReviewsHeader
-          userId={this.props.match.params.userId}
-          sort={this.state.sort}
-          sortMethodHandler={this.sortMethodHandler}
-          toggleSortOrderHandler={this.toggleSortOrderHandler}
-        />
-      );
-    }
 
     if (this.state.isLoading || this.state.isLoadingReviews) {
       reviews = <Spinner />;
@@ -134,9 +123,8 @@ class ProfileReviews extends Component {
             <Review
               key={review._id}
               review={review}
-              book={review.book}
-              showBookAuthors
-              showBookInfo
+              book={{ _id: review.book }}
+              showReviewCreator
               showReviewHeadlineAsLink
               showLikeButton
               showCommentButton
@@ -161,7 +149,14 @@ class ProfileReviews extends Component {
       <Fragment>
         <div className="ui container">
           <div className="ui segment">
-            {profileReviewsHeader}
+            {!this.state.isLoading && (
+              <BookReviewsHeader
+                bookId={this.props.match.params.bookId}
+                sort={this.state.sort}
+                sortMethodHandler={this.sortMethodHandler}
+                toggleSortOrderHandler={this.toggleSortOrderHandler}
+              />
+            )}
             <div className="ui divided items" style={{ padding: '0 12px' }}>
               {reviews}
               {showMoreReviewsButton}

@@ -1,0 +1,8 @@
+.switchLink {
+  color: #4183C4;
+}
+
+.switchLink:hover {
+  color: #1E70BF;
+  cursor: pointer;
+}

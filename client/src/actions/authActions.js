@@ -5,11 +5,11 @@ import jwt_decode from 'jwt-decode';
 import { GET_ERRORS, SET_CURRENT_USER } from './types';
 
 // Register User
-export const registerUser = (userData, history) => dispatch => {
+export const registerUser = userData => dispatch => {
   axios
     .post('/api/users/register', userData)
     .then(res => dispatch(loginUser({ email: userData.email, password: userData.password })))
-    .then(res => history.push('/browse'))
+    // .then(res => history.push('/browse'))
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
@@ -44,10 +44,10 @@ export const setCurrentUser = decoded => {
   };
 };
 
-export const logoutUser = history => dispatch => {
+export const logoutUser = () => dispatch => {
   localStorage.removeItem('jwtToken');
   setAuthToken(false);
-  history.push('/login');
+  // history.push('/login');
   dispatch(setCurrentUser({}));
 };
 

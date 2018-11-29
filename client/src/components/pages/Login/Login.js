@@ -7,7 +7,7 @@ import { loginUser } from './../../../actions/authActions';
 // component
 import TextInputField from '../../layout/TextInputField/TextInputField';
 
-import './Login.css';
+import classes from './Login.module.css';
 
 class Login extends Component {
   state = {
@@ -60,7 +60,8 @@ class Login extends Component {
                   noValidate
                   onSubmit={this.submitFormHandler}
                   className={[
-                    'login__form ui fluid form',
+                    'ui fluid form',
+                    classes.loginForm,
                     this.state.loading ? 'loading' : ''
                   ].join(' ')}
                 >

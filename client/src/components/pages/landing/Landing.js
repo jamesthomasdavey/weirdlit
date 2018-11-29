@@ -8,11 +8,13 @@ import { connect } from 'react-redux';
 import Logo from './Components/Logo';
 import BackgroundAnimation from './Components/BackgroundAnimation';
 import Search from './../../layout/Search/Search';
+import Modal from './../../layout/Modal/Modal';
 
 // css
 import classes from './Landing.module.css';
 
 class Landing extends Component {
+  state = { modal: '' };
   render() {
     document.title = 'WeirdLit | The Database for Strange Writings';
     let authButtons;
@@ -21,14 +23,24 @@ class Landing extends Component {
         <div className="ui internally celled grid">
           <div className="row">
             <div className="eight wide column">
-              <Link to="/login">
-                <button className="ui right floated grey button">Sign In</button>
-              </Link>
+              {/* <Link to="/login"> */}
+              <button
+                onClick={() => this.setState({ modal: 'login' })}
+                className="ui right floated grey button"
+              >
+                Sign In
+              </button>
+              {/* </Link> */}
             </div>
             <div className="eight wide column">
-              <Link to="/register">
-                <button className="ui left floated grey button">Register</button>
-              </Link>
+              {/* <Link to="/register"> */}
+              <button
+                onClick={() => this.setState({ modal: 'register' })}
+                className="ui left floated grey button"
+              >
+                Register
+              </button>
+              {/* </Link> */}
             </div>
           </div>
         </div>
@@ -36,6 +48,7 @@ class Landing extends Component {
     }
     return (
       <Fragment>
+        <Modal formType={this.state.modal} hideModal={() => this.setState({ modal: '' })} />
         <div className={classes.container}>
           <div className={['ui text container', classes.content__container].join(' ')}>
             <div className={classes.content}>

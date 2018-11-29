@@ -38,7 +38,7 @@ import RandomBook from './components/pages/RandomBook/RandomBook';
 import Author from './components/pages/Author/Author';
 import AuthorBooks from './components/pages/AuthorBooks/AuthorBooks';
 import EditAuthor from './components/pages/EditAuthor/EditAuthor';
-// import BookReviews from './components/pages/BookReviews/BookReviews';
+import BookReviews from './components/pages/BookReviews/BookReviews';
 import Review from './components/pages/Review/Review';
 import NewReview from './components/pages/NewReview/NewReview';
 import EditReview from './components/pages/EditReview/EditReview';
@@ -101,7 +101,12 @@ class App extends Component {
               <Route exact path="/books/:bookId" component={Book} />
               <AdminRoute exact path="/books/:bookId/edit" component={EditBook} />
               <AdminRoute exact path="/books/:bookId/delete" component={DeleteBook} />
-              {/* <Route exact path="/books/:bookId/reviews" component={BookReviews} /> */}
+              <Route exact path="/books/:bookId/reviews" component={BookReviews} />
+              <Route
+                exact
+                path="/books/:bookId/reviews/sort/:sortMethod/:sortOrder"
+                component={BookReviews}
+              />
               <PrivateRoute exact path="/books/:bookId/reviews/new" component={NewReview} />
               <Route exact path="/books/:bookId/reviews/:reviewId" component={Review} />
               <PrivateRoute

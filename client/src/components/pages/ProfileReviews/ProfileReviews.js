@@ -42,6 +42,7 @@ class ProfileReviews extends Component {
   updateUrl = () => {
     if (
       this.state.sort.sortMethod === 'writtenDate' ||
+      this.state.sort.sortMethod === 'likes' ||
       this.state.sort.sortMethod === 'rating' ||
       this.state.sort.sortMethod === 'wordCount'
     ) {

@@ -18,6 +18,15 @@ const ReviewSortBar = props => {
       }
     },
     {
+      key: 'likes',
+      text: 'Likes',
+      value: 'likes',
+      content: 'Likes',
+      onClick: function() {
+        props.sortMethodHandler('likes');
+      }
+    },
+    {
       key: 'rating',
       text: 'Rating',
       value: 'rating',

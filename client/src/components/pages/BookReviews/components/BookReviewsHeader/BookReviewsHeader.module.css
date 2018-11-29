@@ -1,0 +1,12 @@
+.h3Wrapper {
+  display: block;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .h3Wrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+}

@@ -158,6 +158,20 @@ router.get('/filter/:tags/sort/:sortMethod/:sortOrder/skip/:skipAmount', async (
   res.json({ totalAvailable, books: skippedBooks, usableTagIds });
 });
 
+// @route     get /api/books/reviews
+// @desc      get recent 5 reviews
+// @access    public
+router.get('/reviews', (req, res) => {
+  Review.find({})
+    .sort({ date: -1 })
+    .limit(5)
+    .populate('creator', ['name', '_id'])
+    .populate({ path: 'book', populate: { path: 'authors' } })
+    .then(reviews => {
+      res.json(reviews);
+    });
+});
+
 // @route     get /api/books/featured
 // @desc      get featured book ID
 // @access    public

@@ -7,6 +7,7 @@ const isEmpty = require('./../../validation/is-empty');
 //models
 const Author = require('./../../models/Author');
 const Book = require('./../../models/Book');
+const Tag = require('./../../models/Tag');
 
 // functions
 const asyncForEach = async (arr, callback) => {
@@ -47,7 +48,15 @@ router.post('/suggest', (req, res) => {
             link: `/authors/${author._id}`
           }))
           .splice(0, 5);
-        res.json({ books: booksResults, authors: authorsResults });
+        Tag.find({ $text: { $search: req.body.searchQuery } })
+          .limit(5)
+          .then(tags => {
+            const tagResults = tags.map(tag => ({
+              title: tag.name,
+              link: `/books/filter/${tag.name}`
+            }));
+            res.json({ books: booksResults, authors: authorsResults, tags: tagResults });
+          });
       });
     });
 });
