@@ -96,7 +96,12 @@ router.get(
     }
     let books = [];
     if (tagIds.length > 0) {
-      await Book.find({ authors: req.params.authorId, tags: tagIds[0] })
+      await Book.find({
+        authors: req.params.authorId,
+        tags: tagIds[0],
+        isApproved: true,
+        isRejected: false
+      })
         .populate('authors', 'name')
         .then(matchingBooks => {
           matchingBooks.forEach(matchingBook => {
@@ -113,7 +118,7 @@ router.get(
           });
         });
     } else {
-      await Book.find({ authors: req.params.authorId })
+      await Book.find({ authors: req.params.authorId, isApproved: true, isRejected: false })
         .populate('authors', 'name')
         .then(allBooks => {
           allBooks.forEach(book => {

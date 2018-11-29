@@ -5,6 +5,9 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import arrayToSentence from 'array-to-sentence';
 
+// css
+import classes from './SearchPage.module.css';
+
 class SearchPage extends Component {
   state = {
     searchQuery: '',
@@ -61,7 +64,7 @@ class SearchPage extends Component {
     } else if (this.state.searchResults.loaded && this.state.searchResults.results.length > 0) {
       const searchResultsList = this.state.searchResults.results.map(book => {
         return (
-          <div className="item book__item" key={book.googleId}>
+          <div className={['item', classes.bookItem].join(' ')} key={book.googleId}>
             <div className="ui small image">
               <img alt="cover" src={book.thumb} />
             </div>

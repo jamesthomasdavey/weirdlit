@@ -336,6 +336,9 @@ router.get(
           books.reverse();
         }
         const totalAvailable = books.length;
+        books = books.filter(book => {
+          return book.isApproved && !book.isRejected;
+        });
         const usableTagIds = books.reduce((accTags, currentBook) => {
           const usableTagsFromBook = currentBook.tags.reduce((acc, currentTag) => {
             if (!accTags.includes(currentTag)) {

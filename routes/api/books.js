@@ -81,7 +81,7 @@ router.get('/filter/:tags/sort/:sortMethod/:sortOrder/skip/:skipAmount', async (
   }
   let books = [];
   if (tagIds.length > 0) {
-    await Book.find({ tags: tagIds[0] })
+    await Book.find({ tags: tagIds[0], isApproved: true, isRejected: false })
       .populate('authors', 'name')
       .then(matchingBooks => {
         matchingBooks.forEach(matchingBook => {
@@ -98,7 +98,7 @@ router.get('/filter/:tags/sort/:sortMethod/:sortOrder/skip/:skipAmount', async (
         });
       });
   } else {
-    await Book.find()
+    await Book.find({ isApproved: true, isRejected: false })
       .populate('authors', 'name')
       .then(allBooks => {
         allBooks.forEach(book => {

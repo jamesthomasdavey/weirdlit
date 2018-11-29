@@ -113,7 +113,7 @@ const Review = props => {
           </div>
         )}
         <div className="meta">
-          <span>
+          <span className={classes.postedDate}>
             Posted {timeAgo.ago(props.review.date)}
             {reviewCreator}
           </span>

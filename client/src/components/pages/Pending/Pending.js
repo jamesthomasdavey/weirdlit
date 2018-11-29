@@ -6,27 +6,31 @@ import axios from 'axios';
 // component
 import Spinner from './../../layout/Spinner/Spinner';
 import AuthorLinks from './../../layout/AuthorLinks/AuthorLinks';
+import PendingBook from './components/PendingBook/PendingBook';
 
 class Pending extends Component {
   state = {
     books: [],
-    isLoading: false,
+    isLoading: true,
     errors: {}
   };
   componentDidMount = () => {
     this.updateFromPendingBooks();
   };
   updateFromPendingBooks = () => {
-    this.setState({ isLoading: true }, () => {
-      axios
-        .get('/api/books/pending')
-        .then(res => {
-          this.setState({ books: res.data, isLoading: false });
-        })
-        .catch(err => {
-          this.setState({ books: [], isLoading: false });
-        });
-    });
+    axios
+      .get('/api/books/pending')
+      .then(res => {
+        this.setState({ books: res.data, isLoading: false });
+      })
+      .catch(err => {
+        this.setState({ books: [], isLoading: false });
+      });
+  };
+  deletePendingBookHandler = () => {
+    setTimeout(() => {
+      this.updateFromPendingBooks();
+    }, 400);
   };
   approveBookHandler = book => {
     this.setState({ isLoading: true }, () => {
@@ -63,52 +67,16 @@ class Pending extends Component {
       pendingResults = <h5 style={{ textAlign: 'center', padding: '2rem' }}>No pending books.</h5>;
     } else {
       pendingResults = this.state.books.map(book => {
-        return (
-          <div className="item book__item" key={book._id}>
-            <div className="ui small image">
-              <img alt="cover" src={book.image.mediumThumbnail} />
-            </div>
-            <div className="content">
-              <div className="header">{book.title}</div>
-              {book.subtitle && <div className="meta">{book.subtitle}</div>}
-              <div className="meta">{book.publishedDate}</div>
-              {book.authors && (
-                <div className="meta">
-                  <AuthorLinks authors={book.authors} />
-                </div>
-              )}
-              <div className="meta">
-                Requested by{' '}
-                <Link to={`/profile/user/${book.creator._id}`}>{book.creator.name}</Link>
-              </div>
-              <button
-                className="ui teal labeled tiny icon button"
-                onClick={() => this.approveBookHandler(book)}
-              >
-                Approve
-                <i className="add icon" />
-              </button>
-              <button
-                className="ui red labeled tiny icon button"
-                onClick={() => this.rejectBookHandler(book)}
-              >
-                Reject
-                <i className="x icon" />
-              </button>
-              <Link to={`/books/${book._id}/edit`} className="ui labeled tiny icon button">
-                Edit
-                <i className="edit icon" />
-              </Link>
-            </div>
-          </div>
-        );
+        return <PendingBook book={book} deletePendingBookHandler={this.deletePendingBookHandler} />;
       });
     }
     return (
       <Fragment>
         <div className="ui container">
           <div className="ui text container">
-            <div className="ui divided items">{pendingResults}</div>
+            <div className="ui segment">
+              <div className="ui divided items">{pendingResults}</div>
+            </div>
           </div>
         </div>
       </Fragment>
