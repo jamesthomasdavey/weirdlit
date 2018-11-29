@@ -641,7 +641,10 @@ router.delete(
               });
               booksRead.splice(deleteIndex);
               profile.booksRead = booksRead;
-              if (profile.favoriteBook.id.toString() === req.params.bookId) {
+              if (
+                profile.favoriteBook.id &&
+                profile.favoriteBook.id.toString() === req.params.bookId
+              ) {
                 profile.favoriteBook = {};
               }
               await profile.save();

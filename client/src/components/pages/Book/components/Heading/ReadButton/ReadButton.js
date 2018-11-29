@@ -4,17 +4,26 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
+// component
+import Modal from './../../../../../layout/Modal/Modal';
+
 class ReadButton extends Component {
   state = {
     hasRead: false,
     canUnread: true,
     isLoading: true,
     isChanging: false,
+    modal: '',
     errors: []
   };
   componentDidMount = () => {
     // update state if authenticated
     if (this.props.auth.isAuthenticated) {
+      this.updateFromProfile(this.props.bookId);
+    }
+  };
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.auth.isAuthenticated) {
       this.updateFromProfile(this.props.bookId);
     }
   };
@@ -101,7 +110,7 @@ class ReadButton extends Component {
         readButton = (
           <button
             disabled
-            className="ui grey disabled labeled icon button small"
+            className="ui disabled labeled icon button small"
             style={{ cursor: 'default' }}
           >
             <i className="check circle outline icon" />I haven't read this
@@ -112,10 +121,9 @@ class ReadButton extends Component {
           readButton = (
             <button
               onClick={this.readBookHandler}
-              className={[
-                'ui grey labeled icon button small',
-                this.state.isChanging && 'disabled'
-              ].join(' ')}
+              className={['ui labeled icon button small', this.state.isChanging && 'disabled'].join(
+                ' '
+              )}
             >
               <i className="circle outline icon" />I haven't read this
             </button>
@@ -146,9 +154,23 @@ class ReadButton extends Component {
           }
         }
       }
+    } else {
+      readButton = (
+        <button
+          onClick={() => this.setState({ modal: 'login' })}
+          className="ui labeled icon button small"
+        >
+          <i className="check circle outline icon" />I haven't read this
+        </button>
+      );
     }
 
-    return <Fragment>{readButton}</Fragment>;
+    return (
+      <Fragment>
+        <Modal formType={this.state.modal} hideModal={() => this.setState({ modal: '' })} />
+        {readButton}
+      </Fragment>
+    );
   }
 }
 
