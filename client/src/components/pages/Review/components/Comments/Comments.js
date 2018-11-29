@@ -1,5 +1,5 @@
 // package
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
@@ -10,6 +10,7 @@ import isEmpty from './../../../../../validation/is-empty';
 
 // component
 import TextAreaInputField from './../../../../layout/TextAreaInputField/TextAreaInputField';
+import Modal from './../../../../layout/Modal/Modal';
 import Comment from './Comment/Comment';
 
 class Comments extends Component {
@@ -18,6 +19,7 @@ class Comments extends Component {
     newComment: '',
     isLoading: false,
     isSubmitting: false,
+    modal: '',
     errors: {}
   };
   componentDidMount = () => {
@@ -34,24 +36,28 @@ class Comments extends Component {
   };
   formSubmitHandler = e => {
     e.preventDefault();
-    this.setState({ isSubmitting: true }, () => {
-      axios
-        .post(
-          `/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}/comments`,
-          {
-            text: this.state.newComment
-          }
-        )
-        .then(res => {
-          if (res.data.errors && !isEmpty(res.data.errors)) {
-            this.setState({ errors: res.data.errors, isSubmitting: false });
-          } else {
-            this.setState({ isSubmitting: false, isLoading: true }, () => {
-              this.notifyReviewerHandler(res.data.comment);
-            });
-          }
-        });
-    });
+    if (!this.props.auth.isAuthenticated) {
+      this.setState({ modal: 'login' });
+    } else {
+      this.setState({ isSubmitting: true }, () => {
+        axios
+          .post(
+            `/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}/comments`,
+            {
+              text: this.state.newComment
+            }
+          )
+          .then(res => {
+            if (res.data.errors && !isEmpty(res.data.errors)) {
+              this.setState({ errors: res.data.errors, isSubmitting: false });
+            } else {
+              this.setState({ isSubmitting: false, isLoading: true }, () => {
+                this.notifyReviewerHandler(res.data.comment);
+              });
+            }
+          });
+      });
+    }
   };
   notifyReviewerHandler = comment => {
     if (this.props.auth.user._id !== this.props.review.creator._id) {
@@ -98,40 +104,45 @@ class Comments extends Component {
     }
 
     return (
-      <div>
-        <h5 className="ui horizontal divider header" id="comments">
-          <i className="comment outline icon" />
-          Comments
-        </h5>
-        <div
-          className={['ui raised segment', this.state.isLoading && 'loading'].join(' ')}
-          style={{ padding: '22px' }}
-        >
-          {comments}
-          <div className="ui dividing header" />
-          <form className="ui form" onSubmit={this.formSubmitHandler}>
-            <TextAreaInputField
-              name="newComment"
-              minHeight="100px"
-              rows="1"
-              placeholder="Add a new comment..."
-              value={this.state.newComment}
-              maxLength="600"
-              onChange={this.changeInputHandler}
-              error={this.state.errors.newComment}
-              info={
-                this.state.newComment &&
-                `Characters remaining: ${600 - this.state.newComment.length}`
-              }
-            />
-            <button
-              className={['ui primary tiny button', this.state.isSubmitting && 'loading'].join(' ')}
-            >
-              Comment
-            </button>
-          </form>
+      <Fragment>
+        <Modal formType={this.state.modal} hideModal={() => this.setState({ modal: '' })} />
+        <div>
+          <h5 className="ui horizontal divider header" id="comments">
+            <i className="comment outline icon" />
+            Comments
+          </h5>
+          <div
+            className={['ui raised segment', this.state.isLoading && 'loading'].join(' ')}
+            style={{ padding: '22px' }}
+          >
+            {comments}
+            <div className="ui dividing header" />
+            <form className="ui form" onSubmit={this.formSubmitHandler}>
+              <TextAreaInputField
+                name="newComment"
+                minHeight="100px"
+                rows="1"
+                placeholder="Add a new comment..."
+                value={this.state.newComment}
+                maxLength="600"
+                onChange={this.changeInputHandler}
+                error={this.state.errors.newComment}
+                info={
+                  this.state.newComment &&
+                  `Characters remaining: ${600 - this.state.newComment.length}`
+                }
+              />
+              <button
+                className={['ui primary tiny button', this.state.isSubmitting && 'loading'].join(
+                  ' '
+                )}
+              >
+                Comment
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }

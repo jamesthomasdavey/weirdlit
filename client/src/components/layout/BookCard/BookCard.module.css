@@ -54,6 +54,10 @@
   color: grey;
 }
 
+.pageCount {
+  text-align: center;
+}
+
 .viewButton {
   margin-top: 8px;
   text-align: center;

@@ -238,7 +238,16 @@ class ProfileBooks extends Component {
     } else {
       if (this.state.booksOnDisplay.length > 0) {
         books = this.state.booksOnDisplay.map(book => {
-          return <BookCard key={book._id} book={book} showRating showAuthors showPublishedDate />;
+          return (
+            <BookCard
+              key={book._id}
+              book={book}
+              showRating
+              showAuthors
+              showPageCount
+              showPublishedDate
+            />
+          );
         });
       } else {
         books = (

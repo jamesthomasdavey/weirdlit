@@ -17,6 +17,7 @@ class BookCard extends Component {
     let rating;
     let authors;
     let publishedDate;
+    let pageCount;
 
     if (this.props.showRating) {
       // if (this.props.book.ratingDisplay) {
@@ -58,6 +59,10 @@ class BookCard extends Component {
       );
     }
 
+    if (this.props.showPageCount) {
+      pageCount = <div className={classes.pageCount}>{this.props.book.pageCount} pages</div>;
+    }
+
     return (
       <div className={classes.wrapper}>
         <div>
@@ -66,9 +71,10 @@ class BookCard extends Component {
           </div>
           <div className={classes.info}>
             <h3 className={classes.title}>{this.props.book.title}</h3>
+            {publishedDate}
             {rating}
             {authors}
-            {publishedDate}
+            {pageCount}
             <div className={classes.viewButton}>
               <Link to={`/books/${this.props.book._id}`} className="ui tiny primary button">
                 View
@@ -86,13 +92,15 @@ BookCard.propTypes = {
   currentAuthor: PropTypes.object,
   showRating: PropTypes.bool,
   showAuthors: PropTypes.bool,
-  showPublishedDate: PropTypes.bool
+  showPublishedDate: PropTypes.bool,
+  showPageCount: PropTypes.bool
 };
 
 BookCard.defaultProps = {
   showRating: false,
   showAuthors: false,
-  showPublishedDate: false
+  showPublishedDate: false,
+  showPageCount: false
 };
 
 export default BookCard;

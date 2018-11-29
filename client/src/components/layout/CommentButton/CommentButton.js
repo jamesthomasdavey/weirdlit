@@ -7,7 +7,7 @@ const CommentButton = props => {
   return (
     <HashLink
       to={`/books/${props.review.book._id}/reviews/${props.review._id}/#comments`}
-      className="ui tiny button"
+      className="ui mini button"
     >
       Comments{props.review.comments.length > 0 && ` (${props.review.comments.length})`}
     </HashLink>

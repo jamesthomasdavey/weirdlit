@@ -28,8 +28,12 @@ class Book extends Component {
     },
     isLoading: true
   };
-  componentWillReceiveProps = () => {
-    window.location.reload();
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.match.params.bookId !== this.props.match.params.bookId) {
+      this.setState({ book: {}, isLoading: true }, () => {
+        this.updateFromBook(nextProps.match.params.bookId);
+      });
+    }
   };
   componentDidMount = () => {
     if (this.props.match.params.bookId) {

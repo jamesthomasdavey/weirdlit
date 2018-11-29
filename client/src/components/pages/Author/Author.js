@@ -14,8 +14,12 @@ class Author extends Component {
     author: {},
     isLoading: true
   };
-  componentWillReceiveProps = () => {
-    window.location.reload();
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.match.params.authorId !== this.props.match.params.authorId) {
+      this.setState({author: {}, isLoading: true}, () => {
+        this.updateFromAuthor(nextProps.match.params.authorId)
+      })
+    }
   };
   componentDidMount = () => {
     if (this.props.match.params.authorId) {

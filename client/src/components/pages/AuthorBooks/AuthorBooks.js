@@ -244,6 +244,7 @@ class AuthorBooks extends Component {
               book={book}
               showRating
               showAuthors
+              showPageCount
               authorId={this.props.match.params.authorId}
               showPublishedDate
             />

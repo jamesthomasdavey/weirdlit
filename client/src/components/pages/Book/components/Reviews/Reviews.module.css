@@ -1,0 +1,8 @@
+.linkStyle {
+  color: #5f95cd;
+}
+
+.linkStyle:hover {
+  color: #4585c8;
+  cursor: pointer;
+}
