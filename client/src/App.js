@@ -23,7 +23,7 @@ import Register from './components/pages/Register/Register';
 import Login from './components/pages/Login/Login';
 import About from './components/pages/About/About';
 import Browse from './components/pages/Browse/Browse';
-import Landing from './components/pages/Landing/Landing.js';
+import Landing from './components/pages/Landing/Landing';
 import Profile from './components/pages/Profile/Profile';
 import EditProfile from './components/pages/EditProfile/EditProfile';
 import ProfileBooks from './components/pages/ProfileBooks/ProfileBooks';
