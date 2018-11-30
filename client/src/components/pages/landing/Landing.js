@@ -11,9 +11,9 @@ import Search from './../../layout/Search/Search';
 import Modal from './../../layout/Modal/Modal';
 
 // css
-import classes from './WelcomePage.module.css';
+import classes from './Landing.module.css';
 
-class WelcomePage extends Component {
+class Landing extends Component {
   state = { modal: '' };
   render() {
     document.title = 'WeirdLit | The Database for Strange Writings';
@@ -68,7 +68,7 @@ class WelcomePage extends Component {
   }
 }
 
-WelcomePage.propTypes = {
+Landing.propTypes = {
   auth: PropTypes.object.isRequired
 };
 
@@ -76,4 +76,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(withRouter(WelcomePage));
+export default connect(mapStateToProps)(withRouter(Landing));

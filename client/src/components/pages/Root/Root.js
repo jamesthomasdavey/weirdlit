@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Browse from './../Browse/Browse';
-import WelcomePage from './../WelcomePage/WelcomePage';
+import Landing from './../Landing/Landing';
 
 class Root extends Component {
   render() {
     if (this.props.auth.isAuthenticated) {
       return <Browse />;
     } else {
-      return <WelcomePage />;
+      return <Landing />;
     }
   }
 }
