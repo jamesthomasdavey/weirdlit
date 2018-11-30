@@ -1,6 +1,6 @@
 // package
 import React, { Component, Fragment } from 'react';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -79,4 +79,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {}
-)(withRouter(Landing));
+)(Landing);
