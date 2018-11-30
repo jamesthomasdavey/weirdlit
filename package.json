@@ -1,6 +1,9 @@
 {
   "name": "weirdlit",
   "version": "1.0.0",
+  "engines": {
+    "node": "10.10.0"
+  },
   "description": "The central hub for weird literature",
   "main": "server.js",
   "scripts": {
