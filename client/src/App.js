@@ -19,11 +19,11 @@ import Footer from './components/layout/Footer/Footer';
 // pages
 import NotFound from './components/pages/NotFound/NotFound';
 import Root from './components/pages/Root/Root';
-import Landing from './components/pages/Landing/Landing';
 import Register from './components/pages/Register/Register';
 import Login from './components/pages/Login/Login';
 import About from './components/pages/About/About';
 import Browse from './components/pages/Browse/Browse';
+import Landing from './components/pages/Landing/Landing';
 import Profile from './components/pages/Profile/Profile';
 import EditProfile from './components/pages/EditProfile/EditProfile';
 import ProfileBooks from './components/pages/ProfileBooks/ProfileBooks';
