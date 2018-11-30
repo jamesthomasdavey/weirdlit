@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 // css
-import classes from './../Landing.module.css';
+import classes from './../WelcomePage.module.css';
 
 const Logo = () => {
   return (

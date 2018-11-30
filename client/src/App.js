@@ -23,7 +23,7 @@ import Register from './components/pages/Register/Register';
 import Login from './components/pages/Login/Login';
 import About from './components/pages/About/About';
 import Browse from './components/pages/Browse/Browse';
-import Landing from './components/pages/Landing/Landing';
+import WelcomePage from './components/pages/WelcomePage/WelcomePage';
 import Profile from './components/pages/Profile/Profile';
 import EditProfile from './components/pages/EditProfile/EditProfile';
 import ProfileBooks from './components/pages/ProfileBooks/ProfileBooks';
@@ -81,7 +81,7 @@ class App extends Component {
           <div className="App">
             <Navbar />
             <Route exact path="/" component={Root} />
-            <Route exact path="/landing" component={Landing} />
+            <Route exact path="/landing" component={WelcomePage} />
             <Route exact path="/browse" component={Browse} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
