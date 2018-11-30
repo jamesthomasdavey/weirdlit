@@ -156,8 +156,8 @@ router.get('/current', passport.authenticate('jwt', { session: false }), (req, r
   });
 });
 
-// @route     delete /api/users
-// @desc      return current user info
+// @route     post /api/users/delete
+// @desc      delete current user
 // @access    private
 router.post('/delete', passport.authenticate('jwt', { session: false }), (req, res) => {
   const errors = {};

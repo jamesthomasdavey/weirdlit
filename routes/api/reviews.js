@@ -242,20 +242,6 @@ router.delete('/:reviewId', passport.authenticate('jwt', { session: false }), (r
     .catch(err => res.status(404).json(err));
 });
 
-// @route     post /api/books/:bookId/reviews/:reviewId/like
-// @desc      like review of book
-// @access    private
-router.put('/:reviewId/likes', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Review.findById(req.params.reviewId)
-    .then(review => {
-      review.likes = req.body.likes;
-      review.save().then(() => {
-        res.json({ success: true });
-      });
-    })
-    .catch(err => res.status(400).json(err));
-});
-
 // @route     post /api/books/:bookId/reviews/:reviewId/likes
 // @desc      like review of book
 // @access    private
@@ -327,7 +313,6 @@ router.delete(
   '/:reviewId/comments/:commentId',
   passport.authenticate('jwt', { session: false }),
   (req, res) => {
-    const errors = {};
     Review.findById(req.params.reviewId)
       .populate('comments', ['creator'])
       .then(review => {

@@ -286,7 +286,7 @@ router.put('/booksRead', passport.authenticate('jwt', { session: false }), (req,
   });
 });
 
-// @route     put /api/profile/booksRead
+// @route     get /api/profile/booksRead
 // @desc      read or unread a book
 // @access    private
 router.get(
