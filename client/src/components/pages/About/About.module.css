@@ -1,0 +1,7 @@
+.itemTitle {
+  user-select: none;
+}
+
+.itemDescription {
+  line-height: 22px;
+}

@@ -1,11 +1,8 @@
 // package
 import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 // component
-import Spinner from './../../layout/Spinner/Spinner';
-import AuthorLinks from './../../layout/AuthorLinks/AuthorLinks';
 import PendingBook from './components/PendingBook/PendingBook';
 
 class Pending extends Component {
@@ -61,21 +58,34 @@ class Pending extends Component {
   render() {
     document.title = 'Pending Books | WeirdLit';
     let pendingResults;
-    if (this.state.isLoading) {
-      pendingResults = <Spinner />;
-    } else if (this.state.books.length === 0) {
-      pendingResults = <h5 style={{ textAlign: 'center', padding: '2rem' }}>No pending books.</h5>;
-    } else {
-      pendingResults = this.state.books.map(book => {
-        return <PendingBook book={book} deletePendingBookHandler={this.deletePendingBookHandler} />;
-      });
+    if (!this.state.isLoading) {
+      if (this.state.books.length === 0) {
+        pendingResults = (
+          <h5 style={{ textAlign: 'center', padding: '2rem' }}>No pending books.</h5>
+        );
+      } else {
+        pendingResults = this.state.books.map(book => {
+          return (
+            <PendingBook book={book} deletePendingBookHandler={this.deletePendingBookHandler} />
+          );
+        });
+      }
     }
     return (
       <Fragment>
         <div className="ui container">
           <div className="ui text container">
-            <div className="ui segment">
-              <div className="ui divided items">{pendingResults}</div>
+            <div className={['ui segment', this.state.isLoading ? 'loading' : ''].join(' ')}>
+              {this.state.isLoading && (
+                <Fragment>
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                </Fragment>
+              )}
+              {!this.state.isLoading && <div className="ui divided items">{pendingResults}</div>}
             </div>
           </div>
         </div>

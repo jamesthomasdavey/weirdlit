@@ -82,9 +82,10 @@ class Notifications extends Component {
               <br />
               <br />
               <br />
+              <br />
             </Fragment>
           )}
-          {notificationsContent}
+          {!this.state.isLoading && notificationsContent}
           {this.state.notifications.length > 0 && !this.state.isLoading && (
             <div style={{ textAlign: 'center' }}>
               <button onClick={this.clearNotificationsHandler} className="ui tiny button">

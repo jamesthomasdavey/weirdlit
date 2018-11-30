@@ -22,6 +22,7 @@ import Root from './components/pages/Root/Root';
 import Landing from './components/pages/Landing/Landing';
 import Register from './components/pages/Register/Register';
 import Login from './components/pages/Login/Login';
+import About from './components/pages/About/About';
 import Browse from './components/pages/Browse/Browse';
 import Profile from './components/pages/Profile/Profile';
 import EditProfile from './components/pages/EditProfile/EditProfile';
@@ -84,6 +85,7 @@ class App extends Component {
             <Route exact path="/browse" component={Browse} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/about" component={About} />
             <Route exact path="/unauthorized" component={Unauthorized} />
             <Route exact path="/404" component={NotFound} />
             <Switch>
