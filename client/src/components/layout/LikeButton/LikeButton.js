@@ -32,63 +32,45 @@ class LikeButton extends Component {
     }
     this.setState(currentState);
   };
-  updateFromReview = () => {
-    this.setState({ isLoading: true }, () => {
-      axios
-        .get(`/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}`)
-        .then(res => {
-          const currentState = this.state;
-          currentState.likes = res.data.likes;
-          if (this.props.auth.isAuthenticated) {
-            currentState.likes.forEach(like => {
-              if (like === this.props.auth.user._id) {
-                currentState.hasLiked = true;
-              }
-            });
-          }
-          currentState.isLoading = false;
-          this.setState(currentState);
-        });
+  checkIfLiked = () => {
+    const currentState = this.state;
+    currentState.hasLiked = false;
+    currentState.likes.forEach(like => {
+      if (like === this.props.auth.user._id) {
+        currentState.hasLiked = true;
+      }
+    });
+    currentState.isLoading = false;
+    this.setState(currentState, () => {
+      if (currentState.hasLiked) {
+        this.notifyReviewCreator();
+      }
     });
   };
   toggleLikeReviewHandler = () => {
     if (!this.props.auth.isAuthenticated) {
       this.setState({ modal: 'login' });
-    } else if (!this.state.hasLiked) {
-      const currentState = this.state;
-      currentState.likes.push(this.props.auth.user._id);
-      currentState.hasLiked = true;
-      currentState.isLoading = false;
-      this.setState(currentState, this.updateReview);
     } else {
-      const currentState = this.state;
-      let removeIndex;
-      currentState.likes.forEach((like, index) => {
-        if (like === this.props.auth.user._id) {
-          removeIndex = index;
+      this.setState({ isLoading: true }, () => {
+        if (!this.state.hasLiked) {
+          axios
+            .post(`/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}/likes`)
+            .then(res => {
+              this.setState({ likes: res.data.likes }, this.checkIfLiked);
+            });
+        } else {
+          axios
+            .delete(
+              `/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}/likes/${
+                this.props.auth.user._id
+              }`
+            )
+            .then(res => {
+              this.setState({ likes: res.data.likes }, this.checkIfLiked);
+            });
         }
       });
-      currentState.likes.splice(removeIndex, 1);
-      currentState.hasLiked = false;
-      currentState.isLoading = false;
-      this.setState(currentState, this.updateReview);
     }
-  };
-  updateReview = () => {
-    this.setState({ isLoading: true }, () => {
-      axios
-        .put(`/api/books/${this.props.review.book._id}/reviews/${this.props.review._id}/likes`, {
-          likes: this.state.likes
-        })
-        .then(() => {
-          this.setState({ isLoading: false }, () => {
-            if (this.state.hasLiked) {
-              this.notifyReviewCreator();
-            }
-          });
-        })
-        .catch(this.updateFromReview);
-    });
   };
   notifyReviewCreator = () => {
     if (this.props.auth.user._id !== this.props.review.creator._id) {

@@ -256,6 +256,50 @@ router.put('/:reviewId/likes', passport.authenticate('jwt', { session: false }),
     .catch(err => res.status(400).json(err));
 });
 
+// @route     post /api/books/:bookId/reviews/:reviewId/likes
+// @desc      like review of book
+// @access    private
+router.post('/:reviewId/likes', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Review.findById(req.params.reviewId).then(review => {
+    if (review.likes.length === 0) {
+      review.likes.push(req.user._id);
+      review.save().then(review => {
+        return res.json({ likes: review.likes });
+      });
+    } else {
+      const likes = review.likes.map(like => like.toString());
+      if (!likes.includes(req.user._id.toString())) {
+        review.likes.push(req.user._id);
+        review.save().then(review => {
+          return res.json({ likes: review.likes });
+        });
+      }
+    }
+  });
+});
+
+// @route     delete /api/books/:bookId/reviews/:reviewId/likes/:userId
+// @desc      like review of book
+// @access    private
+router.delete(
+  '/:reviewId/likes/:userId',
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    if (req.params.userId === req.user._id.toString()) {
+      Review.findById(req.params.reviewId).then(review => {
+        if (review.likes.length > 0) {
+          const likes = review.likes.map(like => like.toString());
+          const deleteIndex = likes.indexOf(req.user._id.toString());
+          review.likes.splice(deleteIndex, 1);
+          review.save().then(review => {
+            return res.json({ likes: review.likes });
+          });
+        }
+      });
+    }
+  }
+);
+
 // @route     post /api/books/:bookId/reviews/:reviewId/comments
 // @desc      add comment to review
 // @access    private
