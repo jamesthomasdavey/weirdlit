@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const imgur = require('imgur-node-api');
+const path = require('path');
 
 // require routes
 const authors = require('./routes/api/authors');
@@ -51,6 +52,15 @@ app.use('/api/books/:bookId/reviews', reviews);
 app.use('/api/search', search);
 app.use('/api/tags', tags);
 app.use('/api/users', users);
+
+// server static assets if in production
+if (process.env.NODE_ENV === 'production') {
+  // set static folder
+  app.use(express.static('client/build'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 const port = process.env.PORT || 5000;
 
