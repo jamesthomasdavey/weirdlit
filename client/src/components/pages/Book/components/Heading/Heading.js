@@ -20,7 +20,7 @@ const Heading = props => {
         <div className={classes.backdrop__cover} />
         <div
           className={classes.backdrop}
-          style={{ backgroundImage: `url(${props.book.image.original})` }}
+          style={{ backgroundImage: `url(${props.book.image.largeThumbnail})` }}
         />
         <div className={['ui container', classes.container].join(' ')}>
           {props.auth.user.isAdmin && (

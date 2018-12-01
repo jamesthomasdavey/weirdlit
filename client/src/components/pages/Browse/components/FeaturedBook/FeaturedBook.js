@@ -31,7 +31,7 @@ class FeaturedBook extends Component {
     let bookObj;
 
     if (!this.state.isLoading) {
-      backgroundImage = this.state.book.image.hugeThumbnail;
+      backgroundImage = this.state.book.image.largeThumbnail;
     }
 
     if (!this.state.isLoading) {

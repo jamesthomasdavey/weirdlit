@@ -27,9 +27,9 @@ class Navbar extends Component {
     this.getNotificationsCount();
   };
 
-  componentDidUpdate = () => {
-    this.getNotificationsCount();
-  };
+  // componentDidUpdate = () => {
+  // this.getNotificationsCount();
+  // };
 
   getNotificationsCount = () => {
     if (this.props.auth.isAuthenticated) {
