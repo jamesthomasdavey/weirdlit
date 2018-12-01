@@ -19,7 +19,7 @@ const users = require('./routes/api/users');
 // run express as app
 const app = express();
 app.use(compression());
-app.use(enforce.HTTPS());
+app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
 // imgur setup
 const imgurClientId = require('./config/keys').imgur.clientId;
