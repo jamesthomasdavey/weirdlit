@@ -1,4 +1,5 @@
 const express = require('express');
+const enforce = require('express-sslify');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -18,6 +19,7 @@ const users = require('./routes/api/users');
 // run express as app
 const app = express();
 app.use(compression());
+app.use(enforce.HTTPS());
 
 // imgur setup
 const imgurClientId = require('./config/keys').imgur.clientId;
