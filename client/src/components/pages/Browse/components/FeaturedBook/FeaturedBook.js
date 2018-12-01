@@ -1,7 +1,6 @@
 // package
 import React, { Component } from 'react';
 import axios from 'axios';
-import analyze from 'rgbaster.js';
 
 // component
 import BookObj from './BookObj/BookObj';
@@ -23,10 +22,7 @@ class FeaturedBook extends Component {
         return axios.get(`/api/books/${res.data.bookId}`);
       })
       .then(res => {
-        analyze(res.data.image.smallThumbnail).then(colors => {
-          console.log(colors);
-          this.setState({ book: res.data, isLoading: false });
-        });
+        this.setState({ book: res.data, isLoading: false });
       });
   };
   render() {
