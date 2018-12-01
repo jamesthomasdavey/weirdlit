@@ -1,7 +1,6 @@
 .wrapper {
   position: relative;
   width: 100%;
-  /* overflow: hidden; */
   border-top: 4px solid #333;
   border-bottom: 4px solid #aaa;
 }

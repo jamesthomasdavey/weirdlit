@@ -1,6 +1,7 @@
 // package
 import React, { Component } from 'react';
 import axios from 'axios';
+import analyze from 'rgbaster.js';
 
 // component
 import BookObj from './BookObj/BookObj';
@@ -22,7 +23,10 @@ class FeaturedBook extends Component {
         return axios.get(`/api/books/${res.data.bookId}`);
       })
       .then(res => {
-        this.setState({ book: res.data, isLoading: false });
+        analyze(res.data.image.smallThumbnail).then(colors => {
+          console.log(colors);
+          this.setState({ book: res.data, isLoading: false });
+        });
       });
   };
   render() {
@@ -53,6 +57,24 @@ class FeaturedBook extends Component {
             className={classes.backdrop}
             style={{ backgroundImage: `url('${backgroundImage}')` }}
           />
+          // <Blur
+          //   img={backgroundImage}
+          //   blurRadius={20}
+          //   style={{
+          //     position: 'absolute',
+          //     zIndex: '3',
+          //     top: '0',
+          //     left: '0',
+          //     backgroundSize: '100%',
+          //     backgroundPosition: 'center center',
+          //     transform: 'scale(1.1) translate3d(0, 0, 0)',
+          //     WebkitTransform: 'scale(1.1) translate3d(0, 0, 0)',
+          //     filter: 'blur(20px)',
+          //     WebkitFilter: 'blur(20px)',
+          //     width: '100%',
+          //     height: '100%'
+          //   }}
+          // />
         )}
         <div className={classes.backdrop__cover} />
         <div className={classes.featuredHeader}>

@@ -19,7 +19,6 @@ const users = require('./routes/api/users');
 // run express as app
 const app = express();
 app.use(compression());
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
 // imgur setup
 const imgurClientId = require('./config/keys').imgur.clientId;
@@ -60,6 +59,7 @@ app.use('/api/users', users);
 // server static assets if in production
 if (process.env.NODE_ENV === 'production') {
   // set static folder
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
   app.use(express.static(path.join(__dirname, 'client', 'build')));
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
