@@ -6,6 +6,7 @@
   left: 0;
   z-index: 999;
   background: white;
+  -webkit-animation: fadein 0.8s linear;
   animation: fadein 0.8s linear;
 }
 
@@ -15,8 +16,12 @@
 
 .content {
   margin: auto 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   height: 100vh;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 
@@ -40,8 +45,18 @@
   font-size: 48px;
   letter-spacing: 32px;
   text-transform: uppercase;
+  -webkit-animation: expand 28s ease-in-out;
   animation: expand 28s ease-in-out;
   padding-right: -30px;
+}
+
+@-webkit-keyframes expand {
+  from {
+    letter-spacing: 13px;
+  }
+  to {
+    letter-spacing: 32px;
+  }
 }
 
 @keyframes expand {
@@ -78,8 +93,22 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center center;
+  -webkit-transform-origin: center center;
   transform-origin: center center;
+  -webkit-animation: spin 400s linear infinite, backgroundFade 8s ease;
   animation: spin 400s linear infinite, backgroundFade 8s ease;
+}
+
+@-webkit-keyframes backgroundFade {
+  0% {
+    opacity: 0;
+  }
+  28% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 100;
+  }
 }
 
 @keyframes backgroundFade {
@@ -94,14 +123,32 @@
   }
 }
 
-@keyframes spin {
+@-webkit-keyframes spin {
   0% {
+    -webkit-transform: rotate(0deg) scale(1);
     transform: rotate(0deg) scale(1);
   }
   50% {
+    -webkit-transform: rotate(-180deg) scale(1.5);
     transform: rotate(-180deg) scale(1.5);
   }
   100% {
+    -webkit-transform: rotate(-360deg) scale(1);
+    transform: rotate(-360deg) scale(1);
+  }
+}
+
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg) scale(1);
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    -webkit-transform: rotate(-180deg) scale(1.5);
+    transform: rotate(-180deg) scale(1.5);
+  }
+  100% {
+    -webkit-transform: rotate(-360deg) scale(1);
     transform: rotate(-360deg) scale(1);
   }
 }

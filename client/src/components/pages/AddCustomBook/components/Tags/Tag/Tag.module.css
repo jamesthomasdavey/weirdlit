@@ -1,6 +1,9 @@
 .tag {
   display: inline-block;
   margin: 4px !important;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 

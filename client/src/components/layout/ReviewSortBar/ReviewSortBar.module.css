@@ -2,8 +2,14 @@
   position: relative;
   z-index: 25;
   top: -6px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
   margin-top: 1rem;
 }
@@ -11,23 +17,29 @@
 @media (min-width: 768px) {
   .wrapper {
     top: -11px;
+    -webkit-box-pack: none;
+    -ms-flex-pack: none;
     justify-content: none;
     margin-top: 0;
   }
 }
 
 .sortOrder {
+  -webkit-transition: 0.2s all ease;
   transition: 0.2s all ease;
+  -webkit-transform-origin: center center;
   transform-origin: center center;
   padding: 10px 0 8px 8px;
 }
 
 .sortOrder > i {
   font-size: 18px;
+  -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
 }
 
 .sortOrder:hover {
   cursor: pointer;
+  -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }

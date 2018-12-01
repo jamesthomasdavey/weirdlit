@@ -3,28 +3,38 @@
   top: 3px;
   z-index: 25;
   margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
 }
 
 @media (min-width: 768px) {
   .wrapper {
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
     justify-content: flex-end;
   }
 }
 
 .sortOrder {
+  -webkit-transition: 0.2s all ease;
   transition: 0.2s all ease;
+  -webkit-transform-origin: center center;
   transform-origin: center center;
   padding: 6px 0 8px 8px;
 }
 
 .sortOrder > i {
   font-size: 18px;
+  -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
 }
 
 .sortOrder:hover {
   cursor: pointer;
+  -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }

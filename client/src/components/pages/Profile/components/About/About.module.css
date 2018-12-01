@@ -3,9 +3,11 @@
   margin: 0 8px;
   height: 40px;
   width: 40px;
+  -webkit-transition: 0.2s all ease;
   transition: 0.2s all ease;
 }
 
 .social__icon:hover {
+  -webkit-transform: scale(1.07);
   transform: scale(1.07);
 }

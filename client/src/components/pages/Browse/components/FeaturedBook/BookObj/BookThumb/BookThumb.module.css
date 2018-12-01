@@ -3,6 +3,7 @@
   margin-top: 32px;
   width: 180px;
   height: auto;
+  -webkit-filter: drop-shadow(0 0 24px rgba(1, 1, 1, 0.75));
   filter: drop-shadow(0 0 24px rgba(1, 1, 1, 0.75));
 }
 

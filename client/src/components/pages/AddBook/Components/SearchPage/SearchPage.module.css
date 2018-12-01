@@ -1,4 +1,6 @@
 .bookItem {
+  -webkit-animation: fadein 0.3s linear;
   animation: fadein 0.3s linear;
+  -webkit-transition: 0.3s all linear;
   transition: 0.3s all linear;
 }

@@ -1,9 +1,12 @@
 .bookItem {
+  -webkit-animation: fadein 0.3s linear;
   animation: fadein 0.3s linear;
+  -webkit-transition: 0.3s all linear;
   transition: 0.3s all linear;
 }
 
 .deleted {
+  -webkit-transition: 0.4s opacity ease !important;
   transition: 0.4s opacity ease !important;
   opacity: 0;
 }
