@@ -26,6 +26,7 @@ class Book extends Component {
       tags: [],
       description: ''
     },
+    colors: [],
     isLoading: true
   };
   componentWillReceiveProps = nextProps => {
@@ -42,9 +43,9 @@ class Book extends Component {
   };
   updateFromBook = bookId => {
     axios
-      .get(`/api/books/${bookId}`)
+      .get(`/api/books/${bookId}/gradient`)
       .then(res => {
-        this.setState({ book: res.data, isLoading: false });
+        this.setState({ book: res.data.book, colors: res.data.colors, isLoading: false });
       })
       .catch(() => {
         this.props.history.push('/404');
@@ -57,7 +58,7 @@ class Book extends Component {
     }
     return (
       <Fragment>
-        {!this.state.isLoading && <Heading book={this.state.book} />}
+        {!this.state.isLoading && <Heading book={this.state.book} colors={this.state.colors} />}
         <div className="ui container">
           {!this.state.isLoading && (
             <div className="ui segment">

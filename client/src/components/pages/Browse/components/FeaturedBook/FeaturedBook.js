@@ -11,6 +11,7 @@ import classes from './FeaturedBook.module.css';
 class FeaturedBook extends Component {
   state = {
     book: {},
+    colors: [],
     featuredDate: '',
     isLoading: true
   };
@@ -19,19 +20,41 @@ class FeaturedBook extends Component {
       .get('/api/books/featured')
       .then(res => {
         this.setState({ featuredDate: res.data.featuredDate });
-        return axios.get(`/api/books/${res.data.bookId}`);
+        return axios.get(`/api/books/${res.data.bookId}/gradient`);
       })
       .then(res => {
-        this.setState({ book: res.data, isLoading: false });
+        this.setState({ book: res.data.book, colors: res.data.colors, isLoading: false });
       });
   };
   render() {
-    let backgroundImage;
+    let backdrop;
     let dateHeading;
     let bookObj;
 
     if (!this.state.isLoading) {
-      backgroundImage = this.state.book.image.largeThumbnail;
+      if (!this.state.colors) {
+        backdrop = (
+          <div
+            className={[classes.backdrop, classes.blur].join(' ')}
+            style={{ backgroundImage: `url('${this.state.book.image.largeThumbnail}')` }}
+          />
+        );
+      } else {
+        const newColors = this.state.colors.map(color => {
+          return `rgb(${color._rgb[0]}, ${color._rgb[1]}, ${color._rgb[2]})`;
+        });
+        backdrop = (
+          <div
+            className={classes.backdrop}
+            style={{
+              backgroundImage: `linear-gradient(135deg, ${newColors[0]}, ${newColors[1]}, ${
+                newColors[2]
+              })`
+            }}
+          />
+        );
+        console.log(newColors);
+      }
     }
 
     if (!this.state.isLoading) {
@@ -48,30 +71,7 @@ class FeaturedBook extends Component {
 
     return (
       <div className={classes.wrapper}>
-        {!this.state.isLoading && (
-          <div
-            className={classes.backdrop}
-            style={{ backgroundImage: `url('${backgroundImage}')` }}
-          />
-          // <Blur
-          //   img={backgroundImage}
-          //   blurRadius={20}
-          //   style={{
-          //     position: 'absolute',
-          //     zIndex: '3',
-          //     top: '0',
-          //     left: '0',
-          //     backgroundSize: '100%',
-          //     backgroundPosition: 'center center',
-          //     transform: 'scale(1.1) translate3d(0, 0, 0)',
-          //     WebkitTransform: 'scale(1.1) translate3d(0, 0, 0)',
-          //     filter: 'blur(20px)',
-          //     WebkitFilter: 'blur(20px)',
-          //     width: '100%',
-          //     height: '100%'
-          //   }}
-          // />
-        )}
+        {backdrop}
         <div className={classes.backdrop__cover} />
         <div className={classes.featuredHeader}>
           <h2>FEATURED</h2>

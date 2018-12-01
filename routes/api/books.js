@@ -7,6 +7,7 @@ const passport = require('passport');
 const imgur = require('imgur-node-api');
 const prependHttp = require('prepend-http');
 const firstBy = require('thenby');
+const getColors = require('get-image-colors');
 
 // load input validation
 const isEmpty = require('./../../validation/is-empty');
@@ -513,6 +514,32 @@ router.get('/:bookId', (req, res) => {
           tags: book.tags,
           image: book.image
         });
+      }
+    })
+    .catch(err => res.status(400).json(err));
+});
+
+// @route     /api/books/:bookId/gradient
+// @desc      book show route
+// @access    public
+router.get('/:bookId/gradient', (req, res) => {
+  const errors = [];
+  Book.findById(req.params.bookId)
+    .populate('authors', 'name')
+    .populate('tags', 'name')
+    .then(book => {
+      if (!book) {
+        errors.push('Unable to find book.');
+        return res.json(errors);
+      }
+      if (book.isApproved || !book.isRejected || req.user.isAdmin) {
+        getColors(book.image.smallThumbnail)
+          .then(colors => {
+            return res.json({book, colors});
+          })
+          .catch(err => {
+            res.json(book);
+          });
       }
     })
     .catch(err => res.status(400).json(err));

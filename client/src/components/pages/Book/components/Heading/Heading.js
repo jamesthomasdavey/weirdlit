@@ -14,14 +14,34 @@ import Tags from './Tags/Tags';
 import classes from './Heading.module.css';
 
 const Heading = props => {
+  let backdrop;
+  if (!props.colors) {
+    backdrop = (
+      <div
+        className={[classes.backdrop, classes.blur].join(' ')}
+        style={{ backgroundImage: `url(${props.book.image.largeThumbnail})` }}
+      />
+    );
+  } else {
+    const newColors = props.colors.map(color => {
+      return `rgb(${color._rgb[0]}, ${color._rgb[1]}, ${color._rgb[2]})`;
+    });
+    backdrop = (
+      <div
+        className={classes.backdrop}
+        style={{
+          backgroundImage: `linear-gradient(135deg, ${newColors[0]}, ${newColors[1]}, ${
+            newColors[2]
+          })`
+        }}
+      />
+    );
+  }
   return (
     <Fragment>
       <div className={classes.wrapper}>
         <div className={classes.backdrop__cover} />
-        <div
-          className={classes.backdrop}
-          style={{ backgroundImage: `url(${props.book.image.largeThumbnail})` }}
-        />
+        {backdrop}
         <div className={['ui container', classes.container].join(' ')}>
           {props.auth.user.isAdmin && (
             <Link
@@ -92,7 +112,8 @@ const Heading = props => {
 
 Heading.propTypes = {
   book: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  colors: PropTypes.array
 };
 
 const mapStateToProps = state => ({
