@@ -51,14 +51,15 @@ class DeleteAccount extends Component {
               <button
                 type="submit"
                 className={[
-                  'button negative ui',
+                  'ui tiny button negative',
                   this.state.password ? '' : 'disabled',
                   this.state.isDeleting ? 'loading' : ''
                 ].join(' ')}
+                style={{margin: '4px'}}
               >
                 Delete My Account
               </button>
-              <Link to="/account" className="button ui" style={{ marginLeft: '1rem' }}>
+              <Link to="/account" className="ui tiny button" style={{ margin: '4px' }}>
                 Cancel
               </Link>
             </form>

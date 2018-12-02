@@ -293,8 +293,13 @@ class AddCustomBook extends Component {
                   </div>
                 </div>
               </div>
-              <input type="submit" className="ui primary button" value="Submit" />
-              <Link to={'/books/add'} style={{ marginLeft: '1rem' }} className="ui button">
+              <input
+                type="submit"
+                className="ui tiny primary button"
+                style={{ margin: '4px' }}
+                value="Submit"
+              />
+              <Link to={'/books/add'} style={{ margin: '4px' }} className="ui tiny button">
                 Cancel
               </Link>
             </form>

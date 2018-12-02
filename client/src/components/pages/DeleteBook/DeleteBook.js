@@ -64,18 +64,19 @@ class DeleteBook extends Component {
               <button
                 type="submit"
                 className={[
-                  'button negative ui',
+                  'ui tiny button negative',
                   this.state.title === this.state.bookTitle ? '' : 'disabled',
                   this.state.isDeleting ? 'loading' : ''
                 ].join(' ')}
+                style={{margin: '4px'}}
                 disabled={this.state.title !== this.state.bookTitle}
               >
                 Delete {this.state.bookTitle || 'Book'}
               </button>
               <Link
                 to={`/books/${this.props.match.params.bookId}/edit`}
-                className="button ui"
-                style={{ marginLeft: '1rem' }}
+                className="ui tiny button"
+                style={{ margin: '4px' }}
               >
                 Cancel
               </Link>

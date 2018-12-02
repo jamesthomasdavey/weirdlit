@@ -155,14 +155,17 @@ class Account extends Component {
             />
             <input
               type="submit"
-              className={['ui button primary', this.state.hasChanged ? '' : 'disabled'].join(' ')}
+              className={['ui tiny button primary', this.state.hasChanged ? '' : 'disabled'].join(
+                ' '
+              )}
               value={this.state.hasSaved ? 'Saved' : 'Save'}
               disabled={!this.state.hasChanged}
+              style={{ margin: '4px' }}
             />
             <Link
               to="/account/delete"
-              style={{ marginLeft: '1rem' }}
-              className="ui negative button"
+              style={{ margin: '4px' }}
+              className="ui tiny negative button"
             >
               Delete Account
             </Link>

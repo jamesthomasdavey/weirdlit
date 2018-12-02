@@ -12,7 +12,7 @@ import isEmpty from '../../../validation/is-empty';
 import TextInputField from '../../layout/TextInputField/TextInputField';
 import TextAreaInputField from '../../layout/TextAreaInputField/TextAreaInputField';
 import FavoriteBookSearch from '../../layout/FavoriteBookSearch/FavoriteBookSearch';
-import SocialInputField from './../../layout/SocialInputField/SocialInputField'
+import SocialInputField from './../../layout/SocialInputField/SocialInputField';
 import FavoriteBook from '../../layout/FavoriteBook/FavoriteBook';
 
 class EditProfile extends Component {
@@ -222,13 +222,14 @@ class EditProfile extends Component {
             <input
               type="submit"
               disabled={!this.state.hasChanged}
-              className={['ui primary button', this.state.hasChanged ? '' : 'disabled'].join(' ')}
+              className={['ui tiny primary button', this.state.hasChanged ? '' : 'disabled'].join(' ')}
               value={this.state.hasSaved ? 'Saved' : 'Save'}
+              style={{ margin: '4px' }}
             />
             <Link
               to={`/profile/user/${this.props.auth.user._id}`}
-              style={{ marginLeft: '1rem' }}
-              className="ui button"
+              style={{ margin: '4px' }}
+              className="ui tiny button"
             >
               {this.state.hasSaved ? 'Back to Profile' : 'Cancel'}
             </Link>
