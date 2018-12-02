@@ -241,13 +241,17 @@ class EditBook extends Component {
 
     if (!this.state.isApproved) {
       backButton = (
-        <Link to={'/books/pending'} style={{margin: '4px'}} className="ui button">
+        <Link to={'/books/pending'} style={{ margin: '4px' }} className="ui tiny button">
           {this.state.hasSaved ? 'Back to Pending Books' : 'Cancel'}
         </Link>
       );
     } else {
       backButton = (
-        <Link to={`/books/${this.props.match.params.bookId}`} style={{margin: '4px'}} className="ui tiny button">
+        <Link
+          to={`/books/${this.props.match.params.bookId}`}
+          style={{ margin: '4px' }}
+          className="ui tiny button"
+        >
           {this.state.hasSaved ? 'Back to Book' : 'Cancel'}
         </Link>
       );
@@ -436,14 +440,14 @@ class EditBook extends Component {
               className={['ui tiny primary button', this.state.hasChanged ? '' : 'disabled'].join(
                 ' '
               )}
-              style={{margin: '4px'}}
+              style={{ margin: '4px' }}
               value={this.state.hasSaved ? 'Saved' : 'Save'}
             />
             {backButton}
             <Link
               to={`/books/${this.props.match.params.bookId}/delete`}
               className="ui tiny negative button"
-              style={{margin: '4px'}}
+              style={{ margin: '4px' }}
             >
               Delete {this.state.form.title}
             </Link>
