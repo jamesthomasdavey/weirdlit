@@ -53,7 +53,6 @@ class FeaturedBook extends Component {
             }}
           />
         );
-        console.log(newColors);
       }
     }
 

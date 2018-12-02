@@ -66,7 +66,11 @@ class Pending extends Component {
       } else {
         pendingResults = this.state.books.map(book => {
           return (
-            <PendingBook book={book} deletePendingBookHandler={this.deletePendingBookHandler} />
+            <PendingBook
+              book={book}
+              key={book._id}
+              deletePendingBookHandler={this.deletePendingBookHandler}
+            />
           );
         });
       }

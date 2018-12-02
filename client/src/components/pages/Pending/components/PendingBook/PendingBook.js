@@ -40,7 +40,6 @@ class PendingBook extends Component {
           classes.bookItem,
           this.state.isBeingDeleted ? classes.deleted : ''
         ].join(' ')}
-        key={this.props.book._id}
       >
         <div className="ui small image">
           <img alt="cover" src={this.props.book.image.mediumThumbnail} />

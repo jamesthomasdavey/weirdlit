@@ -76,7 +76,7 @@ const Heading = props => {
                   <Tags tags={props.book.tags} />
                 </div>
                 <div style={{ marginBottom: '12px' }}>
-                  {props.book.social.amazon && (
+                  {props.book.social && props.book.social.amazon && (
                     <a
                       href={props.book.social.amazon}
                       target="_blank"
@@ -87,7 +87,7 @@ const Heading = props => {
                       Amazon
                     </a>
                   )}
-                  {props.book.social.goodreads && (
+                  {props.book.social && props.book.social.goodreads && (
                     <a
                       href={props.book.social.goodreads}
                       target="_blank"
