@@ -26,7 +26,7 @@ class RecentlyPublished extends Component {
       recentlyPublishedContent = <Spinner />;
     } else {
       recentlyPublishedContent = this.state.books.map(book => {
-        return <BookThumb book={book} key={book._id} />;
+        return <BookThumb book={book} key={book._id + '_recentlyPublishedBook'} />;
       });
     }
     return (

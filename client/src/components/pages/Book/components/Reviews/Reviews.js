@@ -114,7 +114,7 @@ class Reviews extends Component {
       reviewsContent = recentSortedReviews.map(review => {
         return (
           <Review
-            key={review._id}
+            key={review._id + '_bookReviewSorted'}
             review={review}
             book={this.props.book}
             showReviewHeadlineAsLink

@@ -64,7 +64,7 @@ class SearchPage extends Component {
     } else if (this.state.searchResults.loaded && this.state.searchResults.results.length > 0) {
       const searchResultsList = this.state.searchResults.results.map(book => {
         return (
-          <div className={['item', classes.bookItem].join(' ')} key={book.googleId}>
+          <div className={['item', classes.bookItem].join(' ')} key={book.googleId + '_googleId'}>
             <div className="ui small image">
               <img alt="cover" src={book.thumb} />
             </div>

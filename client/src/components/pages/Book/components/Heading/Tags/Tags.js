@@ -12,7 +12,7 @@ const Tags = props => {
   const tags = props.tags
     .sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0))
     .map(tag => {
-      return <Tag name={tag.name} key={tag._id} id={tag._id} />;
+      return <Tag name={tag.name} key={tag._id + '_sortedHeadingTag'} id={tag._id} />;
     });
   return <div className={classes.tags}>{tags}</div>;
 };

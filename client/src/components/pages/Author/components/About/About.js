@@ -15,7 +15,7 @@ const About = props => {
         <p>
           {props.bio.split('\n').map((item, key) => {
             return (
-              <span key={key}>
+              <span key={key + '_bioKey'}>
                 {item}
                 <br />
               </span>

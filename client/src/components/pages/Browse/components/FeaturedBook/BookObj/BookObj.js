@@ -57,7 +57,7 @@ class BookObj extends Component {
           return (
             <Link
               to={`/authors/${author._id}/books`}
-              key={author._id}
+              key={author._id + '_authorLinkKey'}
               className={classes.moreByLink}
             >
               More by {author.name}

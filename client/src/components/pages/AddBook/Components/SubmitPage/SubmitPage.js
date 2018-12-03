@@ -42,7 +42,9 @@ class SubmitPage extends Component {
     let errorsList;
 
     if (this.state.errors.length > 0) {
-      const errorsListItems = this.state.errors.map(error => <li key="error">{error}</li>);
+      const errorsListItems = this.state.errors.map(error => (
+        <li key={error + '_errorKey'}>{error}</li>
+      ));
       errorsList = <ul className="list">{errorsListItems}</ul>;
     }
 

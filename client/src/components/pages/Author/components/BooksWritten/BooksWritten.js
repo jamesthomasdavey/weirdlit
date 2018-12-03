@@ -30,7 +30,9 @@ class BooksWritten extends Component {
         .sort(() => Math.random() - 0.5)
         .splice(0, numberOfBooksToDisplay);
 
-      booksWrittenContent = randomizedBooks.map(book => <BookThumb book={book} key={book._id} />);
+      booksWrittenContent = randomizedBooks.map(book => (
+        <BookThumb book={book} key={book._id + '_bookWrittenThumb'} />
+      ));
     }
 
     return (

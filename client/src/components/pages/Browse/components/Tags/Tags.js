@@ -31,7 +31,7 @@ class Tags extends Component {
         return (
           <Link
             to={`/books/filter/${tag.name}`}
-            key={tag._id}
+            key={tag._id + '_browseKey'}
             className={['ui label', classes.tag].join(' ')}
           >
             {tag.name}

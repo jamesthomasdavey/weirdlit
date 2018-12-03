@@ -87,8 +87,8 @@
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
-  filter: drop-shadow(0 0 24px rgba(1, 1, 1, 0.75));
-  -webkit-filter: drop-shadow(0 0 24px rgba(1, 1, 1, 0.75));
+  /* filter: drop-shadow(0 0 24px rgba(1, 1, 1, 0.75)); */
+  /* -webkit-filter: drop-shadow(0 0 24px rgba(1, 1, 1, 0.75)); */
 }
 
 @media (min-width: 468px) {
@@ -100,8 +100,8 @@
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
-    filter: drop-shadow(0 0 24px rgba(1, 1, 1, 0.75));
-    -webkit-filter: drop-shadow(0 0 24px rgba(1, 1, 1, 0.75));
+    /* filter: drop-shadow(0 0 24px rgba(1, 1, 1, 0.75)); */
+    /* -webkit-filter: drop-shadow(0 0 24px rgba(1, 1, 1, 0.75)); */
   }
 }
 
@@ -130,7 +130,7 @@
 }
 
 .info {
-  text-shadow: 0 0 16px rgba(0, 0, 0, 0.67);
+  /* text-shadow: 0 0 16px rgba(0, 0, 0, 0.67); */
   text-align: center;
 }
 

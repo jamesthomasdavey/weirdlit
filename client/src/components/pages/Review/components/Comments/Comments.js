@@ -94,7 +94,7 @@ class Comments extends Component {
     } else {
       const commentsContent = this.state.comments.map(comment => (
         <Comment
-          key={comment._id}
+          key={comment._id + '_commentKey'}
           comment={comment}
           review={this.props.review}
           deleteCommentHandler={this.deleteCommentHandler}

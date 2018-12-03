@@ -50,7 +50,7 @@ class Notifications extends Component {
       notificationsContent = notifications.reverse().map(notification => {
         return (
           <Notification
-            key={notification._id}
+            key={notification._id + '_notification'}
             notification={notification}
             deleteNotificationHandler={this.deleteNotificationHandler}
           />

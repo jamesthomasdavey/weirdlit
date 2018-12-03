@@ -22,7 +22,7 @@ class RecentReviews extends Component {
       reviews = this.state.reviews.map(review => {
         return (
           <Review
-            key={review._id}
+            key={review._id + '_recentReviewKey'}
             review={review}
             book={review.book}
             showBookAuthors

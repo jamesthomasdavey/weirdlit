@@ -68,7 +68,7 @@ class Pending extends Component {
           return (
             <PendingBook
               book={book}
-              key={book._id}
+              key={book._id + '_pendingBookKey'}
               deletePendingBookHandler={this.deletePendingBookHandler}
             />
           );

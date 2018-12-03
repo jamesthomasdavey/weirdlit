@@ -40,7 +40,10 @@ class FilterSortBar extends Component {
         }, [])
         .map(tag => {
           return (
-            <span key={tag._id} className={['ui label', classes.tag].join(' ')}>
+            <span
+              key={tag._id + '_activeFilterTag'}
+              className={['ui label', classes.tag].join(' ')}
+            >
               {tag.name}{' '}
               <i
                 className="delete icon"

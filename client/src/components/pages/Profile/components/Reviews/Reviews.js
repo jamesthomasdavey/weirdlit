@@ -45,7 +45,7 @@ class Reviews extends Component {
       reviewsContent = recentSortedReviews.map(review => {
         return (
           <Review
-            key={review._id}
+            key={review._id + '_profileReviewKey'}
             review={review}
             book={review.book}
             showBookAuthors

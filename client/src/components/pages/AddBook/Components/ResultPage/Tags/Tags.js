@@ -31,7 +31,7 @@ class Tags extends Component {
             selected={this.props.selectedTags.includes(tag._id)}
             name={tag.name}
             id={tag._id}
-            key={tag._id}
+            key={tag._id + '_customBookTag'}
             toggleSelectTagHandler={this.props.toggleSelectTagHandler}
           />
         );

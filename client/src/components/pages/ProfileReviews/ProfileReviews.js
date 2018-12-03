@@ -133,7 +133,7 @@ class ProfileReviews extends Component {
         reviews = this.state.reviewsOnDisplay.map(review => {
           return (
             <Review
-              key={review._id}
+              key={review._id + '_profileReviewsPageKey'}
               review={review}
               book={review.book}
               showBookAuthors

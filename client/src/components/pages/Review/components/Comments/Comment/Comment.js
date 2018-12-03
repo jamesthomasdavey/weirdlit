@@ -55,7 +55,7 @@ class Comment extends Component {
           <div className={['text', this.state.isLoading ? classes.loading : ''].join(' ')}>
             {this.props.comment.text.split('\n').map((item, key) => {
               return (
-                <span key={key}>
+                <span key={key + '_commentStringKey'}>
                   {item}
                   <br />
                 </span>

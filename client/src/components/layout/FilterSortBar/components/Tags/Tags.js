@@ -9,14 +9,17 @@ const Tags = props => {
   const tags = props.tags.map(tag => {
     if (tag.isDisabled && !tag.isSelected) {
       return (
-        <span key={tag._id} className={['ui label disabled', classes.tag].join(' ')}>
+        <span
+          key={tag._id + '_filterTagDisabled'}
+          className={['ui label disabled', classes.tag].join(' ')}
+        >
           {tag.name}
         </span>
       );
     } else {
       return (
         <span
-          key={tag._id}
+          key={tag._id + '_filterTagEnabled'}
           className={['ui label', tag.isSelected && 'blue', classes.enabled, classes.tag].join(' ')}
           onClick={() => props.toggleSelectedHandler(tag.name)}
         >

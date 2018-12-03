@@ -26,7 +26,7 @@ class ReviewText extends Component {
         <p>
           {this.props.review.split('\n').map((item, key) => {
             return (
-              <span key={key}>
+              <span key={key + '_splitReviewKey'}>
                 {item}
                 <br />
               </span>
@@ -42,7 +42,7 @@ class ReviewText extends Component {
           <p>
             {this.props.review.split('\n').map((item, key) => {
               return (
-                <span key={key}>
+                <span key={key + '_splitReviewKey2'}>
                   {item}
                   <br />
                 </span>
@@ -58,7 +58,7 @@ class ReviewText extends Component {
           <p>
             {shortenedReview.split('\n').map((item, key) => {
               return (
-                <span key={key}>
+                <span key={key + '_splitReviewKey3'}>
                   {item}
                   <br />
                 </span>

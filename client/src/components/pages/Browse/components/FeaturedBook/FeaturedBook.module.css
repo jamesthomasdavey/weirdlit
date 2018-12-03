@@ -55,19 +55,19 @@
   text-align: center;
   margin-top: 8px;
   margin-bottom: 8px;
-  text-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+  /* text-shadow: 0 0 16px rgba(0, 0, 0, 0.6); */
 }
 
 .featuredHeader > h4 {
   color: #ccc;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  /* user-select: none; */
+  /* -webkit-user-select: none; */
+  /* -moz-user-select: none; */
+  /* -ms-user-select: none; */
   font-weight: normal;
   text-align: center;
   margin-top: 0;
-  text-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+  /* text-shadow: 0 0 16px rgba(0, 0, 0, 0.6); */
 }
 
 @media (min-width: 600px) {

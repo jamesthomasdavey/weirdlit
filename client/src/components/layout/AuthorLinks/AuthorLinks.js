@@ -11,7 +11,7 @@ const AuthorLinks = props => {
 
   const authorArray = props.authors.map(author => {
     return (
-      <Link className={style} to={`/authors/${author._id}`} key={author._id}>
+      <Link className={style} to={`/authors/${author._id}`} key={author._id + '_authorLink'}>
         {author.name}
       </Link>
     );
@@ -19,17 +19,17 @@ const AuthorLinks = props => {
 
   const authorArrayFormated = authorArray.map((authorLink, index, array) => {
     if (index === array.length - 1) {
-      return <Fragment key={index}>{authorLink}</Fragment>;
+      return <Fragment key={index + '_lastLink'}>{authorLink}</Fragment>;
     } else if (index === array.length - 2) {
       return (
-        <Fragment key={index}>
+        <Fragment key={index + '_penultimateLink'}>
           {authorLink}
           <span className={style}>{' & '}</span>
         </Fragment>
       );
     } else {
       return (
-        <Fragment key={index}>
+        <Fragment key={index + '_midLink'}>
           {authorLink}
           <span className={style}>{', '}</span>
         </Fragment>

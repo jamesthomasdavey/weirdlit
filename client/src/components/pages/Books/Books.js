@@ -239,7 +239,7 @@ class Books extends Component {
         books = this.state.booksOnDisplay.map(book => {
           return (
             <BookCard
-              key={book._id}
+              key={book._id + '_bookOnDisplay'}
               book={book}
               showRating
               showAuthors

@@ -141,6 +141,20 @@ class About extends Component {
               <div className="item">
                 <a
                   className="header"
+                  href="http://weirdfictionreview.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Weird Fiction Review
+                </a>
+                <div className="description">
+                  For articles and posts relating to weird fiction, created by Jeff and Ann
+                  VanderMeer.
+                </div>
+              </div>
+              <div className="item">
+                <a
+                  className="header"
                   href="https://lithub.com/weird-fiction-a-primer/"
                   target="_blank"
                   rel="noopener noreferrer"
