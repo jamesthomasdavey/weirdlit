@@ -32,7 +32,12 @@ const Review = props => {
         to={`/books/${props.book._id}`}
         className={['ui tiny image', classes['book-image']].join(' ')}
       >
-        <img alt="cover" className="book__image" src={props.book.image.smallThumbnail} />
+        <img
+          crossOrigin="anonymous"
+          alt="cover"
+          className="book__image"
+          src={props.book.image.smallThumbnail}
+        />
       </Link>
     );
   }

@@ -19,7 +19,7 @@ const Heading = props => {
     backdrop = (
       <div
         className={[classes.backdrop, classes.blur].join(' ')}
-        style={{ backgroundImage: `url(${props.book.image.largeThumbnail})` }}
+        style={{ backgroundImage: `url('${props.book.image.largeThumbnail}')` }}
       />
     );
   } else {
@@ -54,7 +54,7 @@ const Heading = props => {
           <div className={classes.content__wrapper}>
             <div
               className={classes.image}
-              style={{ backgroundImage: `url(${props.book.image.largeThumbnail})` }}
+              style={{ backgroundImage: `url('${props.book.image.largeThumbnail}')` }}
             />
             <div className={classes.info__wrapper}>
               <div className={classes.info}>

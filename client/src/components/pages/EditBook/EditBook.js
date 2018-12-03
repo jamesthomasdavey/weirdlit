@@ -409,14 +409,14 @@ class EditBook extends Component {
               <div className="ui field">
                 <label>{this.state.form.image.status ? 'Previous' : 'Current'} Image</label>
                 <div className="ui small image">
-                  <img alt="cover" src={this.state.oldForm.image} />
+                  <img crossOrigin="anonymous" alt="cover" src={this.state.oldForm.image} />
                 </div>
               </div>
               {this.state.form.image.status && (
                 <div className="ui field">
                   <label>Updated Image</label>
                   <div className="ui small image">
-                    <img alt="cover" src={this.state.form.image.imageUrl} />
+                    <img crossOrigin="anonymous" alt="cover" src={this.state.form.image.imageUrl} />
                   </div>
                 </div>
               )}

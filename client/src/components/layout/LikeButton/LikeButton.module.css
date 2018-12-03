@@ -4,6 +4,6 @@
 
 .icon {
   position: relative;
-  top: -1px;
-  left: 4px;
+  transform: translate(4px, -1px);
+  -webkit-transform: translate(4px, -1px);
 }

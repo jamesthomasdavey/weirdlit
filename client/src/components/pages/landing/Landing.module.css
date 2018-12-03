@@ -43,29 +43,9 @@
 .content__logo-text {
   font-family: 'Lora', serif;
   font-size: 48px;
-  letter-spacing: 32px;
+  letter-spacing: 18px;
   text-transform: uppercase;
-  -webkit-animation: expand 28s ease-in-out;
-  animation: expand 28s ease-in-out;
   padding-right: -30px;
-}
-
-@-webkit-keyframes expand {
-  from {
-    letter-spacing: 13px;
-  }
-  to {
-    letter-spacing: 32px;
-  }
-}
-
-@keyframes expand {
-  from {
-    letter-spacing: 13px;
-  }
-  to {
-    letter-spacing: 32px;
-  }
 }
 
 .text__weird {

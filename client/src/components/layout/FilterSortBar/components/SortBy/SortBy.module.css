@@ -1,6 +1,7 @@
 .wrapper {
   position: relative;
-  top: 3px;
+  -webkit-transform: translateY(3px);
+  transform: translateY(3px);
   z-index: 25;
   margin: 0 auto;
   display: -webkit-box;

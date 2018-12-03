@@ -43,7 +43,7 @@ class BookThumb extends Component {
           </div>
           <div
             style={{
-              backgroundImage: `url(${this.props.book.image.mediumThumbnail})`
+              backgroundImage: `url('${this.props.book.image.mediumThumbnail}')`
             }}
             className={classes['book__cover-image']}
           />

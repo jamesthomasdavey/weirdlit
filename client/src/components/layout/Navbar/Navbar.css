@@ -10,6 +10,8 @@
   margin-left: 12px;
   letter-spacing: 3px;
   text-transform: uppercase;
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
   /* animation: fadein 0.3s linear; */
 }
 

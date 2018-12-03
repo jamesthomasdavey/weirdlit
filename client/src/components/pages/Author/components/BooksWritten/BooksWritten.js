@@ -43,6 +43,14 @@ class BooksWritten extends Component {
         </h5>
         <div className={['ui raised segment', this.state.isLoading ? 'loading' : ''].join(' ')}>
           <div className={classes.books__wrapper}>{booksWrittenContent}</div>
+          {this.state.isLoading && (
+            <Fragment>
+              <br />
+              <br />
+              <br />
+              <br />
+            </Fragment>
+          )}
           {this.state.books.length > numberOfBooksToDisplay && (
             <div style={{ textAlign: 'center' }}>
               <Link

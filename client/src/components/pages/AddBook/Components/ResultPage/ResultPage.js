@@ -116,7 +116,11 @@ class ResultPage extends Component {
                 {this.state.googleImage.status && (
                   <Fragment>
                     <div className="ui small image">
-                      <img alt="cover" src={this.state.googleImage.googleImageUrl} />
+                      <img
+                        crossOrigin="anonymous"
+                        alt="cover"
+                        src={this.state.googleImage.googleImageUrl}
+                      />
                     </div>
                     <br />
                     <button
@@ -131,7 +135,11 @@ class ResultPage extends Component {
                 )}
                 <div className="ui small image">
                   {this.state.userImage.status && (
-                    <img alt="cover" src={this.state.userImage.userImageUrl} />
+                    <img
+                      crossOrigin="anonymous"
+                      alt="cover"
+                      src={this.state.userImage.userImageUrl}
+                    />
                   )}
                 </div>
                 <div className="ui form" style={{ marginTop: '1rem' }}>

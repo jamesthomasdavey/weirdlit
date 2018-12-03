@@ -79,6 +79,7 @@ class BookObj extends Component {
                 className={['ui small image', classes.book__image].join(' ')}
               >
                 <img
+                  crossOrigin="anonymous"
                   src={this.state.image.largeThumbnail}
                   className="book__image"
                   alt={this.state.title}

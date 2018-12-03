@@ -66,7 +66,7 @@ class SearchPage extends Component {
         return (
           <div className={['item', classes.bookItem].join(' ')} key={book.googleId + '_googleId'}>
             <div className="ui small image">
-              <img alt="cover" src={book.thumb} />
+              <img crossOrigin="anonymous" alt="cover" src={book.thumb} />
             </div>
             <div className="content">
               <div className="header">{book.title}</div>

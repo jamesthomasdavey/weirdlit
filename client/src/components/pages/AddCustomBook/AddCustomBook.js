@@ -272,7 +272,11 @@ class AddCustomBook extends Component {
                 <div className="ui center aligned segment">
                   {this.state.form.image.status && (
                     <div className="ui small image">
-                      <img alt="cover" src={this.state.form.image.imageUrl} />
+                      <img
+                        crossOrigin="anonymous"
+                        alt="cover"
+                        src={this.state.form.image.imageUrl}
+                      />
                     </div>
                   )}
                   <div

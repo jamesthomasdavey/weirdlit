@@ -134,13 +134,14 @@ class EditAuthor extends Component {
             <input
               type="submit"
               disabled={!this.state.hasChanged}
-              className={['ui primary button', this.state.hasChanged ? '' : 'disabled'].join(' ')}
+              className={['ui tiny primary button', this.state.hasChanged ? '' : 'disabled'].join(' ')}
+              style={{ margin: '4px' }}
               value={this.state.hasSaved ? 'Saved' : 'Save'}
             />
             <Link
               to={`/authors/${this.props.match.params.authorId}`}
-              style={{ marginLeft: '1rem' }}
-              className="ui button"
+              style={{ margin: '4px' }}
+              className="ui tiny button"
             >
               {this.state.hasSaved ? 'Back' : 'Cancel'}
             </Link>

@@ -42,7 +42,7 @@ class PendingBook extends Component {
         ].join(' ')}
       >
         <div className="ui small image">
-          <img alt="cover" src={this.props.book.image.mediumThumbnail} />
+          <img crossOrigin="anonymous" alt="cover" src={this.props.book.image.mediumThumbnail} />
         </div>
         <div className="content">
           <div className="header">{this.props.book.title}</div>

@@ -20,6 +20,11 @@ const users = require('./routes/api/users');
 // run express as app
 const app = express();
 app.use(compression());
+// app.use(function(req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//   next();
+// });
 cors({ credentials: true, origin: true });
 app.use(cors());
 

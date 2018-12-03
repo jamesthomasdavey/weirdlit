@@ -132,12 +132,7 @@ class EditProfile extends Component {
               value={this.state.form.handle}
               onChange={this.changeInputHandler}
               error={this.state.errors.handle}
-              info={
-                this.state.form.handle
-                  ? 'A unique handle for your profile URL. Preview: weirdl.it/profile/' +
-                    this.state.form.handle.toLowerCase()
-                  : 'A unique handle for your profile URL.'
-              }
+              info="A unique handle for your profile URL."
             />
             <div className={['ui field', this.state.errors.favoriteBook && 'error'].join(' ')}>
               <label>Favorite Book</label>
@@ -222,7 +217,9 @@ class EditProfile extends Component {
             <input
               type="submit"
               disabled={!this.state.hasChanged}
-              className={['ui tiny primary button', this.state.hasChanged ? '' : 'disabled'].join(' ')}
+              className={['ui tiny primary button', this.state.hasChanged ? '' : 'disabled'].join(
+                ' '
+              )}
               value={this.state.hasSaved ? 'Saved' : 'Save'}
               style={{ margin: '4px' }}
             />

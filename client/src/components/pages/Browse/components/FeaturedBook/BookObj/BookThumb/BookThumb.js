@@ -30,7 +30,12 @@ class BookThumb extends Component {
             this.state.isHoveredOver ? classes['book__cover-top-hover'] : ''
           ].join(' ')}
         /> */}
-        <img alt="cover" src={this.props.book.image.largeThumbnail} className={classes.bookCover} />
+        <img
+          crossOrigin="anonymous"
+          alt="cover"
+          src={this.props.book.image.largeThumbnail}
+          className={classes.bookCover}
+        />
       </Link>
     );
   }
