@@ -416,7 +416,7 @@ class EditBook extends Component {
                 <div className="ui field">
                   <label>Updated Image</label>
                   <div className="ui small image">
-                    <img crossOrigin="anonymous" alt="cover" src={this.state.form.image.imageUrl} />
+                    <img alt="cover" src={this.state.form.image.imageUrl} />
                   </div>
                 </div>
               )}
