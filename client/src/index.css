@@ -12,24 +12,7 @@ code {
 } */
 
 /*****************************
-******************* VARIABLES
-*****************************/
-
-/* colors */
-
-:root {
-  --black: #373737;
-}
-
-/* fonts */
-
-:root {
-  --header-font-stack: 'Open Sans', sans-serif;
-  --paragraph-font-stack: 'Lora', serif;
-}
-
-/*****************************
-********************* GENERAL
+********************* general
 *****************************/
 
 .clearfix::after {
@@ -39,7 +22,7 @@ code {
 }
 
 body {
-  color: var(--black);
+  color: #373737;
   background: #f6f6f6;
 }
 
@@ -52,44 +35,17 @@ html {
 *,
 *:before,
 *:after {
-  -webkit-box-sizing: inherit;
   box-sizing: inherit;
+  -webkit-box-sizing: inherit;
   margin: 0;
   padding: 0;
 }
 
 /*****************************
-*********** GLOBAL ANIMATIONS
+******** Semantic Workarounds
 *****************************/
 
-@-webkit-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.book__item {
-  -webkit-animation: fadein 0.3s linear;
-  animation: fadein 0.3s linear;
-  -webkit-transition: 0.3s all linear;
-  transition: 0.3s all linear;
-}
-
-.book__image:hover {
-  cursor: pointer;
-}
+/* 'Sort By' dropdown spacing */
 
 div.menu.transition > div[role='option'] > span.text {
   font-size: 12px !important;

@@ -76,7 +76,8 @@ class BookObj extends Component {
             <div className="ui item">
               <Link
                 to={`/books/${this.props.bookId}`}
-                className={['ui small image', classes.book__image].join(' ')}
+                className="ui small image"
+                style={{ display: 'block' }}
               >
                 <img
                   crossOrigin="anonymous"

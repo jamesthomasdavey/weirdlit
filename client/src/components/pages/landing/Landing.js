@@ -1,6 +1,5 @@
 // package
 import React, { Component, Fragment } from 'react';
-// import { withRouter } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -23,24 +22,20 @@ class Landing extends Component {
         <div className="ui internally celled grid">
           <div className="row">
             <div className="eight wide column">
-              {/* <Link to="/login"> */}
               <button
                 onClick={() => this.setState({ modal: 'login' })}
                 className="ui right floated grey button"
               >
                 Sign In
               </button>
-              {/* </Link> */}
             </div>
             <div className="eight wide column">
-              {/* <Link to="/register"> */}
               <button
                 onClick={() => this.setState({ modal: 'register' })}
                 className="ui left floated grey button"
               >
                 Register
               </button>
-              {/* </Link> */}
             </div>
           </div>
         </div>
@@ -50,11 +45,11 @@ class Landing extends Component {
       <Fragment>
         <Modal formType={this.state.modal} hideModal={() => this.setState({ modal: '' })} />
         <div className={classes.container}>
-          <div className={['ui text container', classes.content__container].join(' ')}>
+          <div className={['ui text container', classes.contentContainer].join(' ')}>
             <div className={classes.content}>
-              <div className={classes.content__inner}>
+              <div className={classes.innerContent}>
                 <Logo />
-                <div className={classes.content__search}>
+                <div className={classes.searchWrapper}>
                   <Search autoFocus history={this.props.history} />
                 </div>
                 {authButtons}

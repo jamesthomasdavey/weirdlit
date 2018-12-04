@@ -1,8 +1,7 @@
 .logo__icon {
-  color: var(--black);
+  color: #373737;
   height: 43px;
   width: 37.5px;
-  /* animation: fadein 0.3s linear; */
 }
 .logo__text {
   font-family: 'Lora', serif;
@@ -12,11 +11,10 @@
   text-transform: uppercase;
   transform: translate3d(0, 0, 0);
   -webkit-transform: translate3d(0, 0, 0);
-  /* animation: fadein 0.3s linear; */
 }
 
 .logo__text_weird {
-  color: var(--black);
+  color: #373737;
 }
 
 .logo__text_lit {

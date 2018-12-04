@@ -4,3 +4,21 @@
   -webkit-transition: 0.3s all linear;
   transition: 0.3s all linear;
 }
+
+@-webkit-keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
