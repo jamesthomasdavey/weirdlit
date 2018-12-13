@@ -183,6 +183,33 @@ class About extends Component {
         }
       },
       {
+        key: 'tags',
+        title: {
+          content: <span className={classes.itemTitle}>How do the tags and sorting work?</span>
+        },
+        content: {
+          content: (
+            <Fragment>
+              <p className={classes.itemDescription} style={{ marginBottom: '1rem' }}>
+                The tags for each book are meant to be <em>relatively</em> spoiler-free. For
+                instance, a book that only features aliens at the end should not be labeled as such.
+                However, a book that is known for featuring aliens should be labeled as such, since
+                it would less likely spoil the premise for prospective readers. That being said, as
+                I've only read a small portion of the catalogue, most of the tags are taken from
+                Goodreads and other miscellaneous sources relating to the work. If you have any
+                suggestions for tags, you may either suggest them to me directly, or request to
+                become an admin and add them yourself.
+              </p>
+              <p className={classes.itemDescription}>
+                The publication dates listed for each title are meant to represent the date of
+                original publication or writing, and not any later publication. If any are listed
+                incorrectly, please let me know.
+              </p>
+            </Fragment>
+          )
+        }
+      },
+      {
         key: 'info',
         title: {
           content: <span className={classes.itemTitle}>Who made this?</span>
