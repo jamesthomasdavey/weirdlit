@@ -69,6 +69,7 @@ class DeleteReview extends Component {
                 onChange={this.changeInputHandler}
                 type="text"
                 name="title"
+                autoFocus
               />
               <button
                 type="submit"

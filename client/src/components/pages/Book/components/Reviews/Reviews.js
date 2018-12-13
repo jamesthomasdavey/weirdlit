@@ -133,8 +133,10 @@ class Reviews extends Component {
           <i className="align left icon" />
           Reviews for {this.props.book.title}
         </h5>
-        {this.props.book.rating && this.props.book.rating > 0 && (
+        {this.props.book.rating && this.props.book.rating > 0 ? (
           <StarRating center large value={this.props.book.rating} />
+        ) : (
+          ''
         )}
         <div
           className={['ui raised segment', this.state.isLoading ? 'loading' : ''].join(' ')}
