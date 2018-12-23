@@ -18,6 +18,7 @@ class AuthorBooksHeader extends Component {
     let authorLink;
 
     if (!this.state.isLoading) {
+      document.title = `Books by ${this.state.authorName} | WeirdLit`;
       authorLink = <Link to={`/authors/${this.props.authorId}`}>{this.state.authorName}</Link>;
     }
 

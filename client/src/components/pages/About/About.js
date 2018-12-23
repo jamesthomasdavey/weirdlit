@@ -7,6 +7,7 @@ import classes from './About.module.css';
 
 class About extends Component {
   render() {
+    document.title = 'About | WeirdLit';
     const panels = [
       {
         key: 'weird',
