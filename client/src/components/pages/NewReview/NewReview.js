@@ -120,14 +120,17 @@ class NewReview extends Component {
                 }
               />
               <button
-                className={['ui primary button', this.state.isSubmitting && 'loading'].join(' ')}
+                className={['ui tiny primary button', this.state.isSubmitting && 'loading'].join(
+                  ' '
+                )}
+                style={{ margin: '4px' }}
               >
                 Submit
               </button>
               <Link
                 to={`/books/${this.props.match.params.bookId}`}
-                style={{ marginLeft: '1rem' }}
-                className="ui button"
+                style={{ margin: '4px' }}
+                className="ui tiny button"
               >
                 Cancel
               </Link>
