@@ -145,24 +145,27 @@ class EditReview extends Component {
               <input
                 type="submit"
                 disabled={!this.state.hasChanged}
-                className={['ui primary button', this.state.hasChanged ? '' : 'disabled'].join(' ')}
+                className={['ui tiny primary button', this.state.hasChanged ? '' : 'disabled'].join(
+                  ' '
+                )}
                 value={this.state.hasSaved ? 'Saved' : 'Save'}
+                style={{ margin: '4px' }}
               />
               <Link
-                className="ui button"
+                className="ui tiny button"
                 to={`/books/${this.props.match.params.bookId}/reviews/${
                   this.props.match.params.reviewId
                 }`}
-                style={{ marginLeft: '1rem' }}
+                style={{ margin: '4px' }}
               >
                 {this.state.hasSaved ? `Back to Review` : 'Cancel'}
               </Link>
               <Link
-                className="ui negative button"
+                className="ui tiny negative button"
                 to={`/books/${this.props.match.params.bookId}/reviews/${
                   this.props.match.params.reviewId
                 }/delete`}
-                style={{ marginLeft: '1rem' }}
+                style={{ margin: '4px' }}
               >
                 Delete Review
               </Link>
