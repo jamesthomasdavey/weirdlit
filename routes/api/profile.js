@@ -323,12 +323,22 @@ router.get(
             return a > b ? -1 : a < b ? 1 : 0;
           });
         } else if (req.params.sortMethod === 'rating') {
-          books.sort(
+          let booksWithRatings = [];
+          let booksWithoutRatings = [];
+          books.forEach(book => {
+            if (book.rating) {
+              booksWithRatings.push(book);
+            } else {
+              booksWithoutRatings.push(book);
+            }
+          });
+          booksWithRatings.sort(
             firstBy((a, b) => a.rating - b.rating, -1).thenBy(
               (a, b) => a.numberOfReviews - b.numberOfReviews,
               -1
             )
           );
+          books = [...booksWithRatings, ...booksWithoutRatings];
         } else if (req.params.sortMethod === 'pageCount') {
           books.sort((a, b) => a.pageCount - b.pageCount).reverse();
         }
