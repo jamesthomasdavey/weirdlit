@@ -53,6 +53,7 @@ class Reviews extends Component {
             showReviewHeadlineAsLink
             showLikeButton
             showCommentButton
+            showLastUpdated
           />
         );
       });

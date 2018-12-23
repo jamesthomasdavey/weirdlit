@@ -38,7 +38,11 @@ class RecentlyPublished extends Component {
         <div className="ui raised segment">
           <div className={classes.books__wrapper}>{recentlyPublishedContent}</div>
           <div style={{ textAlign: 'center' }}>
-            <Link to="/books" className="ui tiny button" style={{ marginTop: '16px' }}>
+            <Link
+              to="/books/filter/none/sort/publishedDate/desc"
+              className="ui tiny button"
+              style={{ marginTop: '16px' }}
+            >
               View All
             </Link>
           </div>

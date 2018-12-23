@@ -30,7 +30,7 @@ class Tags extends Component {
       tags = this.state.allTags.map(tag => {
         return (
           <Link
-            to={`/books/filter/${tag.name}`}
+            to={`/books/filter/${tag.name}/sort/publishedDate/desc`}
             key={tag._id + '_browseKey'}
             className={['ui label', classes.tag].join(' ')}
           >
