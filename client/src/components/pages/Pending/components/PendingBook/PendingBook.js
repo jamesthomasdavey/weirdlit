@@ -72,7 +72,7 @@ class PendingBook extends Component {
           </button>
           <button
             className={[
-              'ui red labeled tiny icon button',
+              'ui tiny red labeled icon button',
               this.state.isRejecting ? 'loading' : '',
               this.state.isApproving ? 'disabled' : ''
             ].join(' ')}
