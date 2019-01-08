@@ -6,6 +6,7 @@
   left: 0;
   z-index: 999;
   background: white;
+  overflow: hidden;
 }
 
 .contentContainer {
