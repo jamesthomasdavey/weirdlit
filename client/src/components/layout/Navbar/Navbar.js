@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logoutUser } from './../../../actions/authActions';
 import axios from 'axios';
+import ImageFadeIn from 'react-image-fade-in';
 
 //images
 import './../../../img/bird-1903523.png';
@@ -123,7 +124,7 @@ class Navbar extends Component {
           <div className="ui container">
             <Link to="/">
               <div className="header item">
-                <img alt="navbar_logo" className="logo__icon" src={shellLogo} />
+                <ImageFadeIn alt="navbar_logo" className="logo__icon" src={shellLogo} />
                 <div className="logo__text">
                   <span className="logo__text_weird">Weird</span>
                   <span className="logo__text_lit">Lit</span>

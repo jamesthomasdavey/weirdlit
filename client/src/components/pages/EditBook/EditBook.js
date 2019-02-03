@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import imageCheck from 'image-check';
 import moment from 'moment';
+import ImageFadeIn from 'react-image-fade-in';
 
 // component
 import TextInputField from './../../layout/TextInputField/TextInputField';
@@ -409,14 +410,14 @@ class EditBook extends Component {
               <div className="ui field">
                 <label>{this.state.form.image.status ? 'Previous' : 'Current'} Image</label>
                 <div className="ui small image">
-                  <img crossOrigin="anonymous" alt="cover" src={this.state.oldForm.image} />
+                  <ImageFadeIn crossOrigin="anonymous" alt="cover" src={this.state.oldForm.image} />
                 </div>
               </div>
               {this.state.form.image.status && (
                 <div className="ui field">
                   <label>Updated Image</label>
                   <div className="ui small image">
-                    <img alt="cover" src={this.state.form.image.imageUrl} />
+                    <ImageFadeIn alt="cover" src={this.state.form.image.imageUrl} />
                   </div>
                 </div>
               )}

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import imageCheck from 'image-check';
+import ImageFadeIn from 'react-image-fade-in';
 // import moment from 'moment';
 
 // component
@@ -272,7 +273,7 @@ class AddCustomBook extends Component {
                 <div className="ui center aligned segment">
                   {this.state.form.image.status && (
                     <div className="ui small image">
-                      <img alt="cover" src={this.state.form.image.imageUrl} />
+                      <ImageFadeIn alt="cover" src={this.state.form.image.imageUrl} />
                     </div>
                   )}
                   <div
