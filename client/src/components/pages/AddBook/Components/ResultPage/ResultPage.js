@@ -3,7 +3,6 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import imageCheck from 'image-check';
-import ImageFadeIn from 'react-image-fade-in';
 
 // component
 import Spinner from './../../../../layout/Spinner/Spinner';
@@ -117,7 +116,7 @@ class ResultPage extends Component {
                 {this.state.googleImage.status && (
                   <Fragment>
                     <div className="ui small image">
-                      <ImageFadeIn alt="cover" src={this.state.googleImage.googleImageUrl} />
+                      <img alt="cover" src={this.state.googleImage.googleImageUrl} />
                     </div>
                     <br />
                     <button
@@ -132,7 +131,7 @@ class ResultPage extends Component {
                 )}
                 <div className="ui small image">
                   {this.state.userImage.status && (
-                    <ImageFadeIn alt="cover" src={this.state.userImage.userImageUrl} />
+                    <img alt="cover" src={this.state.userImage.userImageUrl} />
                   )}
                 </div>
                 <div className="ui form" style={{ marginTop: '1rem' }}>

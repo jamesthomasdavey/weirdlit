@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import arrayToSentence from 'array-to-sentence';
-import ImageFadeIn from 'react-image-fade-in';
 
 // css
 import classes from './SearchPage.module.css';
@@ -67,7 +66,7 @@ class SearchPage extends Component {
         return (
           <div className={['item', classes.bookItem].join(' ')} key={book.googleId + '_googleId'}>
             <div className="ui small image">
-              <ImageFadeIn alt="cover" src={book.thumb} />
+              <img alt="cover" src={book.thumb} />
             </div>
             <div className="content">
               <div className="header">{book.title}</div>

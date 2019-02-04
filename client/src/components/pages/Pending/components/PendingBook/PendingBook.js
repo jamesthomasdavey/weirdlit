@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import ImageFadeIn from 'react-image-fade-in';
 
 // css
 import classes from './PendingBook.module.css';
@@ -43,11 +42,7 @@ class PendingBook extends Component {
         ].join(' ')}
       >
         <div className="ui small image">
-          <ImageFadeIn
-            crossOrigin="anonymous"
-            alt="cover"
-            src={this.props.book.image.mediumThumbnail}
-          />
+          <img crossOrigin="anonymous" alt="cover" src={this.props.book.image.mediumThumbnail} />
         </div>
         <div className="content">
           <div className="header">{this.props.book.title}</div>

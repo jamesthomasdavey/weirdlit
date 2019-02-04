@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import ImageFadeIn from 'react-image-fade-in';
 
 // css
 import classes from './BookThumb.module.css';
@@ -31,7 +30,7 @@ class BookThumb extends Component {
             this.state.isHoveredOver ? classes['book__cover-top-hover'] : ''
           ].join(' ')}
         /> */}
-        <ImageFadeIn
+        <img
           crossOrigin="anonymous"
           alt="cover"
           src={this.props.book.image.largeThumbnail}

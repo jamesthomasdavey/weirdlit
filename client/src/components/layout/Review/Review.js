@@ -3,7 +3,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import timeAgo from 'time-ago';
-import ImageFadeIn from 'react-image-fade-in';
 
 // component
 import AuthorLinks from './../../layout/AuthorLinks/AuthorLinks';
@@ -33,7 +32,7 @@ const Review = props => {
         to={`/books/${props.book._id}`}
         className={['ui tiny image', classes['book-image']].join(' ')}
       >
-        <ImageFadeIn crossOrigin="anonymous" alt="cover" src={props.book.image.smallThumbnail} />
+        <img crossOrigin="anonymous" alt="cover" src={props.book.image.smallThumbnail} />
       </Link>
     );
   }
