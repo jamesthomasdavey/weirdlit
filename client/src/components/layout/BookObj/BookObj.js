@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import renderHTML from 'react-render-html';
+import ImageFadeIn from 'react-image-fade-in';
 
 // component
 import Spinner from './../Spinner/Spinner';
@@ -79,7 +80,7 @@ class BookObj extends Component {
                 className="ui small image"
                 style={{ display: 'block' }}
               >
-                <img
+                <ImageFadeIn
                   crossOrigin="anonymous"
                   src={this.state.image.largeThumbnail}
                   className="book__image"
