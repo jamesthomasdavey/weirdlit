@@ -61,6 +61,7 @@ class SearchPage extends Component {
           <Link to="/books/add/custom">add a custom book here.</Link>
         </h5>
       );
+      sear;
     } else if (this.state.searchResults.loaded && this.state.searchResults.results.length > 0) {
       const searchResultsList = this.state.searchResults.results.map(book => {
         return (
@@ -126,7 +127,7 @@ class SearchPage extends Component {
                 onChange={this.changeSearchHandler}
                 name="search"
                 value={this.state.searchQuery}
-                placeholder="Search for a book to add..."
+                placeholder="Search for a book by title, author, or ISBN..."
               />
               <i className="search__icon search icon" />
             </div>
