@@ -61,7 +61,6 @@ class SearchPage extends Component {
           <Link to="/books/add/custom">add a custom book here.</Link>
         </h5>
       );
-      sear;
     } else if (this.state.searchResults.loaded && this.state.searchResults.results.length > 0) {
       const searchResultsList = this.state.searchResults.results.map(book => {
         return (
